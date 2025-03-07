@@ -1,6 +1,7 @@
 import os
 import re
 from datetime import datetime
+
 try:
     import markdown as md
 except ImportError:
@@ -48,16 +49,7 @@ class Page:
     def custom(self, html):
         self.content.append(html)
     def timeline_entry(self, date, event):
-        self.content.append(f'''
-<div class="timeline-item single scroll-animate">
-  <div class="timeline-marker"></div>
-  <div class="timeline-connector"></div>
-  <div class="timeline-content">
-    <div class="timeline-date">{date}</div>
-    <div class="timeline-text">{event}</div>
-  </div>
-</div>
-''')
+        self.content.append(f'<div class="timeline-entry"><strong>{date}:</strong> {event}</div>')
     def timeline_full(self, events):
         try:
             sorted_events = sorted(events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"))
@@ -68,12 +60,8 @@ class Page:
             side = "left" if idx % 2 == 0 else "right"
             timeline_html += f'''
 <div class="timeline-item {side} scroll-animate">
-  <div class="timeline-marker"></div>
-  <div class="timeline-connector"></div>
-  <div class="timeline-content">
-    <div class="timeline-date">{date}</div>
-    <div class="timeline-text">{event}</div>
-  </div>
+  <div class="timeline-date">{date}</div>
+  <div class="timeline-content">{event}</div>
 </div>
 '''
         timeline_html += '</div>'
@@ -86,7 +74,7 @@ class Page:
   <a href="{link}.html" style="text-decoration: none; color: inherit;">
     <div class="row no-gutters">
       <div class="col-md-4">
-        <img src="{image_url}" class="card-img" alt="{title}" loading="lazy">
+        <img src="{image_url}" class="card-img" alt="{title}">
       </div>
       <div class="col-md-8">
         <div class="card-body">
@@ -104,7 +92,7 @@ class Page:
             style += f'width:{width}px;'
         if height:
             style += f'height:{height}px;'
-        self.content.append(f'<img src="{image_url}" alt="{alt_text}" style="{style}" loading="lazy">')
+        self.content.append(f'<img src="{image_url}" alt="{alt_text}" style="{style}">')
     def email_link(self, email, text=None):
         display_text = text if text else email
         self.content.append(f'<a href="mailto:{email}">{display_text}</a>')
@@ -122,7 +110,7 @@ class Page:
     def gallery(self, images):
         gallery_html = '<div class="row">'
         for img in images:
-            gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid" loading="lazy"></div>'
+            gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid"></div>'
         gallery_html += '</div>'
         self.content.append(gallery_html)
     def markdown(self, text):
@@ -193,7 +181,7 @@ class Page:
             active = "active" if i == 0 else ""
             slides += f'''
 <div class="carousel-item {active}">
-  <img src="{img}" class="d-block w-100" alt="Slide {i+1}" loading="lazy">
+  <img src="{img}" class="d-block w-100" alt="Slide {i+1}">
 </div>
 '''
         self.content.append(f'''
@@ -266,12 +254,8 @@ class Website:
                 side = "left" if idx % 2 == 0 else "right"
                 timeline_html += f'''
 <div class="timeline-item {side} scroll-animate">
-  <div class="timeline-marker"></div>
-  <div class="timeline-connector"></div>
-  <div class="timeline-content">
-    <div class="timeline-date">{date}</div>
-    <div class="timeline-text">{event}</div>
-  </div>
+  <div class="timeline-date">{date}</div>
+  <div class="timeline-content">{event}</div>
 </div>
 '''
             timeline_html += '</div>'
@@ -299,18 +283,18 @@ class Website:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
-<meta name="description" content="{title} - A modern responsive website">
+<script>
+if(localStorage.getItem('theme')==='dark'){{document.documentElement.classList.add('dark-mode');}}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 <style>
-html {{
-  scroll-behavior: smooth;
-}}
-* {{
-  transition: all 0.3s ease;
-}}
 body {{
   font-family: 'Roboto', sans-serif;
   background-color: #f5f5f5;
   color: #333;
+  transition: background-color 0.3s, color 0.3s;
 }}
 html.dark-mode body {{
   background-color: #2e2e2e;
@@ -321,9 +305,6 @@ html.dark-mode body {{
 }}
 .navbar.dark-mode {{
   background-color: #343a40;
-}}
-.nav-link:hover {{
-  text-decoration: underline;
 }}
 .card {{
   background-color: #ffffff;
@@ -348,9 +329,9 @@ html.dark-mode .card {{
   transform: translateX(-50%);
 }}
 .timeline-item {{
+  padding: 10px 40px;
   position: relative;
   width: 50%;
-  padding: 20px 40px;
   box-sizing: border-box;
 }}
 .timeline-item.left {{
@@ -361,77 +342,47 @@ html.dark-mode .card {{
   left: 50%;
   text-align: left;
 }}
-.timeline-marker {{
+.timeline-item::after {{
+  content: "";
   position: absolute;
   top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   background: #f5f5f5;
   border: 4px solid #6c757d;
   border-radius: 50%;
   z-index: 1;
 }}
-.timeline-item.left .timeline-connector {{
-  position: absolute;
-  top: 18px;
-  right: -50%;
-  width: 50%;
-  height: 2px;
-  background: #6c757d;
+.timeline-item.left::after {{
+  right: -10px;
 }}
-.timeline-item.right .timeline-connector {{
-  position: absolute;
-  top: 18px;
-  left: -50%;
-  width: 50%;
-  height: 2px;
-  background: #6c757d;
+.timeline-item.right::after {{
+  left: -10px;
+}}
+.timeline-date {{
+  font-weight: bold;
+  margin-bottom: 6px;
 }}
 .timeline-content {{
   padding: 10px;
   background: #e9ecef;
   border-radius: 6px;
 }}
-.timeline-date {{
-  font-weight: bold;
-  margin-bottom: 6px;
-}}
-.timeline-text {{
-  margin: 0;
+html.dark-mode .timeline-content {{
+  background: #444;
 }}
 .scroll-animate {{
   opacity: 0;
+  transition: opacity 1s;
 }}
 .animate__fadeIn {{
   opacity: 1 !important;
 }}
-#preloader {{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}}
 {self.custom_css}
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
-<div id="preloader">
-  <div class="spinner-border text-primary" role="status">
-    <span class="sr-only">Loading...</span>
-  </div>
-</div>
-<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark">
   <a class="navbar-brand" href="index.html">{self.title}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
     <span class="navbar-toggler-icon"></span>
@@ -455,7 +406,7 @@ html.dark-mode .card {{
 </footer>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {{
   const observer = new IntersectionObserver((entries) => {{
@@ -466,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function () {{
         entry.target.classList.remove('animate__fadeIn');
       }}
     }});
-  }}, {{ threshold: 0.2 }});
+  }});
   document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
   document.getElementById("toggleTheme").addEventListener("click", function() {{
     document.documentElement.classList.toggle("dark-mode");
@@ -476,9 +427,6 @@ document.addEventListener('DOMContentLoaded', function () {{
       localStorage.setItem('theme', 'light');
     }}
   }});
-  setTimeout(function() {{
-    document.getElementById('preloader').style.display = 'none';
-  }}, 500);
   {self.custom_js}
 }});
 </script>
@@ -491,9 +439,11 @@ document.addEventListener('DOMContentLoaded', function () {{
             file_path = os.path.join(output_dir, f"{slug}.html") if output_dir != "." else f"{slug}.html"
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(html)
+
 """
 if __name__ == "__main__":
-    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
+    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.",
+                  custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
         page.heading("Welcome to My Site")
         page.write("Discover my work and projects.")
@@ -524,7 +474,11 @@ if __name__ == "__main__":
         page.heading("About Me")
         page.write("Information about me goes here.")
     app.add_blog_page("blog_1", "Test Blog", "blog_sample.md")
-    app.add_project_page("project_1", "Project One", "project_intro.md", [("2021-01-01", "Project started"), ("2021-06-01", "Prototype completed"), ("2021-12-31", "Official release")], "https://gist.github.com/username/gistid", "This project demonstrates the awesome features of our site.", [("Paper One", "http://linktopaper1.com", "pdf"), ("Paper Two", "blog_paper_sample.md", "md")])
+    app.add_project_page("project_1", "Project One",
+                          [("2021-01-01", "Project started"), ("2021-06-01", "Prototype completed"), ("2021-12-31", "Official release")],
+                          "https://gist.github.com/username/gistid",
+                          "This project demonstrates the awesome features of our site.",
+                          [("Paper One", "http://linktopaper1.com", "pdf"), ("Paper Two", "blog_paper_sample.md", "md")])
     with app.page("news", "News") as page:
         page.heading("News")
         page.write("Latest news updates.")
