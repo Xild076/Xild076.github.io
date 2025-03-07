@@ -1,16 +1,49 @@
 import os
 import re
 
+try:
+    import markdown as md
+except ImportError:
+    md = None
+
+def convert_markdown_full(markdown_text):
+    if md:
+        return md.markdown(markdown_text)
+    else:
+        lines = markdown_text.splitlines()
+        html_lines = []
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            heading_match = re.match(r'^(#{1,6})\s*(.*)', line)
+            if heading_match:
+                level = len(heading_match.group(1))
+                content = heading_match.group(2)
+                html_lines.append(f"<h{level}>{content}</h{level}>")
+            else:
+                html_lines.append(f"<p>{line}</p>")
+        html_content = "\n".join(html_lines)
+        html_content = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', html_content)
+        html_content = re.sub(r'\*(.*?)\*', r'<em>\1</em>', html_content)
+        html_content = re.sub(r'\~\~(.*?)\~\~', r'<del>\1</del>', html_content)
+        return html_content
+
 class Page:
     def __init__(self, slug, title, website):
         self.slug = slug
         self.title = title
         self.website = website
         self.content = []
+        self.is_blog = False
     def __enter__(self):
         return self
     def __exit__(self, exc_type, exc_value, traceback):
-        self.website.pages[self.slug] = {"title": self.title, "content": self.content}
+        self.website.pages[self.slug] = {
+            "title": self.title,
+            "content": self.content,
+            "is_blog": self.is_blog
+        }
     def heading(self, text, level=1):
         self.content.append(f"<h{level}>{text}</h{level}>")
     def write(self, text):
@@ -194,15 +227,21 @@ class Website:
         return Page(slug, title, self)
     def add_blog_page(self, slug, title, file_path):
         with self.page(slug, title) as page:
+            page.is_blog = True
             page.heading(title)
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read().strip()
-            page.write(content)
+            if file_path.lower().endswith(".md"):
+                html_content = convert_markdown_full(content)
+                page.custom(html_content)
+            else:
+                page.write(content)
         return page
     def compile(self, output_dir="."):
         if output_dir != "." and not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        nav_links = "".join([f'<li class="nav-item"><a class="nav-link" href="{slug}.html">{page["title"]}</a></li>' for slug, page in self.pages.items()])
+        nav_links = "".join([f'<li class="nav-item"><a class="nav-link" href="{slug}.html">{data["title"]}</a></li>' 
+                             for slug, data in self.pages.items() if not data.get("is_blog")])
         base_template = lambda title, content: f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -353,15 +392,17 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
 </body>
 </html>
 """
-        for slug, page in self.pages.items():
-            content = "\n".join(page["content"])
-            html = base_template(page["title"], content)
+        for slug, data in self.pages.items():
+            content = "\n".join(data["content"])
+            html = base_template(data["title"], content)
             file_path = os.path.join(output_dir, f"{slug}.html") if output_dir != "." else f"{slug}.html"
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(html)
+
 """
 if __name__ == "__main__":
-    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
+    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.",
+                  custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
         page.heading("Welcome to My Site")
         page.write("Discover my work and projects.")
@@ -387,11 +428,12 @@ if __name__ == "__main__":
         page.carousel(["https://via.placeholder.com/800x400", "https://via.placeholder.com/800x400", "https://via.placeholder.com/800x400"])
         page.row(["Column 1 content", "Column 2 content", "Column 3 content"])
         page.spacer(50)
-        page.timeline_full([("2025-01-01", "Project initiated."), ("2025-02-15", "First milestone reached."), ("2025-04-01", "Beta launch."), ("2025-06-30", "Official release.")])
+        page.timeline_full([("2025-01-01", "Project initiated."), ("2025-02-15", "First milestone reached."),
+                            ("2025-04-01", "Beta launch."), ("2025-06-30", "Official release.")])
     with app.page("about", "About Me") as page:
         page.heading("About Me")
         page.write("Information about me goes here.")
-    app.add_blog_page("blog_1", "Test Blog", "blog_sample.txt")
+    app.add_blog_page("blog_1", "Test Blog", "blog_sample.md")
     with app.page("news", "News") as page:
         page.heading("News")
         page.write("Latest news updates.")
