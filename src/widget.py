@@ -82,7 +82,7 @@ class Page:
         text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', text)
         text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', text)
         text = re.sub(r'\~\~(.*?)\~\~', r'<del>\1</del>', text)
-        self.content.append(text)
+        self.content.append(f"<p>{text}</p>")
     def list(self, items, ordered=False):
         tag = "ol" if ordered else "ul"
         list_html = f"<{tag}>" + "".join([f"<li>{item}</li>" for item in items]) + f"</{tag}>"
@@ -122,7 +122,7 @@ class Page:
         self.content.append(f'<span data-toggle="tooltip" title="{tooltip_text}">{text}</span>')
     def map(self, location, width=600, height=450):
         self.content.append(f'<iframe src="https://www.google.com/maps?q={location}&output=embed" width="{width}" height="{height}" frameborder="0" style="border:0;" allowfullscreen aria-hidden="false" tabindex="0"></iframe>')
-    def animated(self, html, animation="animate__bounce"):
+    def animated(self, html, animation="animate__fadeIn"):
         self.content.append(f'<div class="animate__animated {animation} scroll-animate">{html}</div>')
     def container(self, content, class_name="container"):
         self.content.append(f'<div class="{class_name}">{content}</div>')
@@ -175,6 +175,13 @@ class Page:
         self.content.append(row_html)
     def spacer(self, height):
         self.content.append(f'<div style="height: {height}px;"></div>')
+    def import_blog(self, file_path):
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read().strip()
+        paragraphs = content.split("\n\n")
+        for para in paragraphs:
+            self.markdown(para)
+            self.content.append("<br>")
 
 class Website:
     def __init__(self, title, footer="", custom_css="", custom_js=""):
@@ -201,30 +208,30 @@ class Website:
 <style>
 body {{
   font-family: 'Roboto', sans-serif;
-  background-color: #ffffff;
-  color: #212529;
+  background-color: #f5f5f5;
+  color: #333;
   transition: background-color 0.3s, color 0.3s;
 }}
 body.dark-mode {{
-  background-color: #121212;
-  color: #e0e0e0;
+  background-color: #2e2e2e;
+  color: #dcdcdc;
 }}
 .navbar {{
-  background-color: #007bff;
+  background-color: #6c757d;
 }}
 .navbar.dark-mode {{
-  background-color: #0056b3;
+  background-color: #343a40;
 }}
 .card {{
   background-color: #ffffff;
 }}
 body.dark-mode .card {{
-  background-color: #1e1e1e;
+  background-color: #3a3a3a;
 }}
 .timeline-entry {{
   margin-bottom: 10px;
   padding: 10px;
-  border-left: 3px solid #007bff;
+  border-left: 3px solid #6c757d;
 }}
 .timeline {{
   position: relative;
@@ -236,7 +243,7 @@ body.dark-mode .card {{
   content: '';
   position: absolute;
   width: 2px;
-  background-color: #007bff;
+  background-color: #6c757d;
   top: 0;
   bottom: 0;
   left: 50%;
@@ -258,8 +265,8 @@ body.dark-mode .card {{
   position: absolute;
   width: 20px;
   height: 20px;
-  background-color: #ffffff;
-  border: 4px solid #007bff;
+  background-color: #f5f5f5;
+  border: 4px solid #6c757d;
   top: 15px;
   border-radius: 50%;
   z-index: 1;
@@ -271,16 +278,23 @@ body.dark-mode .card {{
   left: -10px;
 }}
 .timeline-date {{
-  font-weight: bold;
+  font-weight: 500;
   margin-bottom: 10px;
 }}
 .timeline-content {{
   padding: 10px 20px;
-  background-color: #f1f1f1;
+  background-color: #e9ecef;
   border-radius: 5px;
 }}
 body.dark-mode .timeline-content {{
-  background-color: #333;
+  background-color: #444;
+}}
+.scroll-animate {{
+  opacity: 0;
+  transition: opacity 1s;
+}}
+.animate__fadeIn {{
+  opacity: 1 !important;
 }}
 {self.custom_css}
 </style>
@@ -338,8 +352,8 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
             file_path = os.path.join(output_dir, f"{slug}.html") if output_dir != "." else f"{slug}.html"
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(html)
-
-"""if __name__ == "__main__":
+"""
+if __name__ == "__main__":
     app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
         page.heading("Welcome to My Site")
@@ -358,7 +372,7 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
         page.tabs([("Tab 1", "Content for tab 1."), ("Tab 2", "Content for tab 2.")])
         page.tooltip("Hover over me", "This is a tooltip")
         page.map("New York, NY", 600, 450)
-        page.animated("<p>This text bounces on scroll!</p>", "animate__fadeIn")
+        page.animated("<p>This text fades in on scroll!</p>", "animate__fadeIn")
         page.container("<p>This is inside a container.</p>")
         page.divider()
         page.button("Click Me", "https://example.com")
@@ -372,9 +386,7 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
         page.write("Information about me goes here.")
     with app.page("blog", "Blog") as page:
         page.heading("Blog")
-        page.write("Here is a list of blog posts.")
-        page.timeline_entry("2025-01-01", "Project started")
-        page.timeline_entry("2025-03-01", "First milestone reached")
+        page.import_blog("blog_sample.txt")
     with app.page("news", "News") as page:
         page.heading("News")
         page.write("Latest news updates.")
