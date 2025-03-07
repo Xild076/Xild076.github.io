@@ -247,6 +247,8 @@ class Website:
                 page.custom(html_content)
             else:
                 page.write(content)
+            share_html = f'<div class="share-links"><a href="https://twitter.com/share?url={slug}.html">Twitter</a> | <a href="https://www.facebook.com/sharer/sharer.php?u={slug}.html">Facebook</a> | <a href="https://www.linkedin.com/shareArticle?mini=true&url={slug}.html">LinkedIn</a></div>'
+            page.custom(share_html)
         return page
     def add_project_page(self, slug, title, timeline_events, project_intro, github_gist_url, github_desc, papers, technologies=None):
         with self.page(slug, title) as page:
@@ -286,13 +288,13 @@ class Website:
 <div class="card mb-3" style="max-width: 300px;">
   <a href="{link_target}" style="text-decoration: none; color: inherit;">
     <div class="row no-gutters">
-      <div class="col-md-4">
-        <img src="images/placeholder.png" class="card-img" style="width:100%; height:100%; object-fit:cover;" alt="{paper_title}">
+      <div class="col-4" style="padding:0;">
+        <img src="images/placeholder.png" class="card-img" alt="{paper_title}" style="width:100%; height:100%; object-fit:cover;">
       </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title">{paper_title}</h5>
-          <p class="card-text">{paper_desc}</p>
+      <div class="col-8">
+        <div class="card-body" style="padding: 0.5rem;">
+          <h5 class="card-title" style="font-size:1rem;">{paper_title}</h5>
+          <p class="card-text" style="font-size:0.8rem;">{paper_desc}</p>
         </div>
       </div>
     </div>
@@ -429,8 +431,8 @@ html.dark-mode .card {{
   transform: translateY(0) !important;
 }}
 html.dark-mode .timeline-content {{
-  background: #444;
-  color: #dcdcdc;
+  background: #444 !important;
+  color: #dcdcdc !important;
 }}
 {self.custom_css}
 </style>
@@ -500,7 +502,6 @@ document.addEventListener('DOMContentLoaded', function () {{
             file_path = os.path.join(output_dir, f"{slug}.html") if output_dir != "." else f"{slug}.html"
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(html)
-
 """
 if __name__ == "__main__":
     app = Website("My Site", footer="&copy; 2025 Harry. All rights reserved.",
@@ -552,4 +553,3 @@ if __name__ == "__main__":
         page.write("Latest news updates.", align="center")
     app.compile(".")
 """
-  
