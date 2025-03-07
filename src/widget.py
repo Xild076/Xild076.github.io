@@ -251,7 +251,6 @@ class Website:
             page.custom(share_html)
         return page
     def add_project_page(self, slug, title, timeline_events, project_intro, github_gist_url, github_desc, papers, technologies=None):
-        tech_links = {"Python": "https://www.python.org", "Flask": "https://flask.palletsprojects.com", "Docker": "https://www.docker.com", "React": "https://reactjs.org", "Bootstrap": "https://getbootstrap.com"}
         with self.page(slug, title) as page:
             page.is_project = True
             with open(project_intro, "r", encoding="utf-8") as f:
@@ -286,7 +285,7 @@ class Website:
                 else:
                     link_target = paper_link
                 widget_html = f'''
-<div class="card mb-3" style="width: 300px;">
+<div class="card mb-3" style="max-width: 300px;">
   <a href="{link_target}" style="text-decoration: none; color: inherit;">
     <div class="row no-gutters">
       <div class="col-md-4">
@@ -308,10 +307,11 @@ class Website:
             if technologies is not None:
                 tech_badges = ""
                 for tech in technologies:
-                    if tech in tech_links:
-                        tech_badges += f"<a href='{tech_links[tech]}' target='_blank' class='badge badge-primary mr-2 mb-2'>{tech}</a>"
+                    if isinstance(tech, tuple):
+                        tech_name, tech_desc, tech_link = tech
+                        tech_badges += f"<a href='{tech_link}' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='{tech_desc}'>{tech_name}</a>"
                     else:
-                        tech_badges += f"<span class='badge badge-primary mr-2 mb-2'>{tech}</span>"
+                        tech_badges += f"<span class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;'>{tech}</span>"
                 tech_html = f"<div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'>{tech_badges}</div></div>"
             tabs = [("Introduction", intro_html), ("Timeline", timeline_html)]
             if tech_html:
@@ -542,7 +542,9 @@ if __name__ == "__main__":
                           "This project demonstrates the awesome features of our site.",
                           [("Paper One", "http://linktopaper1.com", "pdf", "A description of Paper One."),
                            ("Paper Two", "blog_paper_sample.md", "md", "A description of Paper Two.")],
-                          technologies=["Python", "Flask", "Docker"])
+                          technologies=[("Python", "A versatile programming language", "https://www.python.org"),
+                                        ("Flask", "A lightweight web framework", "https://flask.palletsprojects.com"),
+                                        ("Docker", "Containerization platform", "https://www.docker.com")])
     with app.page("news", "News") as page:
         page.heading("News", align="center")
         page.write("Latest news updates.", align="center")
