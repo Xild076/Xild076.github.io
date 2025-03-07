@@ -57,8 +57,9 @@ class Page:
             sorted_events = events
         timeline_html = '<div class="timeline">'
         for idx, (date, event) in enumerate(sorted_events):
+            side = "left" if idx % 2 == 0 else "right"
             timeline_html += f'''
-<div class="timeline-item scroll-animate">
+<div class="timeline-item {side} scroll-animate">
   <div class="timeline-date">{date}</div>
   <div class="timeline-content">{event}</div>
 </div>
@@ -278,6 +279,9 @@ class Website:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
+<script>
+if(localStorage.getItem('theme')==='dark'){{document.documentElement.classList.add('dark-mode');}}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -288,7 +292,7 @@ body {{
   color: #333;
   transition: background-color 0.3s, color 0.3s;
 }}
-body.dark-mode {{
+html.dark-mode body {{
   background-color: #2e2e2e;
   color: #dcdcdc;
 }}
@@ -301,47 +305,56 @@ body.dark-mode {{
 .card {{
   background-color: #ffffff;
 }}
-body.dark-mode .card {{
+html.dark-mode .card {{
   background-color: #3a3a3a;
-}}
-.timeline-entry {{
-  margin-bottom: 10px;
-  padding: 10px;
-  border-left: 3px solid #6c757d;
 }}
 .timeline {{
   position: relative;
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 10px;
+  padding: 20px 0;
+  width: 90%;
+  margin: 0 auto;
 }}
-.timeline::after {{
-  content: '';
+.timeline::before {{
+  content: "";
   position: absolute;
-  width: 2px;
-  background-color: #6c757d;
   top: 0;
   bottom: 0;
   left: 50%;
+  width: 4px;
+  background: #6c757d;
   transform: translateX(-50%);
 }}
 .timeline-item {{
-  padding: 20px;
   position: relative;
-  width: 100%;
+  width: 45%;
+  padding: 10px 20px;
+  box-sizing: border-box;
   margin-bottom: 20px;
 }}
-.timeline-date {{
-  font-weight: 500;
-  margin-bottom: 10px;
+.timeline-item.left {{
+  left: 0;
+  text-align: right;
 }}
-.timeline-content {{
-  padding: 10px 20px;
-  background-color: #e9ecef;
-  border-radius: 5px;
+.timeline-item.right {{
+  left: 55%;
+  text-align: left;
 }}
-body.dark-mode .timeline-content {{
-  background-color: #444;
+.timeline-item::after {{
+  content: "";
+  position: absolute;
+  top: 10px;
+  width: 12px;
+  height: 12px;
+  background: #f5f5f5;
+  border: 4px solid #6c757d;
+  border-radius: 50%;
+  z-index: 1;
+}}
+.timeline-item.left::after {{
+  right: -30px;
+}}
+.timeline-item.right::after {{
+  left: -30px;
 }}
 .scroll-animate {{
   opacity: 0;
@@ -381,9 +394,6 @@ body.dark-mode .timeline-content {{
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {{
-  if(localStorage.getItem('theme') === 'dark') {{
-    document.body.classList.add('dark-mode');
-  }}
   const observer = new IntersectionObserver((entries) => {{
     entries.forEach(entry => {{
       if (entry.isIntersecting) {{
@@ -395,8 +405,8 @@ document.addEventListener('DOMContentLoaded', function () {{
   }});
   document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
   document.getElementById("toggleTheme").addEventListener("click", function() {{
-    document.body.classList.toggle("dark-mode");
-    if(document.body.classList.contains("dark-mode")) {{
+    document.documentElement.classList.toggle("dark-mode");
+    if(document.documentElement.classList.contains("dark-mode")) {{
       localStorage.setItem('theme', 'dark');
     }} else {{
       localStorage.setItem('theme', 'light');
@@ -417,7 +427,8 @@ document.addEventListener('DOMContentLoaded', function () {{
 
 """
 if __name__ == "__main__":
-    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
+    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.",
+                  custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
         page.heading("Welcome to My Site")
         page.write("Discover my work and projects.")
