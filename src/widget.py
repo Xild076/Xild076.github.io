@@ -247,8 +247,6 @@ class Website:
                 page.custom(html_content)
             else:
                 page.write(content)
-            share_html = f'<div class="share-links"><a href="https://twitter.com/share?url={slug}.html">Twitter</a> | <a href="https://www.facebook.com/sharer/sharer.php?u={slug}.html">Facebook</a> | <a href="https://www.linkedin.com/shareArticle?mini=true&url={slug}.html">LinkedIn</a></div>'
-            page.custom(share_html)
         return page
     def add_project_page(self, slug, title, timeline_events, project_intro, github_gist_url, github_desc, papers, technologies=None):
         with self.page(slug, title) as page:
@@ -289,7 +287,7 @@ class Website:
   <a href="{link_target}" style="text-decoration: none; color: inherit;">
     <div class="row no-gutters">
       <div class="col-md-4">
-        <img src="images/placeholder.png" class="card-img" alt="{paper_title}">
+        <img src="images/placeholder.png" class="card-img" style="width:100%; height:100%; object-fit:cover;" alt="{paper_title}">
       </div>
       <div class="col-md-8">
         <div class="card-body">
@@ -429,6 +427,10 @@ html.dark-mode .card {{
 .animate__fadeInUp {{
   opacity: 1 !important;
   transform: translateY(0) !important;
+}}
+html.dark-mode .timeline-content {{
+  background: #444;
+  color: #dcdcdc;
 }}
 {self.custom_css}
 </style>

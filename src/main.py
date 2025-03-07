@@ -51,9 +51,9 @@ if __name__ == "__main__":
         page.write("This blog is dedicated to uploading my projects and sharing my thoughts on various topics, whether they be about programming or philosophy. I hope you enjoy your stay!")
 
         page.divider()
-        page.email_link("✉ harry.d.yin.gpc@gmail.com", "Contact Me\n")
-        page.link("🔗 https://www.github.com/Xild076", "GitHub\n")
-        page.link("🔗 https://www.linkedin.com/in/harry-yin-5493152b0/", "LinkedIn")
+        page.email_link("harry.d.yin.gpc@gmail.com", "✉ Contact Me")
+        page.link("https://www.github.com/Xild076", "🔗 GitHub")
+        page.link("https://www.linkedin.com/in/harry-yin-5493152b0/", "🔗 LinkedIn")
         
         page.divider()
         
@@ -91,8 +91,8 @@ if __name__ == "__main__":
         "https://gist.github.com/Xild076/3c89ad41dcc72a5388226d732873bff0",
         "The code provided illustrates the two most critical components of the project: the grouping and objectification, both of which use novel techniques to achieve the desired results. See the paper for more details.",
         [("Beta Paper", "papers/paper_vbeta.md", "md", "This is the first paper written upon release of the Beta version of Alitheia AI"), ("Official Proposal", "papers/Proposal—Objective News.pdf", "pdf", "This is the official proposal paper for a full pipeline version of Alitheia AI, created after much consideration of new methodologies and techniques.")],
-        ["Python 3.x for backend processing", "Streamlit for hosting", "Stanza for NLP", "Hugging Face Transformers for state-of-the-art models",
-         "Scikit-learn for clustering", "BeautifulSoup for web scraping", "Requests for HTTP requests", "Github for development"]
+        [("Python 3.x", "for backend processing", "https://www.python.org/downloads/"), ("Streamlit", "for hosting", "https://streamlit.io/"), ("Stanza", "for NLP", "https://stanfordnlp.github.io/stanza/"), ("Hugging Face Transformers", "for state-of-the-art models", "https://huggingface.co/"),
+         ("Scikit-learn", "for clustering", "https://scikit-learn.org/stable/"), ("BeautifulSoup", "for web scraping", "https://pypi.org/project/beautifulsoup4/"), ("Requests", "for HTTP requests", "https://pypi.org/project/requests/"), ("Github", "for development", "https://github.com/")]
     )
     
     with app.page("about", "About Me") as page:
