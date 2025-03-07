@@ -58,6 +58,7 @@ if __name__ == "__main__":
         page.heading("Blog")
         page.write("Here is a list of blog posts.")
         page.widget("", "Test Blog", "This is a test blog post.", "blog.html")
+        page.import_blog("blog_sample.txt")
     with app.page("projects", "Projects") as page:
         page.heading("Projects")
         page.write("Here is a list of projects.")
