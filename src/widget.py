@@ -36,14 +36,11 @@ class Page:
         self.website = website
         self.content = []
         self.is_blog = False
+        self.is_project = False
     def __enter__(self):
         return self
     def __exit__(self, exc_type, exc_value, traceback):
-        self.website.pages[self.slug] = {
-            "title": self.title,
-            "content": self.content,
-            "is_blog": self.is_blog
-        }
+        self.website.pages[self.slug] = {"title": self.title, "content": self.content, "is_blog": self.is_blog, "is_project": self.is_project}
     def heading(self, text, level=1):
         self.content.append(f"<h{level}>{text}</h{level}>")
     def write(self, text):
@@ -237,11 +234,47 @@ class Website:
             else:
                 page.write(content)
         return page
+    def add_project_page(self, slug, title, timeline_events, github_gist_url, papers):
+        with self.page(slug, title) as page:
+            page.is_project = True
+            timeline_html = '<div class="project-timeline">'
+            for idx, (date, event) in enumerate(timeline_events):
+                side = "left" if idx % 2 == 0 else "right"
+                timeline_html += f'''
+<div class="timeline-item {side}">
+  <div class="timeline-date">{date}</div>
+  <div class="timeline-content">{event}</div>
+</div>
+'''
+            timeline_html += '</div>'
+            code_html = f'<script src="{github_gist_url}.js"></script>'
+            dropdown_html = '''
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="papersDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Select a Paper
+  </button>
+  <div class="dropdown-menu" aria-labelledby="papersDropdown">
+'''
+            for paper in papers:
+                if len(paper) == 2:
+                    paper_title, paper_link = paper
+                    paper_type = "pdf"
+                else:
+                    paper_title, paper_link, paper_type = paper
+                if paper_type.lower() == "md":
+                    paper_slug = f"paper_{re.sub(r'\\W+', '', paper_title).lower()}"
+                    self.add_blog_page(paper_slug, paper_title, paper_link)
+                    dropdown_html += f'<a class="dropdown-item" href="{paper_slug}.html" target="_blank">{paper_title}</a>'
+                else:
+                    dropdown_html += f'<a class="dropdown-item" href="{paper_link}" target="_blank">{paper_title}</a>'
+            dropdown_html += '</div></div>'
+            tabs = [("Timeline", timeline_html), ("Code", code_html), ("Papers", dropdown_html)]
+            page.tabs(tabs)
+        return page
     def compile(self, output_dir="."):
         if output_dir != "." and not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        nav_links = "".join([f'<li class="nav-item"><a class="nav-link" href="{slug}.html">{data["title"]}</a></li>' 
-                             for slug, data in self.pages.items() if not data.get("is_blog")])
+        nav_links = "".join([f'<li class="nav-item"><a class="nav-link" href="{slug}.html">{data["title"]}</a></li>' for slug, data in self.pages.items() if not data.get("is_blog")])
         base_template = lambda title, content: f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -401,8 +434,7 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
 
 """
 if __name__ == "__main__":
-    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.",
-                  custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
+    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
         page.heading("Welcome to My Site")
         page.write("Discover my work and projects.")
@@ -428,12 +460,15 @@ if __name__ == "__main__":
         page.carousel(["https://via.placeholder.com/800x400", "https://via.placeholder.com/800x400", "https://via.placeholder.com/800x400"])
         page.row(["Column 1 content", "Column 2 content", "Column 3 content"])
         page.spacer(50)
-        page.timeline_full([("2025-01-01", "Project initiated."), ("2025-02-15", "First milestone reached."),
-                            ("2025-04-01", "Beta launch."), ("2025-06-30", "Official release.")])
+        page.timeline_full([("2025-01-01", "Project initiated."), ("2025-02-15", "First milestone reached."), ("2025-04-01", "Beta launch."), ("2025-06-30", "Official release.")])
     with app.page("about", "About Me") as page:
         page.heading("About Me")
         page.write("Information about me goes here.")
     app.add_blog_page("blog_1", "Test Blog", "blog_sample.md")
+    app.add_project_page("project_1", "Project One",
+                          [("2021-01-01", "Project started"), ("2021-06-01", "Prototype completed"), ("2021-12-31", "Official release")],
+                          "https://gist.github.com/username/gistid",
+                          [("Paper One", "http://linktopaper1.com", "pdf"), ("Paper Two", "blog_paper_sample.md", "md")])
     with app.page("news", "News") as page:
         page.heading("News")
         page.write("Latest news updates.")

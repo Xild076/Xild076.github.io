@@ -46,23 +46,48 @@ if __name__ == "__main__":
     app = Website("Harry's Blog", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
         page.heading("(Xild076) Harry's Blog")
-        page.write("Hello and welcome to my blog. Here you will find a few of my thoughts and ideas, whether they be about programming or philosophy. I've also included a few of my projects and some other neat stuff. Enjoy!")
+        page.write("Hello and welcome to my blog! :D")
+        page.write("My name is Harry and I am an aspiring data scientist (specifically in the form of data collection and AI models). I am currently a student at Leland High School in San Jose, California.")
+        page.write("This blog is dedicated to uploading my projects and sharing my thoughts on various topics. I hope you enjoy your stay!")
+        
         page.divider()
+        
         page.heading("Latest Blog Posts")
-        page.widget("", "Test Blog", "This is a test blog post.", "blog")
+        page.button("View All Blog Posts", "blog")
+        page.widget("", "Hello Blog!", "This is a test/hello blog post!", "hello_blog")
+        
         page.divider()
-        page.heading("Projects")
+        
+        page.heading("Project Timeline")
         page.timeline_entry("2023-06-01", "Began project StockPred")
         page.timeline_entry("2023-09-01", "Completed first version of project StockPred")
+
     with app.page("blog", "Blog") as page:
-        page.heading("Blog")
-        page.write("Here is a list of blog posts.")
-        page.widget("", "Test Blog", "This is a test blog post.", "blog_1")
-    app.add_blog_page("blog_1", "Test Blog", "blog_sample.md")
+        page.heading("Blogposts")
+        page.write("Here are a couple of blogposts!")
+        page.widget("", "Hello Blog!", "This is a test/hello blog post!", "hello_blog")
+    
+    app.add_blog_page("hello_blog", "Hello Blog", "blogs/hello_blog.md")
+    
     with app.page("projects", "Projects") as page:
         page.heading("Projects")
         page.write("Here is a list of projects.")
+        page.widget("", "Alitheia AI", "This is a project that objectifies News.", "objectivenews")
+    
+    app.add_project_page(
+        "objectivenews",
+        "Alitheia AI (Objective News)",
+        [("2024-10-01", "Began project Objective News"), 
+         ("2024-12-15", "Completed the first beta version of Objective News"), 
+         ("2025-01-02", "Completed the second beta version of Objective News"),
+         ("2025-02-09", "Completed official proposal paper for full version of Objective News"),
+         ("2025-03-06", "Renamed project to Alitheia AI (Greek for 'truth')")],
+        "https://gist.github.com/Xild076/3c89ad41dcc72a5388226d732873bff0",
+        [("Beta Paper", "papers/paper_vbeta.md", "md"), ("Official Proposal", "papers/Proposal—Objective News.pdf", "pdf")]
+    )
+    
     with app.page("about", "About Me") as page:
         page.heading("About Me")
         page.write("About me!")
+    
     app.compile(".")
