@@ -54,30 +54,8 @@ body.dark-mode .card {
 .timeline-item {
   padding: 20px;
   position: relative;
-  width: 50%;
-}
-.timeline-item.left {
-  left: 0;
-}
-.timeline-item.right {
-  left: 50%;
-}
-.timeline-item::after {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: #f5f5f5;
-  border: 4px solid #6c757d;
-  top: 15px;
-  border-radius: 50%;
-  z-index: 1;
-}
-.timeline-item.left::after {
-  right: -10px;
-}
-.timeline-item.right::after {
-  left: -10px;
+  width: 100%;
+  margin-bottom: 20px;
 }
 .timeline-date {
   font-weight: 500;
@@ -109,7 +87,7 @@ body { padding-bottom: 50px; }
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li><li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li><li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li><li class="nav-item"><a class="nav-link" href="objectivenews.html">Alitheia AI (Objective News)</a></li><li class="nav-item"><a class="nav-link" href="about.html">About Me</a></li>
+      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li><li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li><li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li><li class="nav-item"><a class="nav-link" href="about.html">About Me</a></li>
       <li class="nav-item">
         <button id="toggleTheme" class="btn btn-secondary">Toggle Theme</button>
       </li>
@@ -118,37 +96,31 @@ body { padding-bottom: 50px; }
 </nav>
 <div class="container mt-5">
 <ul class="nav nav-tabs" id="tabsExample" role="tablist"><li class="nav-item"><a class="nav-link active" id="tab0" data-toggle="tab" href="#content0" role="tab">Timeline</a></li><li class="nav-item"><a class="nav-link " id="tab1" data-toggle="tab" href="#content1" role="tab">Code</a></li><li class="nav-item"><a class="nav-link " id="tab2" data-toggle="tab" href="#content2" role="tab">Papers</a></li></ul><div class="tab-content" id="tabsExampleContent"><div class="tab-pane fade show active" id="content0" role="tabpanel"><div class="project-timeline">
-<div class="timeline-item left">
-  <div class="timeline-date">2024-10-01</div>
-  <div class="timeline-content">Began project Objective News</div>
+<div class="timeline-item">
+  <div class="timeline-date">2025-03-06</div>
+  <div class="timeline-content">Renamed project to Alitheia AI (Greek for 'truth')</div>
 </div>
 
-<div class="timeline-item right">
-  <div class="timeline-date">2024-12-15</div>
-  <div class="timeline-content">Completed the first beta version of Objective News</div>
-</div>
-
-<div class="timeline-item left">
-  <div class="timeline-date">2025-01-02</div>
-  <div class="timeline-content">Completed the second beta version of Objective News</div>
-</div>
-
-<div class="timeline-item right">
+<div class="timeline-item">
   <div class="timeline-date">2025-02-09</div>
   <div class="timeline-content">Completed official proposal paper for full version of Objective News</div>
 </div>
 
-<div class="timeline-item left">
-  <div class="timeline-date">2025-03-06</div>
-  <div class="timeline-content">Renamed project to Alitheia AI (Greek for 'truth')</div>
+<div class="timeline-item">
+  <div class="timeline-date">2025-01-02</div>
+  <div class="timeline-content">Completed the second beta version of Objective News</div>
 </div>
-</div></div><div class="tab-pane fade show " id="content1" role="tabpanel"><script src="https://gist.github.com/Xild076/3c89ad41dcc72a5388226d732873bff0.js"></script></div><div class="tab-pane fade show " id="content2" role="tabpanel">
-<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="papersDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Select a Paper
-  </button>
-  <div class="dropdown-menu" aria-labelledby="papersDropdown">
-<a class="dropdown-item" href="paper_beta paper.html" target="_blank">Beta Paper</a><a class="dropdown-item" href="papers/Proposal—Objective News.pdf" target="_blank">Official Proposal</a></div></div></div></div>
+
+<div class="timeline-item">
+  <div class="timeline-date">2024-12-15</div>
+  <div class="timeline-content">Completed the first beta version of Objective News</div>
+</div>
+
+<div class="timeline-item">
+  <div class="timeline-date">2024-10-01</div>
+  <div class="timeline-content">Began project Objective News</div>
+</div>
+</div></div><div class="tab-pane fade show " id="content1" role="tabpanel"><p>The code provided illustrates the two most critical components of the project: the grouping and objectification, both of which use novel techniques to achieve the desired results. See the paper for more details.</p><script src="https://gist.github.com/Xild076/3c89ad41dcc72a5388226d732873bff0.js"></script></div><div class="tab-pane fade show " id="content2" role="tabpanel"><div class="paper-section"><h5>Beta Paper</h5><p><a href="paper_beta paper.html" target="_blank">View Paper</a></p></div><div class="paper-section"><h5>Official Proposal</h5><p><a href="papers/Proposal—Objective News.pdf" target="_blank">View PDF</a></p></div></div></div>
 </div>
 <footer class="footer mt-5">
   <div class="container">
@@ -160,6 +132,9 @@ body { padding-bottom: 50px; }
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  if(localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+  }
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -170,11 +145,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
   document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
+  document.getElementById("toggleTheme").addEventListener("click", function() {
+    document.body.classList.toggle("dark-mode");
+    if(document.body.classList.contains("dark-mode")) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  });
+  console.log('Custom JS loaded');
 });
-document.getElementById("toggleTheme").addEventListener("click", function() {
-  document.body.classList.toggle("dark-mode");
-});
-console.log('Custom JS loaded');
 </script>
 </body>
 </html>

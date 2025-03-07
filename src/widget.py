@@ -51,7 +51,6 @@ class Page:
     def timeline_entry(self, date, event):
         self.content.append(f'<div class="timeline-entry"><strong>{date}:</strong> {event}</div>')
     def timeline_full(self, events):
-        sorted_events = []
         try:
             sorted_events = sorted(events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"), reverse=True)
         except Exception:
@@ -260,13 +259,9 @@ class Website:
             for paper in papers:
                 paper_title, paper_link, paper_type = paper
                 if paper_type.lower() == "md":
-                    try:
-                        with open(paper_link, "r", encoding="utf-8") as f:
-                            paper_content = f.read().strip()
-                        paper_html = convert_markdown_full(paper_content)
-                    except Exception:
-                        paper_html = f"<p>Unable to load {paper_title}</p>"
-                    papers_html += f'<div class="paper-section"><h5>{paper_title}</h5>{paper_html}</div>'
+                    paper_slug = f"paper_{re.sub(r'\\W+', '', paper_title).lower()}"
+                    self.add_blog_page(paper_slug, paper_title, paper_link)
+                    papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p><a href="{paper_slug}.html" target="_blank">View Paper</a></p></div>'
                 else:
                     papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p><a href="{paper_link}" target="_blank">View PDF</a></p></div>'
             tabs = [("Timeline", timeline_html), ("Code", code_html), ("Papers", papers_html)]
@@ -386,6 +381,9 @@ body.dark-mode .timeline-content {{
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {{
+  if(localStorage.getItem('theme') === 'dark') {{
+    document.body.classList.add('dark-mode');
+  }}
   const observer = new IntersectionObserver((entries) => {{
     entries.forEach(entry => {{
       if (entry.isIntersecting) {{
@@ -396,11 +394,16 @@ document.addEventListener('DOMContentLoaded', function () {{
     }});
   }});
   document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
+  document.getElementById("toggleTheme").addEventListener("click", function() {{
+    document.body.classList.toggle("dark-mode");
+    if(document.body.classList.contains("dark-mode")) {{
+      localStorage.setItem('theme', 'dark');
+    }} else {{
+      localStorage.setItem('theme', 'light');
+    }}
+  }});
+  {self.custom_js}
 }});
-document.getElementById("toggleTheme").addEventListener("click", function() {{
-  document.body.classList.toggle("dark-mode");
-}});
-{self.custom_js}
 </script>
 </body>
 </html>
@@ -414,8 +417,7 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
 
 """
 if __name__ == "__main__":
-    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.",
-                  custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
+    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
         page.heading("Welcome to My Site")
         page.write("Discover my work and projects.")
