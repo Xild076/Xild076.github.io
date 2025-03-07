@@ -251,6 +251,7 @@ class Website:
             page.custom(share_html)
         return page
     def add_project_page(self, slug, title, timeline_events, project_intro, github_gist_url, github_desc, papers, technologies=None):
+        tech_links = {"Python": "https://www.python.org", "Flask": "https://flask.palletsprojects.com", "Docker": "https://www.docker.com", "React": "https://reactjs.org", "Bootstrap": "https://getbootstrap.com"}
         with self.page(slug, title) as page:
             page.is_project = True
             with open(project_intro, "r", encoding="utf-8") as f:
@@ -285,7 +286,7 @@ class Website:
                 else:
                     link_target = paper_link
                 widget_html = f'''
-<div class="card mb-3" style="width: 100%;">
+<div class="card mb-3" style="width: 300px;">
   <a href="{link_target}" style="text-decoration: none; color: inherit;">
     <div class="row no-gutters">
       <div class="col-md-4">
@@ -305,7 +306,13 @@ class Website:
             papers_html += '</div>'
             tech_html = ""
             if technologies is not None:
-                tech_html = "<div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'>" + "".join([f"<span class='badge badge-primary mr-2 mb-2'>{tech}</span>" for tech in technologies]) + "</div></div>"
+                tech_badges = ""
+                for tech in technologies:
+                    if tech in tech_links:
+                        tech_badges += f"<a href='{tech_links[tech]}' target='_blank' class='badge badge-primary mr-2 mb-2'>{tech}</a>"
+                    else:
+                        tech_badges += f"<span class='badge badge-primary mr-2 mb-2'>{tech}</span>"
+                tech_html = f"<div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'>{tech_badges}</div></div>"
             tabs = [("Introduction", intro_html), ("Timeline", timeline_html)]
             if tech_html:
                 tabs.append(("Technologies", tech_html))
@@ -385,33 +392,34 @@ html.dark-mode .card {{
   left: 50%;
   text-align: left;
 }}
-.timeline-item::before {{
+.timeline-content {{
+  padding: 15px;
+  background: #e9ecef;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+}}
+.timeline-item.left .timeline-content::after {{
   content: "";
   position: absolute;
-  top: 25px;
-  width: 0;
-  height: 0;
-  border: 10px solid transparent;
-}}
-.timeline-item.left::before {{
+  top: 50%;
   right: -20px;
-  border-left-color: #e9ecef;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
 }}
-.timeline-item.right::before {{
-  left: -20px;
-  border-right-color: #e9ecef;
-}}
-.timeline-item::after {{
+.timeline-item.right .timeline-content::after {{
   content: "";
   position: absolute;
-  top: 20px;
-  left: calc(50% - 8px);
-  width: 16px;
-  height: 16px;
-  background: #fff;
-  border: 3px solid #6c757d;
-  border-radius: 50%;
-  z-index: 2;
+  top: 50%;
+  left: -20px;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
+}}
+.timeline-date {{
+  font-weight: bold;
+  margin-bottom: 6px;
 }}
 .scroll-animate {{
   opacity: 0;
@@ -540,3 +548,4 @@ if __name__ == "__main__":
         page.write("Latest news updates.", align="center")
     app.compile(".")
 """
+  

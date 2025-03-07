@@ -66,33 +66,34 @@ html.dark-mode .card {
   left: 50%;
   text-align: left;
 }
-.timeline-item::before {
+.timeline-content {
+  padding: 15px;
+  background: #e9ecef;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+}
+.timeline-item.left .timeline-content::after {
   content: "";
   position: absolute;
-  top: 25px;
-  width: 0;
-  height: 0;
-  border: 10px solid transparent;
-}
-.timeline-item.left::before {
+  top: 50%;
   right: -20px;
-  border-left-color: #e9ecef;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
 }
-.timeline-item.right::before {
-  left: -20px;
-  border-right-color: #e9ecef;
-}
-.timeline-item::after {
+.timeline-item.right .timeline-content::after {
   content: "";
   position: absolute;
-  top: 20px;
-  left: calc(50% - 8px);
-  width: 16px;
-  height: 16px;
-  background: #fff;
-  border: 3px solid #6c757d;
-  border-radius: 50%;
-  z-index: 2;
+  top: 50%;
+  left: -20px;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
+}
+.timeline-date {
+  font-weight: bold;
+  margin-bottom: 6px;
 }
 .scroll-animate {
   opacity: 0;
@@ -150,7 +151,7 @@ body { padding-bottom: 50px; }
   <div class="timeline-content">Began project Objective News</div>
 </div>
 </div></div><div class="tab-pane fade show " id="content2" role="tabpanel"><div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'><span class='badge badge-primary mr-2 mb-2'>Python 3.x for backend processing</span><span class='badge badge-primary mr-2 mb-2'>Streamlit for hosting</span><span class='badge badge-primary mr-2 mb-2'>Stanza for NLP</span><span class='badge badge-primary mr-2 mb-2'>Hugging Face Transformers for state-of-the-art models</span><span class='badge badge-primary mr-2 mb-2'>Scikit-learn for clustering</span><span class='badge badge-primary mr-2 mb-2'>BeautifulSoup for web scraping</span><span class='badge badge-primary mr-2 mb-2'>Requests for HTTP requests</span><span class='badge badge-primary mr-2 mb-2'>Github for development</span></div></div></div><div class="tab-pane fade show " id="content3" role="tabpanel"><div style="height: 10px;"></div><p>The code provided illustrates the two most critical components of the project: the grouping and objectification, both of which use novel techniques to achieve the desired results. See the paper for more details.</p><script src="https://gist.github.com/Xild076/3c89ad41dcc72a5388226d732873bff0.js"></script></div><div class="tab-pane fade show " id="content4" role="tabpanel"><div class="paper-widgets"><div style="margin-bottom: 15px;">
-<div class="card mb-3" style="width: 100%;">
+<div class="card mb-3" style="width: 300px;">
   <a href="paper_beta paper.html" style="text-decoration: none; color: inherit;">
     <div class="row no-gutters">
       <div class="col-md-4">
@@ -166,7 +167,7 @@ body { padding-bottom: 50px; }
   </a>
 </div>
 </div><div style="margin-bottom: 15px;">
-<div class="card mb-3" style="width: 100%;">
+<div class="card mb-3" style="width: 300px;">
   <a href="papers/Proposal—Objective News.pdf" style="text-decoration: none; color: inherit;">
     <div class="row no-gutters">
       <div class="col-md-4">
