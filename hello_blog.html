@@ -82,6 +82,20 @@ html.dark-mode .card {
 .timeline-item.right::after {
   left: -6px;
 }
+.timeline-item.left::before, .timeline-item.right::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
+}
+.timeline-item.left::before {
+  right: -20px;
+}
+.timeline-item.right::before {
+  left: -20px;
+}
 .timeline-date {
   font-weight: bold;
   margin-bottom: 6px;
@@ -169,6 +183,12 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       localStorage.setItem('theme', 'light');
     }
+  });
+  document.querySelectorAll('a[href="#top"]').forEach(function(link){
+    link.addEventListener("click", function(e){
+      e.preventDefault();
+      window.scrollTo({top: 0, behavior: "smooth"});
+    });
   });
   console.log('Custom JS loaded');
 });

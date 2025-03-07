@@ -91,10 +91,10 @@ class Page:
         self.content.append(f'<img src="{image_url}" alt="{alt_text}" style="{style}">')
     def email_link(self, email, text=None):
         display_text = text if text else email
-        self.content.append(f'<a href="mailto:{email}">{display_text}</a>\n')
+        self.content.append(f'<a href="mailto:{email}">{display_text}</a><br>')
     def link(self, url, text=None):
         display_text = text if text else url
-        self.content.append(f'<a href="{url}">{display_text}</a>\n')
+        self.content.append(f'<a href="{url}">{display_text}</a><br>')
     def code_block(self, code, language=""):
         self.content.append(f"<pre><code class='{language}'>{code}</code></pre>")
     def video(self, video_url, width=560, height=315):
@@ -270,7 +270,7 @@ class Website:
 '''
             timeline_html += '</div>'
             code_html = '<div style="height: 10px;"></div>' + f"<p>{github_desc}</p>" + f'<script src="{github_gist_url}.js"></script>'
-            papers_html = '<div style="height: 10px;"></div>'
+            papers_html = '<div class="row">'
             for paper in papers:
                 if len(paper) >= 4:
                     paper_title, paper_link, paper_type, paper_desc = paper
@@ -280,9 +280,28 @@ class Website:
                 if paper_type.lower() == "md":
                     paper_slug = f"paper_{re.sub(r'\\W+', '', paper_title).lower()}"
                     self.add_blog_page(paper_slug, paper_title, paper_link)
-                    papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p>{paper_desc}</p><p><a href="{paper_slug}.html" target="_blank">View Paper</a></p></div>'
+                    link_target = f"{paper_slug}.html"
                 else:
-                    papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p>{paper_desc}</p><p><a href="{paper_link}" target="_blank">View PDF</a></p></div>'
+                    link_target = paper_link
+                widget_html = f'''
+<div class="card mb-3" style="width: 100%;">
+  <a href="{link_target}" style="text-decoration: none; color: inherit;">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="images/placeholder.png" class="card-img" alt="{paper_title}">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{paper_title}</h5>
+          <p class="card-text">{paper_desc}</p>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+'''
+                papers_html += f'<div class="col-md-4">{widget_html}</div>'
+            papers_html += '</div>'
             tech_html = ""
             if technologies is not None:
                 tech_html = "<div class='project-technologies'><h5>Technologies Used</h5><ul>" + "".join([f"<li>{tech}</li>" for tech in technologies]) + "</ul></div>"
@@ -381,6 +400,20 @@ html.dark-mode .card {{
 .timeline-item.right::after {{
   left: -6px;
 }}
+.timeline-item.left::before, .timeline-item.right::before {{
+  content: "";
+  position: absolute;
+  top: 20px;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
+}}
+.timeline-item.left::before {{
+  right: -20px;
+}}
+.timeline-item.right::before {{
+  left: -20px;
+}}
 .timeline-date {{
   font-weight: bold;
   margin-bottom: 6px;
@@ -453,6 +486,12 @@ document.addEventListener('DOMContentLoaded', function () {{
       localStorage.setItem('theme', 'light');
     }}
   }});
+  document.querySelectorAll('a[href="#top"]').forEach(function(link){{
+    link.addEventListener("click", function(e){{
+      e.preventDefault();
+      window.scrollTo({{top: 0, behavior: "smooth"}});
+    }});
+  }});
   {self.custom_js}
 }});
 </script>
@@ -475,7 +514,9 @@ if __name__ == "__main__":
         page.write("Discover my work and projects.", align="center")
         page.widget("", "Sample Widget", "This is a clickable widget linking to our blog.", "blog_1")
         page.image("https://via.placeholder.com/300x200", "Sample Image", 300, 200)
-        page.email_link("example@example.com", "Contact Us")
+        page.email_link("harry.d.yin.gpc@gmail.com", "Contact Me\n")
+        page.link("https://www.github.com/Xild076", "GitHub\n")
+        page.link("https://www.linkedin.com/in/harry-yin-5493152b0/", "LinkedIn")
         page.video("https://www.youtube.com/embed/dQw4w9WgXcQ")
         page.code_block("print('Hello, world!')", "python")
         page.blockquote("This is an inspiring quote.", "Author Name")
