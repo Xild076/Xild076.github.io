@@ -42,14 +42,15 @@ class Page:
         return self
     def __exit__(self, exc_type, exc_value, traceback):
         self.website.pages[self.slug] = {"title": self.title, "content": self.content, "is_blog": self.is_blog, "is_project": self.is_project}
-    def heading(self, text, level=1):
-        self.content.append(f"<h{level}>{text}</h{level}>")
-    def write(self, text):
-        self.content.append(f"<p>{text}</p>")
+    def heading(self, text, level=1, align="left"):
+        self.content.append(f"<h{level} style='text-align: {align};'>{text}</h{level}>")
+    def write(self, text, align="left"):
+        self.content.append(f"<p style='text-align: {align};'>{text}</p>")
     def custom(self, html):
         self.content.append(html)
-    def timeline_entry(self, date, event):
-        self.content.append(f'<div class="timeline-entry"><strong>{date}:</strong> {event}</div>')
+    def timeline_entry(self, date, event, icon=""):
+        icon_html = f"<i class='{icon}'></i> " if icon else ""
+        self.content.append(f'<div class="timeline-item scroll-animate"><div class="timeline-date">{date}</div><div class="timeline-content">{icon_html}{event}</div></div>')
     def timeline_full(self, events):
         try:
             sorted_events = sorted(events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"))
@@ -58,12 +59,7 @@ class Page:
         timeline_html = '<div class="timeline">'
         for idx, (date, event) in enumerate(sorted_events):
             side = "left" if idx % 2 == 0 else "right"
-            timeline_html += f'''
-<div class="timeline-item {side} scroll-animate">
-  <div class="timeline-date">{date}</div>
-  <div class="timeline-content">{event}</div>
-</div>
-'''
+            timeline_html += f'<div class="timeline-item {side} scroll-animate"><div class="timeline-date">{date}</div><div class="timeline-content">{event}</div></div>'
         timeline_html += '</div>'
         self.content.append(timeline_html)
     def widget(self, image_url, title, description, link):
@@ -96,6 +92,9 @@ class Page:
     def email_link(self, email, text=None):
         display_text = text if text else email
         self.content.append(f'<a href="mailto:{email}">{display_text}</a>')
+    def link(self, url, text=None):
+        display_text = text if text else url
+        self.content.append(f'<a href="{url}">{display_text}</a>')
     def code_block(self, code, language=""):
         self.content.append(f"<pre><code class='{language}'>{code}</code></pre>")
     def video(self, video_url, width=560, height=315):
@@ -113,11 +112,11 @@ class Page:
             gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid"></div>'
         gallery_html += '</div>'
         self.content.append(gallery_html)
-    def markdown(self, text):
+    def markdown(self, text, align="left"):
         text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', text)
         text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', text)
         text = re.sub(r'\~\~(.*?)\~\~', r'<del>\1</del>', text)
-        self.content.append(f"<p>{text}</p>")
+        self.content.append(f"<p style='text-align: {align};'>{text}</p>")
     def list(self, items, ordered=False):
         tag = "ol" if ordered else "ul"
         list_html = f"<{tag}>" + "".join([f"<li>{item}</li>" for item in items]) + f"</{tag}>"
@@ -157,7 +156,7 @@ class Page:
         self.content.append(f'<span data-toggle="tooltip" title="{tooltip_text}">{text}</span>')
     def map(self, location, width=600, height=450):
         self.content.append(f'<iframe src="https://www.google.com/maps?q={location}&output=embed" width="{width}" height="{height}" frameborder="0" style="border:0;" allowfullscreen aria-hidden="false" tabindex="0"></iframe>')
-    def animated(self, html, animation="animate__fadeIn"):
+    def animated(self, html, animation="animate__fadeInUp"):
         self.content.append(f'<div class="animate__animated {animation} scroll-animate">{html}</div>')
     def container(self, content, class_name="container"):
         self.content.append(f'<div class="{class_name}">{content}</div>')
@@ -239,7 +238,7 @@ class Website:
             else:
                 page.write(content)
         return page
-    def add_project_page(self, slug, title, project_intro, timeline_events, github_gist_url, github_desc, papers):
+    def add_project_page(self, slug, title, timeline_events, project_intro, github_gist_url, github_desc, papers):
         with self.page(slug, title) as page:
             page.is_project = True
             with open(project_intro, "r", encoding="utf-8") as f:
@@ -308,6 +307,8 @@ html.dark-mode body {{
 }}
 .card {{
   background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: none;
 }}
 html.dark-mode .card {{
   background-color: #3a3a3a;
@@ -324,12 +325,12 @@ html.dark-mode .card {{
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 4px;
-  background: #6c757d;
+  width: 2px;
+  background: #ccc;
   transform: translateX(-50%);
 }}
 .timeline-item {{
-  padding: 10px 40px;
+  padding: 20px;
   position: relative;
   width: 50%;
   box-sizing: border-box;
@@ -345,38 +346,41 @@ html.dark-mode .card {{
 .timeline-item::after {{
   content: "";
   position: absolute;
-  top: 10px;
+  top: 15px;
   width: 12px;
   height: 12px;
-  background: #f5f5f5;
-  border: 4px solid #6c757d;
+  background: #fff;
+  border: 2px solid #6c757d;
   border-radius: 50%;
   z-index: 1;
 }}
 .timeline-item.left::after {{
-  right: -10px;
+  right: -6px;
 }}
 .timeline-item.right::after {{
-  left: -10px;
+  left: -6px;
 }}
 .timeline-date {{
   font-weight: bold;
   margin-bottom: 6px;
 }}
 .timeline-content {{
-  padding: 10px;
+  padding: 15px;
   background: #e9ecef;
   border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }}
 html.dark-mode .timeline-content {{
   background: #444;
 }}
 .scroll-animate {{
   opacity: 0;
-  transition: opacity 1s;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }}
-.animate__fadeIn {{
+.animate__fadeInUp {{
   opacity: 1 !important;
+  transform: translateY(0) !important;
 }}
 {self.custom_css}
 </style>
@@ -409,15 +413,14 @@ html.dark-mode .timeline-content {{
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {{
-  const observer = new IntersectionObserver((entries) => {{
+  const observer = new IntersectionObserver((entries, observer) => {{
     entries.forEach(entry => {{
       if (entry.isIntersecting) {{
-        entry.target.classList.add('animate__fadeIn');
-      }} else {{
-        entry.target.classList.remove('animate__fadeIn');
+        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+        observer.unobserve(entry.target);
       }}
     }});
-  }});
+  }}, {{ threshold: 0.3 }});
   document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
   document.getElementById("toggleTheme").addEventListener("click", function() {{
     document.documentElement.classList.toggle("dark-mode");
@@ -442,11 +445,11 @@ document.addEventListener('DOMContentLoaded', function () {{
 
 """
 if __name__ == "__main__":
-    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.",
+    app = Website("My Site", footer="&copy; 2025 Harry. All rights reserved.",
                   custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
-        page.heading("Welcome to My Site")
-        page.write("Discover my work and projects.")
+        page.heading("Welcome to My Site", align="center")
+        page.write("Discover my work and projects.", align="center")
         page.widget("", "Sample Widget", "This is a clickable widget linking to our blog.", "blog_1")
         page.image("https://via.placeholder.com/300x200", "Sample Image", 300, 200)
         page.email_link("example@example.com", "Contact Us")
@@ -455,13 +458,13 @@ if __name__ == "__main__":
         page.blockquote("This is an inspiring quote.", "Author Name")
         page.alert_box("This is an important alert!", "warning")
         page.gallery(["https://via.placeholder.com/200", "https://via.placeholder.com/200", "https://via.placeholder.com/200"])
-        page.markdown("This is **bold** text and *italic* text with ~~strikethrough~~.")
+        page.markdown("This is **bold** text and *italic* text with ~~strikethrough~~.", align="center")
         page.list(["Item 1", "Item 2", "Item 3"])
         page.accordion([("Section 1", "Content for section 1."), ("Section 2", "Content for section 2.")])
         page.tabs([("Tab 1", "Content for tab 1."), ("Tab 2", "Content for tab 2.")])
         page.tooltip("Hover over me", "This is a tooltip")
         page.map("New York, NY", 600, 450)
-        page.animated("<p>This text fades in on scroll!</p>", "animate__fadeIn")
+        page.animated("<p>This text fades in on scroll!</p>")
         page.container("<p>This is inside a container.</p>")
         page.divider()
         page.button("Click Me", "https://example.com")
@@ -471,16 +474,17 @@ if __name__ == "__main__":
         page.spacer(50)
         page.timeline_full([("2025-01-01", "Project initiated."), ("2025-02-15", "First milestone reached."), ("2025-04-01", "Beta launch."), ("2025-06-30", "Official release.")])
     with app.page("about", "About Me") as page:
-        page.heading("About Me")
-        page.write("Information about me goes here.")
+        page.heading("About Me", align="center")
+        page.write("Information about me goes here.", align="center")
     app.add_blog_page("blog_1", "Test Blog", "blog_sample.md")
     app.add_project_page("project_1", "Project One",
                           [("2021-01-01", "Project started"), ("2021-06-01", "Prototype completed"), ("2021-12-31", "Official release")],
+                          "project_intro.md",
                           "https://gist.github.com/username/gistid",
                           "This project demonstrates the awesome features of our site.",
                           [("Paper One", "http://linktopaper1.com", "pdf"), ("Paper Two", "blog_paper_sample.md", "md")])
     with app.page("news", "News") as page:
-        page.heading("News")
-        page.write("Latest news updates.")
+        page.heading("News", align="center")
+        page.write("Latest news updates.", align="center")
     app.compile(".")
 """
