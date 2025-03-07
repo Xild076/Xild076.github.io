@@ -36,7 +36,7 @@ class Page:
             image_url = "images/placeholder.png"
         self.content.append(f'''
 <div class="card mb-3" style="max-width: 540px;">
-  <a href="{link}" style="text-decoration: none; color: inherit;">
+  <a href="{link}.html" style="text-decoration: none; color: inherit;">
     <div class="row no-gutters">
       <div class="col-md-4">
         <img src="{image_url}" class="card-img" alt="{title}">
@@ -175,7 +175,7 @@ class Page:
         self.content.append(row_html)
     def spacer(self, height):
         self.content.append(f'<div style="height: {height}px;"></div>')
-    def import_blog(self, file_path):
+    def import_text(self, file_path):
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read().strip()
         paragraphs = content.split("\n\n")
@@ -192,6 +192,13 @@ class Website:
         self.pages = {}
     def page(self, slug, title):
         return Page(slug, title, self)
+    def add_blog_page(self, slug, title, file_path):
+        page = self.page(slug, title)
+        page.heading(title)
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read().strip()
+        page.write(content)
+        return page
     def compile(self, output_dir="."):
         if output_dir != "." and not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -352,13 +359,13 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
             file_path = os.path.join(output_dir, f"{slug}.html") if output_dir != "." else f"{slug}.html"
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(html)
-"""
-if __name__ == "__main__":
+
+"""if __name__ == "__main__":
     app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
         page.heading("Welcome to My Site")
         page.write("Discover my work and projects.")
-        page.widget("", "Sample Widget", "This is a clickable widget with image on the left.", "blog.html")
+        page.widget("", "Sample Widget", "This is a clickable widget linking to our blog.", "blog")
         page.image("https://via.placeholder.com/300x200", "Sample Image", 300, 200)
         page.email_link("example@example.com", "Contact Us")
         page.video("https://www.youtube.com/embed/dQw4w9WgXcQ")
@@ -384,9 +391,7 @@ if __name__ == "__main__":
     with app.page("about", "About Me") as page:
         page.heading("About Me")
         page.write("Information about me goes here.")
-    with app.page("blog", "Blog") as page:
-        page.heading("Blog")
-        page.import_blog("blog_sample.txt")
+    app.add_blog_page("blog", "Blog", "blog_sample.txt")
     with app.page("news", "News") as page:
         page.heading("News")
         page.write("Latest news updates.")
