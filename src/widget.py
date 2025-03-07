@@ -1,5 +1,6 @@
 import os
 import re
+from datetime import datetime
 
 try:
     import markdown as md
@@ -50,11 +51,15 @@ class Page:
     def timeline_entry(self, date, event):
         self.content.append(f'<div class="timeline-entry"><strong>{date}:</strong> {event}</div>')
     def timeline_full(self, events):
+        sorted_events = []
+        try:
+            sorted_events = sorted(events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"), reverse=True)
+        except Exception:
+            sorted_events = events
         timeline_html = '<div class="timeline">'
-        for idx, (date, event) in enumerate(events):
-            side = "left" if idx % 2 == 0 else "right"
+        for idx, (date, event) in enumerate(sorted_events):
             timeline_html += f'''
-<div class="timeline-item {side} scroll-animate">
+<div class="timeline-item scroll-animate">
   <div class="timeline-date">{date}</div>
   <div class="timeline-content">{event}</div>
 </div>
@@ -234,47 +239,44 @@ class Website:
             else:
                 page.write(content)
         return page
-    def add_project_page(self, slug, title, timeline_events, github_gist_url, papers):
+    def add_project_page(self, slug, title, timeline_events, github_gist_url, description, papers):
         with self.page(slug, title) as page:
             page.is_project = True
+            try:
+                sorted_events = sorted(timeline_events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"), reverse=True)
+            except Exception:
+                sorted_events = timeline_events
             timeline_html = '<div class="project-timeline">'
-            for idx, (date, event) in enumerate(timeline_events):
-                side = "left" if idx % 2 == 0 else "right"
+            for idx, (date, event) in enumerate(sorted_events):
                 timeline_html += f'''
-<div class="timeline-item {side}">
+<div class="timeline-item">
   <div class="timeline-date">{date}</div>
   <div class="timeline-content">{event}</div>
 </div>
 '''
             timeline_html += '</div>'
-            code_html = f'<script src="{github_gist_url}.js"></script>'
-            dropdown_html = '''
-<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="papersDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Select a Paper
-  </button>
-  <div class="dropdown-menu" aria-labelledby="papersDropdown">
-'''
+            code_html = f"<p>{description}</p>" + f'<script src="{github_gist_url}.js"></script>'
+            papers_html = ''
             for paper in papers:
-                if len(paper) == 2:
-                    paper_title, paper_link = paper
-                    paper_type = "pdf"
-                else:
-                    paper_title, paper_link, paper_type = paper
+                paper_title, paper_link, paper_type = paper
                 if paper_type.lower() == "md":
-                    paper_slug = f"paper_{re.sub(r'\\W+', '', paper_title).lower()}"
-                    self.add_blog_page(paper_slug, paper_title, paper_link)
-                    dropdown_html += f'<a class="dropdown-item" href="{paper_slug}.html" target="_blank">{paper_title}</a>'
+                    try:
+                        with open(paper_link, "r", encoding="utf-8") as f:
+                            paper_content = f.read().strip()
+                        paper_html = convert_markdown_full(paper_content)
+                    except Exception:
+                        paper_html = f"<p>Unable to load {paper_title}</p>"
+                    papers_html += f'<div class="paper-section"><h5>{paper_title}</h5>{paper_html}</div>'
                 else:
-                    dropdown_html += f'<a class="dropdown-item" href="{paper_link}" target="_blank">{paper_title}</a>'
-            dropdown_html += '</div></div>'
-            tabs = [("Timeline", timeline_html), ("Code", code_html), ("Papers", dropdown_html)]
+                    papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p><a href="{paper_link}" target="_blank">View PDF</a></p></div>'
+            tabs = [("Timeline", timeline_html), ("Code", code_html), ("Papers", papers_html)]
             page.tabs(tabs)
         return page
     def compile(self, output_dir="."):
         if output_dir != "." and not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        nav_links = "".join([f'<li class="nav-item"><a class="nav-link" href="{slug}.html">{data["title"]}</a></li>' for slug, data in self.pages.items() if not data.get("is_blog")])
+        nav_links = "".join([f'<li class="nav-item"><a class="nav-link" href="{slug}.html">{data["title"]}</a></li>' 
+                             for slug, data in self.pages.items() if not data.get("is_blog") and not data.get("is_project")])
         base_template = lambda title, content: f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -331,30 +333,8 @@ body.dark-mode .card {{
 .timeline-item {{
   padding: 20px;
   position: relative;
-  width: 50%;
-}}
-.timeline-item.left {{
-  left: 0;
-}}
-.timeline-item.right {{
-  left: 50%;
-}}
-.timeline-item::after {{
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: #f5f5f5;
-  border: 4px solid #6c757d;
-  top: 15px;
-  border-radius: 50%;
-  z-index: 1;
-}}
-.timeline-item.left::after {{
-  right: -10px;
-}}
-.timeline-item.right::after {{
-  left: -10px;
+  width: 100%;
+  margin-bottom: 20px;
 }}
 .timeline-date {{
   font-weight: 500;
@@ -434,7 +414,8 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
 
 """
 if __name__ == "__main__":
-    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
+    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.",
+                  custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
         page.heading("Welcome to My Site")
         page.write("Discover my work and projects.")
@@ -468,6 +449,7 @@ if __name__ == "__main__":
     app.add_project_page("project_1", "Project One",
                           [("2021-01-01", "Project started"), ("2021-06-01", "Prototype completed"), ("2021-12-31", "Official release")],
                           "https://gist.github.com/username/gistid",
+                          "This project demonstrates the awesome features of our site.",
                           [("Paper One", "http://linktopaper1.com", "pdf"), ("Paper Two", "blog_paper_sample.md", "md")])
     with app.page("news", "News") as page:
         page.heading("News")

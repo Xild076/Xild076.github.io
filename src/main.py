@@ -53,7 +53,10 @@ if __name__ == "__main__":
         page.divider()
         
         page.heading("Latest Blog Posts")
+
+        page.spacer(10)
         page.button("View All Blog Posts", "blog")
+        page.spacer(10)
         page.widget("", "Hello Blog!", "This is a test/hello blog post!", "hello_blog")
         
         page.divider()
@@ -83,6 +86,7 @@ if __name__ == "__main__":
          ("2025-02-09", "Completed official proposal paper for full version of Objective News"),
          ("2025-03-06", "Renamed project to Alitheia AI (Greek for 'truth')")],
         "https://gist.github.com/Xild076/3c89ad41dcc72a5388226d732873bff0",
+        "The code provided illustrates the two most critical components of the project: the grouping and objectification, both of which use novel techniques to achieve the desired results. See the paper for more details.",
         [("Beta Paper", "papers/paper_vbeta.md", "md"), ("Official Proposal", "papers/Proposal—Objective News.pdf", "pdf")]
     )
     
