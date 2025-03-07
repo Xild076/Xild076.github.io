@@ -52,7 +52,7 @@ class Page:
         self.content.append(f'<div class="timeline-entry"><strong>{date}:</strong> {event}</div>')
     def timeline_full(self, events):
         try:
-            sorted_events = sorted(events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"), reverse=True)
+            sorted_events = sorted(events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"))
         except Exception:
             sorted_events = events
         timeline_html = '<div class="timeline">'
@@ -239,24 +239,28 @@ class Website:
             else:
                 page.write(content)
         return page
-    def add_project_page(self, slug, title, timeline_events, github_gist_url, description, papers):
+    def add_project_page(self, slug, title, project_intro, timeline_events, github_gist_url, github_desc, papers):
         with self.page(slug, title) as page:
             page.is_project = True
+            with open(project_intro, "r", encoding="utf-8") as f:
+                project_intro = f.read().strip()
+            intro_html = '<div style="height: 10px;"></div>' + convert_markdown_full(project_intro)
             try:
                 sorted_events = sorted(timeline_events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"), reverse=True)
             except Exception:
                 sorted_events = timeline_events
-            timeline_html = '<div class="project-timeline">'
+            timeline_html = '<div class="timeline">'
             for idx, (date, event) in enumerate(sorted_events):
+                side = "left" if idx % 2 == 0 else "right"
                 timeline_html += f'''
-<div class="timeline-item">
+<div class="timeline-item {side} scroll-animate">
   <div class="timeline-date">{date}</div>
   <div class="timeline-content">{event}</div>
 </div>
 '''
             timeline_html += '</div>'
-            code_html = f"<p>{description}</p>" + f'<script src="{github_gist_url}.js"></script>'
-            papers_html = ''
+            code_html = '<div style="height: 10px;"></div>' + f"<p>{github_desc}</p>" + f'<script src="{github_gist_url}.js"></script>'
+            papers_html = '<div style="height: 10px;"></div>'
             for paper in papers:
                 paper_title, paper_link, paper_type = paper
                 if paper_type.lower() == "md":
@@ -265,7 +269,7 @@ class Website:
                     papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p><a href="{paper_slug}.html" target="_blank">View Paper</a></p></div>'
                 else:
                     papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p><a href="{paper_link}" target="_blank">View PDF</a></p></div>'
-            tabs = [("Timeline", timeline_html), ("Code", code_html), ("Papers", papers_html)]
+            tabs = [("Introduction", intro_html), ("Timeline", timeline_html), ("Code", code_html), ("Papers", papers_html)]
             page.tabs(tabs)
         return page
     def compile(self, output_dir="."):
@@ -310,9 +314,9 @@ html.dark-mode .card {{
 }}
 .timeline {{
   position: relative;
+  max-width: 800px;
+  margin: 40px auto;
   padding: 20px 0;
-  width: 90%;
-  margin: 0 auto;
 }}
 .timeline::before {{
   content: "";
@@ -325,18 +329,17 @@ html.dark-mode .card {{
   transform: translateX(-50%);
 }}
 .timeline-item {{
+  padding: 10px 40px;
   position: relative;
-  width: 45%;
-  padding: 10px 20px;
+  width: 50%;
   box-sizing: border-box;
-  margin-bottom: 20px;
 }}
 .timeline-item.left {{
   left: 0;
   text-align: right;
 }}
 .timeline-item.right {{
-  left: 55%;
+  left: 50%;
   text-align: left;
 }}
 .timeline-item::after {{
@@ -351,10 +354,22 @@ html.dark-mode .card {{
   z-index: 1;
 }}
 .timeline-item.left::after {{
-  right: -30px;
+  right: -10px;
 }}
 .timeline-item.right::after {{
-  left: -30px;
+  left: -10px;
+}}
+.timeline-date {{
+  font-weight: bold;
+  margin-bottom: 6px;
+}}
+.timeline-content {{
+  padding: 10px;
+  background: #e9ecef;
+  border-radius: 6px;
+}}
+html.dark-mode .timeline-content {{
+  background: #444;
 }}
 .scroll-animate {{
   opacity: 0;

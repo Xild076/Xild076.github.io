@@ -79,7 +79,7 @@ if __name__ == "__main__":
     
     app.add_project_page(
         "objectivenews",
-        "Alitheia AI (Objective News)",
+        "Alitheia AI (Objective News)", "papers/objective_news_intro.md",
         [("2024-10-01", "Began project Objective News"), 
          ("2024-12-15", "Completed the first beta version of Objective News"), 
          ("2025-01-02", "Completed the second beta version of Objective News"),
