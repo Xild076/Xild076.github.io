@@ -18,6 +18,6 @@ Overall, there are quite a lot of stuff I decided to add, the particularily uniq
 
 Also, here is the placeholder image, its the cat from my pfp :D (Credit to Sooyun Choi for this amazing gif).
 
-![Placeholder Pic](images/placeholder.png "Placeholder Pic")
+<img src="images/placeholder.png" alt="Placeholder Pic" width="300">
 
 All things aside though, I hope whoever is reading this can take away something interesting from this website. Cheers!
