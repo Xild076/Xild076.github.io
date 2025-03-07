@@ -6,7 +6,7 @@ if __name__ == "__main__":
     with app.page("index", "Home") as page:
         page.heading("Welcome to My Site")
         page.write("Discover my work and projects.")
-        page.widget("https://via.placeholder.com/150", "Sample Widget", "This is a clickable widget.", "blog.html")
+        page.widget("", "Sample Widget", "This is a clickable widget with image on the left.", "blog.html")
         page.image("https://via.placeholder.com/300x200", "Sample Image", 300, 200)
         page.email_link("example@example.com", "Contact Us")
         page.video("https://www.youtube.com/embed/dQw4w9WgXcQ")

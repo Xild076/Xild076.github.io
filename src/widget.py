@@ -20,16 +20,23 @@ class Page:
     def timeline_entry(self, date, event):
         self.content.append(f'<div class="timeline-entry"><strong>{date}:</strong> {event}</div>')
     def widget(self, image_url, title, description, link):
+        if not image_url:
+            image_url = "images/placeholder.png"
         self.content.append(f'''
-<div class="card" style="width: 18rem;">
-  <a href="{link}">
-    <img src="{image_url}" class="card-img-top" alt="{title}">
+<div class="card mb-3" style="max-width: 540px;">
+  <a href="{link}" style="text-decoration: none; color: inherit;">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="{image_url}" class="card-img" alt="{title}">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{title}</h5>
+          <p class="card-text">{description}</p>
+        </div>
+      </div>
+    </div>
   </a>
-  <div class="card-body">
-    <h5 class="card-title">{title}</h5>
-    <p class="card-text">{description}</p>
-    <a href="{link}" class="btn btn-primary">Learn More</a>
-  </div>
 </div>
 ''')
     def image(self, image_url, alt_text="", width=None, height=None):
@@ -102,7 +109,7 @@ class Page:
     def tooltip(self, text, tooltip_text):
         self.content.append(f'<span data-toggle="tooltip" title="{tooltip_text}">{text}</span>')
     def map(self, location, width=600, height=450):
-        self.content.append(f'<iframe src="https://www.google.com/maps?q={location}&output=embed" width="{width}" height="{height}" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>')
+        self.content.append(f'<iframe src="https://www.google.com/maps?q={location}&output=embed" width="{width}" height="{height}" frameborder="0" style="border:0;" allowfullscreen aria-hidden="false" tabindex="0"></iframe>')
     def animated(self, html, animation="animate__bounce"):
         self.content.append(f'<div class="animate__animated {animation}">{html}</div>')
     def container(self, content, class_name="container"):
@@ -179,6 +186,28 @@ class Website:
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 <style>
+body {{
+  font-family: "Calibri", sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+  transition: background-color 0.3s, color 0.3s;
+}}
+body.dark-mode {{
+  background-color: #121212;
+  color: #e0e0e0;
+}}
+.navbar {{
+  background-color: #007bff;
+}}
+.navbar.dark-mode {{
+  background-color: #0056b3;
+}}
+.card {{
+  background-color: #ffffff;
+}}
+body.dark-mode .card {{
+  background-color: #1e1e1e;
+}}
 .timeline-entry {{
   margin-bottom: 10px;
   padding: 10px;
@@ -188,7 +217,7 @@ class Website:
 </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark">
   <a class="navbar-brand" href="index.html">{self.title}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
     <span class="navbar-toggler-icon"></span>
@@ -196,11 +225,10 @@ class Website:
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
       {nav_links}
+      <li class="nav-item">
+        <button id="toggleTheme" class="btn btn-secondary">Toggle Theme</button>
+      </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
   </div>
 </nav>
 <div class="container mt-5">
@@ -215,6 +243,9 @@ class Website:
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+document.getElementById("toggleTheme").addEventListener("click", function() {{
+  document.body.classList.toggle("dark-mode");
+}});
 {self.custom_js}
 </script>
 </body>
@@ -226,3 +257,4 @@ class Website:
             file_path = os.path.join(output_dir, f"{slug}.html") if output_dir != "." else f"{slug}.html"
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(html)
+
