@@ -19,6 +19,18 @@ class Page:
         self.content.append(html)
     def timeline_entry(self, date, event):
         self.content.append(f'<div class="timeline-entry"><strong>{date}:</strong> {event}</div>')
+    def timeline_full(self, events):
+        timeline_html = '<div class="timeline">'
+        for idx, (date, event) in enumerate(events):
+            side = "left" if idx % 2 == 0 else "right"
+            timeline_html += f'''
+<div class="timeline-item {side} scroll-animate">
+  <div class="timeline-date">{date}</div>
+  <div class="timeline-content">{event}</div>
+</div>
+'''
+        timeline_html += '</div>'
+        self.content.append(timeline_html)
     def widget(self, image_url, title, description, link):
         if not image_url:
             image_url = "images/placeholder.png"
@@ -111,7 +123,7 @@ class Page:
     def map(self, location, width=600, height=450):
         self.content.append(f'<iframe src="https://www.google.com/maps?q={location}&output=embed" width="{width}" height="{height}" frameborder="0" style="border:0;" allowfullscreen aria-hidden="false" tabindex="0"></iframe>')
     def animated(self, html, animation="animate__bounce"):
-        self.content.append(f'<div class="animate__animated {animation}">{html}</div>')
+        self.content.append(f'<div class="animate__animated {animation} scroll-animate">{html}</div>')
     def container(self, content, class_name="container"):
         self.content.append(f'<div class="{class_name}">{content}</div>')
     def divider(self):
@@ -183,12 +195,13 @@ class Website:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 <style>
 body {{
-  font-family: "Calibri", sans-serif;
-  background-color: #f8f9fa;
+  font-family: 'Roboto', sans-serif;
+  background-color: #ffffff;
   color: #212529;
   transition: background-color 0.3s, color 0.3s;
 }}
@@ -212,6 +225,62 @@ body.dark-mode .card {{
   margin-bottom: 10px;
   padding: 10px;
   border-left: 3px solid #007bff;
+}}
+.timeline {{
+  position: relative;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 10px;
+}}
+.timeline::after {{
+  content: '';
+  position: absolute;
+  width: 2px;
+  background-color: #007bff;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}}
+.timeline-item {{
+  padding: 20px;
+  position: relative;
+  width: 50%;
+}}
+.timeline-item.left {{
+  left: 0;
+}}
+.timeline-item.right {{
+  left: 50%;
+}}
+.timeline-item::after {{
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  border: 4px solid #007bff;
+  top: 15px;
+  border-radius: 50%;
+  z-index: 1;
+}}
+.timeline-item.left::after {{
+  right: -10px;
+}}
+.timeline-item.right::after {{
+  left: -10px;
+}}
+.timeline-date {{
+  font-weight: bold;
+  margin-bottom: 10px;
+}}
+.timeline-content {{
+  padding: 10px 20px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+}}
+body.dark-mode .timeline-content {{
+  background-color: #333;
 }}
 {self.custom_css}
 </style>
@@ -243,6 +312,18 @@ body.dark-mode .card {{
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function () {{
+  const observer = new IntersectionObserver((entries) => {{
+    entries.forEach(entry => {{
+      if (entry.isIntersecting) {{
+        entry.target.classList.add('animate__fadeIn');
+      }} else {{
+        entry.target.classList.remove('animate__fadeIn');
+      }}
+    }});
+  }});
+  document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
+}});
 document.getElementById("toggleTheme").addEventListener("click", function() {{
   document.body.classList.toggle("dark-mode");
 }});
@@ -258,3 +339,44 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(html)
 
+"""if __name__ == "__main__":
+    app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
+    with app.page("index", "Home") as page:
+        page.heading("Welcome to My Site")
+        page.write("Discover my work and projects.")
+        page.widget("", "Sample Widget", "This is a clickable widget with image on the left.", "blog.html")
+        page.image("https://via.placeholder.com/300x200", "Sample Image", 300, 200)
+        page.email_link("example@example.com", "Contact Us")
+        page.video("https://www.youtube.com/embed/dQw4w9WgXcQ")
+        page.code_block("print('Hello, world!')", "python")
+        page.blockquote("This is an inspiring quote.", "Author Name")
+        page.alert_box("This is an important alert!", "warning")
+        page.gallery(["https://via.placeholder.com/200", "https://via.placeholder.com/200", "https://via.placeholder.com/200"])
+        page.markdown("This is **bold** text and *italic* text with ~~strikethrough~~.")
+        page.list(["Item 1", "Item 2", "Item 3"])
+        page.accordion([("Section 1", "Content for section 1."), ("Section 2", "Content for section 2.")])
+        page.tabs([("Tab 1", "Content for tab 1."), ("Tab 2", "Content for tab 2.")])
+        page.tooltip("Hover over me", "This is a tooltip")
+        page.map("New York, NY", 600, 450)
+        page.animated("<p>This text bounces on scroll!</p>", "animate__fadeIn")
+        page.container("<p>This is inside a container.</p>")
+        page.divider()
+        page.button("Click Me", "https://example.com")
+        page.jumbotron("Jumbotron Title", "This is a jumbotron subtitle.", "Learn More", "https://example.com")
+        page.carousel(["https://via.placeholder.com/800x400", "https://via.placeholder.com/800x400", "https://via.placeholder.com/800x400"])
+        page.row(["Column 1 content", "Column 2 content", "Column 3 content"])
+        page.spacer(50)
+        page.timeline_full([("2025-01-01", "Project initiated."), ("2025-02-15", "First milestone reached."), ("2025-04-01", "Beta launch."), ("2025-06-30", "Official release.")])
+    with app.page("about", "About Me") as page:
+        page.heading("About Me")
+        page.write("Information about me goes here.")
+    with app.page("blog", "Blog") as page:
+        page.heading("Blog")
+        page.write("Here is a list of blog posts.")
+        page.timeline_entry("2025-01-01", "Project started")
+        page.timeline_entry("2025-03-01", "First milestone reached")
+    with app.page("news", "News") as page:
+        page.heading("News")
+        page.write("Latest news updates.")
+    app.compile(".")
+"""
