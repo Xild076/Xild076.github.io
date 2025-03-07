@@ -49,7 +49,7 @@ if __name__ == "__main__":
         page.write("Hello and welcome to my blog. Here you will find a few of my thoughts and ideas, whether they be about programming or philosophy. I've also included a few of my projects and some other neat stuff. Enjoy!")
         page.divider()
         page.heading("Latest Blog Posts")
-        page.widget("", "Test Blog", "This is a test blog post.", "blog.html")
+        page.widget("", "Test Blog", "This is a test blog post.", "blog")
         page.divider()
         page.heading("Projects")
         page.timeline_entry("2023-06-01", "Began project StockPred")
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     with app.page("blog", "Blog") as page:
         page.heading("Blog")
         page.write("Here is a list of blog posts.")
-        page.widget("", "Test Blog", "This is a test blog post.", "blog_1.html")
+        page.widget("", "Test Blog", "This is a test blog post.", "blog_1")
     app.add_blog_page("blog_1", "Test Blog", "blog_sample.txt")
     with app.page("projects", "Projects") as page:
         page.heading("Projects")
