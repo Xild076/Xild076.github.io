@@ -193,11 +193,11 @@ class Website:
     def page(self, slug, title):
         return Page(slug, title, self)
     def add_blog_page(self, slug, title, file_path):
-        page = self.page(slug, title)
-        page.heading(title)
-        with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read().strip()
-        page.write(content)
+        with self.page(slug, title) as page:
+            page.heading(title)
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read().strip()
+            page.write(content)
         return page
     def compile(self, output_dir="."):
         if output_dir != "." and not os.path.exists(output_dir):
@@ -359,13 +359,13 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
             file_path = os.path.join(output_dir, f"{slug}.html") if output_dir != "." else f"{slug}.html"
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(html)
-
-"""if __name__ == "__main__":
+"""
+if __name__ == "__main__":
     app = Website("My Site", footer="&copy; 2025 My Site. All rights reserved.", custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
     with app.page("index", "Home") as page:
         page.heading("Welcome to My Site")
         page.write("Discover my work and projects.")
-        page.widget("", "Sample Widget", "This is a clickable widget linking to our blog.", "blog")
+        page.widget("", "Sample Widget", "This is a clickable widget linking to our blog.", "blog_1")
         page.image("https://via.placeholder.com/300x200", "Sample Image", 300, 200)
         page.email_link("example@example.com", "Contact Us")
         page.video("https://www.youtube.com/embed/dQw4w9WgXcQ")
@@ -391,7 +391,7 @@ document.getElementById("toggleTheme").addEventListener("click", function() {{
     with app.page("about", "About Me") as page:
         page.heading("About Me")
         page.write("Information about me goes here.")
-    app.add_blog_page("blog", "Blog", "blog_sample.txt")
+    app.add_blog_page("blog_1", "Test Blog", "blog_sample.txt")
     with app.page("news", "News") as page:
         page.heading("News")
         page.write("Latest news updates.")
