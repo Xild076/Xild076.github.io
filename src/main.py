@@ -51,9 +51,9 @@ if __name__ == "__main__":
         page.write("This blog is dedicated to uploading my projects and sharing my thoughts on various topics, whether they be about programming or philosophy. I hope you enjoy your stay!")
 
         page.divider()
-        page.email_link("harry.d.yin.gpc@gmail.com", "Contact Me\n")
-        page.link("https://www.github.com/Xild076", "GitHub\n")
-        page.link("https://www.linkedin.com/in/harry-yin-5493152b0/", "LinkedIn")
+        page.email_link("✉ harry.d.yin.gpc@gmail.com", "Contact Me\n")
+        page.link("🔗 https://www.github.com/Xild076", "GitHub\n")
+        page.link("🔗 https://www.linkedin.com/in/harry-yin-5493152b0/", "LinkedIn")
         
         page.divider()
         

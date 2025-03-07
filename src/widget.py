@@ -144,7 +144,7 @@ class Page:
         self.content.append(accordion_html)
     def tabs(self, tabs, tab_id="tabsExample"):
         nav_html = f'<ul class="nav nav-tabs" id="{tab_id}" role="tablist">'
-        content_html = f'<div class="tab-content" id="{tab_id}Content">'
+        content_html = f'<div class="tab-content mt-3" id="{tab_id}Content">'
         for idx, (tab_title, tab_content) in enumerate(tabs):
             active = "active" if idx == 0 else ""
             nav_html += f'<li class="nav-item"><a class="nav-link {active}" id="tab{idx}" data-toggle="tab" href="#content{idx}" role="tab">{tab_title}</a></li>'
@@ -241,6 +241,7 @@ class Website:
             word_count = len(content.split())
             read_time = max(1, round(word_count / 200))
             page.write(f"<small>Estimated read time: {read_time} minute{'s' if read_time != 1 else ''}</small>")
+            page.divider()
             if file_path.lower().endswith(".md"):
                 html_content = convert_markdown_full(content)
                 page.custom(html_content)
@@ -270,7 +271,7 @@ class Website:
 '''
             timeline_html += '</div>'
             code_html = '<div style="height: 10px;"></div>' + f"<p>{github_desc}</p>" + f'<script src="{github_gist_url}.js"></script>'
-            papers_html = '<div class="row">'
+            papers_html = '<div class="paper-widgets">'
             for paper in papers:
                 if len(paper) >= 4:
                     paper_title, paper_link, paper_type, paper_desc = paper
@@ -300,11 +301,11 @@ class Website:
   </a>
 </div>
 '''
-                papers_html += f'<div class="col-md-4">{widget_html}</div>'
+                papers_html += f'<div style="margin-bottom: 15px;">{widget_html}</div>'
             papers_html += '</div>'
             tech_html = ""
             if technologies is not None:
-                tech_html = "<div class='project-technologies'><h5>Technologies Used</h5><ul>" + "".join([f"<li>{tech}</li>" for tech in technologies]) + "</ul></div>"
+                tech_html = "<div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'>" + "".join([f"<span class='badge badge-primary mr-2 mb-2'>{tech}</span>" for tech in technologies]) + "</div></div>"
             tabs = [("Introduction", intro_html), ("Timeline", timeline_html)]
             if tech_html:
                 tabs.append(("Technologies", tech_html))
@@ -365,15 +366,16 @@ html.dark-mode .card {{
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 2px;
-  background: #ccc;
+  width: 4px;
+  background: #6c757d;
   transform: translateX(-50%);
 }}
 .timeline-item {{
-  padding: 20px;
   position: relative;
   width: 50%;
+  padding: 20px;
   box-sizing: border-box;
+  margin-bottom: 30px;
 }}
 .timeline-item.left {{
   left: 0;
@@ -383,49 +385,33 @@ html.dark-mode .card {{
   left: 50%;
   text-align: left;
 }}
-.timeline-item::after {{
+.timeline-item::before {{
   content: "";
   position: absolute;
-  top: 15px;
-  width: 12px;
-  height: 12px;
-  background: #fff;
-  border: 2px solid #6c757d;
-  border-radius: 50%;
-  z-index: 1;
-}}
-.timeline-item.left::after {{
-  right: -6px;
-}}
-.timeline-item.right::after {{
-  left: -6px;
-}}
-.timeline-item.left::before, .timeline-item.right::before {{
-  content: "";
-  position: absolute;
-  top: 20px;
-  width: 20px;
-  height: 2px;
-  background: #6c757d;
+  top: 25px;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
 }}
 .timeline-item.left::before {{
   right: -20px;
+  border-left-color: #e9ecef;
 }}
 .timeline-item.right::before {{
   left: -20px;
+  border-right-color: #e9ecef;
 }}
-.timeline-date {{
-  font-weight: bold;
-  margin-bottom: 6px;
-}}
-.timeline-content {{
-  padding: 15px;
-  background: #e9ecef;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}}
-html.dark-mode .timeline-content {{
-  background: #444;
+.timeline-item::after {{
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: calc(50% - 8px);
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border: 3px solid #6c757d;
+  border-radius: 50%;
+  z-index: 2;
 }}
 .scroll-animate {{
   opacity: 0;

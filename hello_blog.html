@@ -47,15 +47,16 @@ html.dark-mode .card {
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 2px;
-  background: #ccc;
+  width: 4px;
+  background: #6c757d;
   transform: translateX(-50%);
 }
 .timeline-item {
-  padding: 20px;
   position: relative;
   width: 50%;
+  padding: 20px;
   box-sizing: border-box;
+  margin-bottom: 30px;
 }
 .timeline-item.left {
   left: 0;
@@ -65,49 +66,33 @@ html.dark-mode .card {
   left: 50%;
   text-align: left;
 }
-.timeline-item::after {
+.timeline-item::before {
   content: "";
   position: absolute;
-  top: 15px;
-  width: 12px;
-  height: 12px;
-  background: #fff;
-  border: 2px solid #6c757d;
-  border-radius: 50%;
-  z-index: 1;
-}
-.timeline-item.left::after {
-  right: -6px;
-}
-.timeline-item.right::after {
-  left: -6px;
-}
-.timeline-item.left::before, .timeline-item.right::before {
-  content: "";
-  position: absolute;
-  top: 20px;
-  width: 20px;
-  height: 2px;
-  background: #6c757d;
+  top: 25px;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
 }
 .timeline-item.left::before {
   right: -20px;
+  border-left-color: #e9ecef;
 }
 .timeline-item.right::before {
   left: -20px;
+  border-right-color: #e9ecef;
 }
-.timeline-date {
-  font-weight: bold;
-  margin-bottom: 6px;
-}
-.timeline-content {
-  padding: 15px;
-  background: #e9ecef;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-html.dark-mode .timeline-content {
-  background: #444;
+.timeline-item::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: calc(50% - 8px);
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border: 3px solid #6c757d;
+  border-radius: 50%;
+  z-index: 2;
 }
 .scroll-animate {
   opacity: 0;
@@ -142,6 +127,7 @@ body { padding-bottom: 50px; }
 <p style='text-align: left;'><small>2025-03-07</small></p>
 <p style='text-align: left;'><small>By Harry Yin</small></p>
 <p style='text-align: left;'><small>Estimated read time: 2 minutes</small></p>
+<hr>
 <p>This is a quick introduction blogpost and a big of an explanation as to how this website was made!</p>
 <h2>The Introduction</h2>
 <p>This website was made primarily to facilitate the posting of some of my projects and thoughts for easier access, both for myself and <em>certain individuals (Hello to any professors, college admissions officers lol)</em>. </p>
