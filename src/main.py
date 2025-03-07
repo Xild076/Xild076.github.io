@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
         page.divider()
         page.email_link("harry.d.yin.gpc@gmail.com", "Contact Me")
-        page.link("github.com/Xild076", "GitHub")
+        page.link("https://www.github.com/Xild076", "GitHub")
         page.link("https://www.linkedin.com/in/harry-yin-5493152b0/", "LinkedIn")
         
         page.divider()
@@ -74,7 +74,7 @@ if __name__ == "__main__":
         page.write("Here are a couple of blogposts!")
         page.widget("", "Hello Blog!", "This is a test/hello blog post!", "hello_blog")
     
-    app.add_blog_page("hello_blog", "Hello Blog", "blogs/hello_blog.md")
+    app.add_blog_page("hello_blog", "Hello Blog", "blogs/hello_blog.md", date="2025-03-07", author="Harry Yin")
     
     with app.page("projects", "Projects") as page:
         page.heading("Projects")
@@ -92,7 +92,7 @@ if __name__ == "__main__":
          "papers/objective_news_intro.md",
         "https://gist.github.com/Xild076/3c89ad41dcc72a5388226d732873bff0",
         "The code provided illustrates the two most critical components of the project: the grouping and objectification, both of which use novel techniques to achieve the desired results. See the paper for more details.",
-        [("Beta Paper", "papers/paper_vbeta.md", "md"), ("Official Proposal", "papers/Proposal—Objective News.pdf", "pdf")]
+        [("Beta Paper", "papers/paper_vbeta.md", "md", "This is the first paper written upon release of the Beta version of Alitheia AI"), ("Official Proposal", "papers/Proposal—Objective News.pdf", "pdf", "This is the official proposal paper for a full pipeline version of Alitheia AI, created after much consideration of new methodologies and techniques.")],
     )
     
     with app.page("about", "About Me") as page:

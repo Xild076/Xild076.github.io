@@ -91,10 +91,10 @@ class Page:
         self.content.append(f'<img src="{image_url}" alt="{alt_text}" style="{style}">')
     def email_link(self, email, text=None):
         display_text = text if text else email
-        self.content.append(f'<a href="mailto:{email}">{display_text}</a>')
+        self.content.append(f'<a href="mailto:{email}">{display_text}</a>\n')
     def link(self, url, text=None):
         display_text = text if text else url
-        self.content.append(f'<a href="{url}">{display_text}</a>')
+        self.content.append(f'<a href="{url}">{display_text}</a>\n')
     def code_block(self, code, language=""):
         self.content.append(f"<pre><code class='{language}'>{code}</code></pre>")
     def video(self, video_url, width=560, height=315):
@@ -226,19 +226,30 @@ class Website:
         self.pages = {}
     def page(self, slug, title):
         return Page(slug, title, self)
-    def add_blog_page(self, slug, title, file_path):
+    def add_blog_page(self, slug, title, file_path, date=None, featured_image=None, author=None):
         with self.page(slug, title) as page:
             page.is_blog = True
+            if featured_image:
+                page.image(featured_image)
             page.heading(title)
+            if date:
+                page.write(f"<small>{date}</small>")
+            if author:
+                page.write(f"<small>By {author}</small>")
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read().strip()
+            word_count = len(content.split())
+            read_time = max(1, round(word_count / 200))
+            page.write(f"<small>Estimated read time: {read_time} minute{'s' if read_time != 1 else ''}</small>")
             if file_path.lower().endswith(".md"):
                 html_content = convert_markdown_full(content)
                 page.custom(html_content)
             else:
                 page.write(content)
+            share_html = f'<div class="share-links"><a href="https://twitter.com/share?url={slug}.html">Twitter</a> | <a href="https://www.facebook.com/sharer/sharer.php?u={slug}.html">Facebook</a> | <a href="https://www.linkedin.com/shareArticle?mini=true&url={slug}.html">LinkedIn</a></div>'
+            page.custom(share_html)
         return page
-    def add_project_page(self, slug, title, timeline_events, project_intro, github_gist_url, github_desc, papers):
+    def add_project_page(self, slug, title, timeline_events, project_intro, github_gist_url, github_desc, papers, technologies=None):
         with self.page(slug, title) as page:
             page.is_project = True
             with open(project_intro, "r", encoding="utf-8") as f:
@@ -261,14 +272,24 @@ class Website:
             code_html = '<div style="height: 10px;"></div>' + f"<p>{github_desc}</p>" + f'<script src="{github_gist_url}.js"></script>'
             papers_html = '<div style="height: 10px;"></div>'
             for paper in papers:
-                paper_title, paper_link, paper_type = paper
+                if len(paper) >= 4:
+                    paper_title, paper_link, paper_type, paper_desc = paper
+                else:
+                    paper_title, paper_link, paper_type = paper
+                    paper_desc = ""
                 if paper_type.lower() == "md":
                     paper_slug = f"paper_{re.sub(r'\\W+', '', paper_title).lower()}"
                     self.add_blog_page(paper_slug, paper_title, paper_link)
-                    papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p><a href="{paper_slug}.html" target="_blank">View Paper</a></p></div>'
+                    papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p>{paper_desc}</p><p><a href="{paper_slug}.html" target="_blank">View Paper</a></p></div>'
                 else:
-                    papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p><a href="{paper_link}" target="_blank">View PDF</a></p></div>'
-            tabs = [("Introduction", intro_html), ("Timeline", timeline_html), ("Code", code_html), ("Papers", papers_html)]
+                    papers_html += f'<div class="paper-section"><h5>{paper_title}</h5><p>{paper_desc}</p><p><a href="{paper_link}" target="_blank">View PDF</a></p></div>'
+            tech_html = ""
+            if technologies is not None:
+                tech_html = "<div class='project-technologies'><h5>Technologies Used</h5><ul>" + "".join([f"<li>{tech}</li>" for tech in technologies]) + "</ul></div>"
+            tabs = [("Introduction", intro_html), ("Timeline", timeline_html)]
+            if tech_html:
+                tabs.append(("Technologies", tech_html))
+            tabs.extend([("Code", code_html), ("Papers", papers_html)])
             page.tabs(tabs)
         return page
     def compile(self, output_dir="."):
@@ -386,6 +407,7 @@ html.dark-mode .timeline-content {{
 </style>
 </head>
 <body>
+<a id="top"></a>
 <nav class="navbar navbar-expand-lg navbar-dark">
   <a class="navbar-brand" href="index.html">{self.title}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
@@ -402,6 +424,7 @@ html.dark-mode .timeline-content {{
 </nav>
 <div class="container mt-5">
 {content}
+<div style="text-align: center; margin: 20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
 </div>
 <footer class="footer mt-5">
   <div class="container">
@@ -476,13 +499,15 @@ if __name__ == "__main__":
     with app.page("about", "About Me") as page:
         page.heading("About Me", align="center")
         page.write("Information about me goes here.", align="center")
-    app.add_blog_page("blog_1", "Test Blog", "blog_sample.md")
+    app.add_blog_page("blog_1", "Test Blog", "blog_sample.md", date="2025-03-07", featured_image="https://via.placeholder.com/600x300", author="Harry")
     app.add_project_page("project_1", "Project One",
                           [("2021-01-01", "Project started"), ("2021-06-01", "Prototype completed"), ("2021-12-31", "Official release")],
                           "project_intro.md",
                           "https://gist.github.com/username/gistid",
                           "This project demonstrates the awesome features of our site.",
-                          [("Paper One", "http://linktopaper1.com", "pdf"), ("Paper Two", "blog_paper_sample.md", "md")])
+                          [("Paper One", "http://linktopaper1.com", "pdf", "A description of Paper One."),
+                           ("Paper Two", "blog_paper_sample.md", "md", "A description of Paper Two.")],
+                          technologies=["Python", "Flask", "Docker"])
     with app.page("news", "News") as page:
         page.heading("News", align="center")
         page.write("Latest news updates.", align="center")
