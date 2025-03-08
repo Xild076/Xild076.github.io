@@ -18,33 +18,31 @@ One of the biggest hurdles in improving public speaking is receiving constructiv
 
 LSDAI is a comprehensive AI-powered tool designed to*analyze and enhance speech delivery through a multi-layered approach. It evaluates speech recordings based on multiple criteria, providing users with insights on their speaking style and areas for improvement. By leveraging machine learning and NLP models trained on Kaggle datasets, LSDAI objectively assesses speech in ways that traditional methods cannot.  
 
-### Methodology  
-
 LSDAI employs a structured pipeline that breaks speech down into key components:  
 
-1. Content Analysis
-   - Uses NLP techniques to analyze the structure and clarity of spoken content.  
-   - Identifies filler words, redundant phrases, and overall coherence.  
-   - Highlights areas where speech could be more concise or impactful.  
+1. Content Analysis:
+    - Uses NLP techniques to analyze the structure and clarity of spoken content.  
+    - Identifies filler words, redundant phrases, and overall coherence.  
+    - Highlights areas where speech could be more concise or impactful.  
 
-2. Emphasis Detection
-   - Applies signal processing and prosody analysis to identify stressed words and syllables.  
-   - Evaluates whether key points are delivered with proper emphasis.  
-   - Detects monotonous speech patterns and suggests variation for better engagement.  
+2. Emphasis Detection:
+    - Applies signal processing and prosody analysis to identify stressed words and syllables.  
+    - Evaluates whether key points are delivered with proper emphasis.  
+    - Detects monotonous speech patterns and suggests variation for better engagement.  
 
-3. Tone & Sentiment Analysis
-   - Uses AI models trained on Kaggle datasets to classify emotional tone (e.g., confident, nervous, engaging, dull).  
-   - Analyzes voice modulation and energy levels to determine speech effectiveness.  
-   - Provides a breakdown of sentiment trends throughout the speech.  
+3. Tone & Sentiment Analysis:
+    - Uses AI models trained on Kaggle datasets to classify emotional tone (e.g., confident, nervous, engaging, dull).  
+    - Analyzes voice modulation and energy levels to determine speech effectiveness.  
+    - Provides a breakdown of sentiment trends throughout the speech.  
 
-4. Speech Speed & Pacing Evaluation
-   - Measures words per minute (WPM) and detects unnatural pacing (too fast or too slow).  
-   - Flags inconsistent pacing that could make speech hard to follow.  
-   - Suggests improvements for better rhythm and flow.  
+4. Speech Speed & Pacing Evaluation:
+    - Measures words per minute (WPM) and detects unnatural pacing (too fast or too slow).  
+    - Flags inconsistent pacing that could make speech hard to follow.  
+    - Suggests improvements for better rhythm and flow.  
 
-5. Interactive Analysis with Streamlit
-   - Users can upload speech recordings and receive real-time feedback through an intuitive UI.  
-   - Analysis results are displayed with visual breakdowns for easy interpretation.  
+5. Interactive Analysis with Streamlit:
+    - Users can upload speech recordings and receive real-time feedback through an intuitive UI.  
+    - Analysis results are displayed with visual breakdowns for easy interpretation.  
 
 ### Key Innovations  
 

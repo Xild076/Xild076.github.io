@@ -120,6 +120,34 @@ if __name__ == "__main__":
         page.file_download("website_text/Transcript.pdf", "Transcript", False)
         page.divider()
         page.write("That aside, here are some photos of my cat (the small one was one our friend's cats)!")
-        page.rotating_gallery(["images/archie_brownie.png", "images/archie.png", "images/brownie_archie.png"], container_height=300, container_width=400, interval=1000, smart_fit=True)
+        cat_images = [
+            "images/cats/archie_brownie.png",
+            "images/cats/archie.png",
+            "images/cats/brownie_archie.png",
+            "images/cats/IMG_0285.png",
+            "images/cats/IMG_1075.png",
+            "images/cats/IMG_1122.png",
+            "images/cats/IMG_1131.png",
+            "images/cats/IMG_6074.png",
+            "images/cats/IMG_6084.png",
+            "images/cats/IMG_6094.png",
+            "images/cats/IMG_6107.png",
+            "images/cats/IMG_6110.png",
+            "images/cats/IMG_6205.png",
+            "images/cats/IMG_6275.png",
+            "images/cats/IMG_6279.png",
+            "images/cats/IMG_6403.png",
+            "images/cats/IMG_6775.png",
+            "images/cats/IMG_6998.png",
+            "images/cats/IMG_7202.png",
+            "images/cats/IMG_7285.png",
+            "images/cats/IMG_7810.png",
+            "images/cats/IMG_8588.png",
+            "images/cats/IMG_9280.png",
+            "images/cats/IMG_9297.png",
+            "images/cats/IMG_9522.png",
+            "images/cats/IMG_9976.png"
+        ]
+        page.rotating_gallery(cat_images, container_height=300, container_width=400, interval=1000, smart_fit=True)
     
     app.compile(".")
