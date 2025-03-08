@@ -112,6 +112,34 @@ class Page:
             gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid"></div>'
         gallery_html += '</div>'
         self.content.append(gallery_html)
+    def rotating_gallery(self, images, carousel_id="rotatingGallery", interval=3000):
+        indicators = "".join([f'<li data-target="#{carousel_id}" data-slide-to="{i}" {"class=\'active\'" if i==0 else ""}></li>' for i in range(len(images))])
+        slides = ""
+        for i, img in enumerate(images):
+            active = "active" if i == 0 else ""
+            slides += f'''
+    <div class="carousel-item {active}">
+    <img src="{img}" class="d-block w-100" alt="Slide {i+1}">
+    </div>
+    '''
+        self.content.append(f'''
+    <div id="{carousel_id}" class="carousel slide" data-ride="carousel" data-interval="{interval}">
+    <ol class="carousel-indicators">
+        {indicators}
+    </ol>
+    <div class="carousel-inner">
+        {slides}
+    </div>
+    <a class="carousel-control-prev" href="#{carousel_id}" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#{carousel_id}" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+    </div>
+    ''')
     def markdown(self, text, align="left"):
         text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', text)
         text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', text)
@@ -247,8 +275,6 @@ class Website:
                 page.custom(html_content)
             else:
                 page.write(content)
-            share_html = f'<div class="share-links"><a href="https://twitter.com/share?url={slug}.html">Twitter</a> | <a href="https://www.facebook.com/sharer/sharer.php?u={slug}.html">Facebook</a> | <a href="https://www.linkedin.com/shareArticle?mini=true&url={slug}.html">LinkedIn</a></div>'
-            page.custom(share_html)
         return page
     def add_project_page(self, slug, title, timeline_events, project_intro, github_gist_url, github_desc, papers, technologies=None):
         with self.page(slug, title) as page:
@@ -502,54 +528,3 @@ document.addEventListener('DOMContentLoaded', function () {{
             file_path = os.path.join(output_dir, f"{slug}.html") if output_dir != "." else f"{slug}.html"
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(html)
-"""
-if __name__ == "__main__":
-    app = Website("My Site", footer="&copy; 2025 Harry. All rights reserved.",
-                  custom_css="body { padding-bottom: 50px; }", custom_js="console.log('Custom JS loaded');")
-    with app.page("index", "Home") as page:
-        page.heading("Welcome to My Site", align="center")
-        page.write("Discover my work and projects.", align="center")
-        page.widget("", "Sample Widget", "This is a clickable widget linking to our blog.", "blog_1")
-        page.image("https://via.placeholder.com/300x200", "Sample Image", 300, 200)
-        page.email_link("harry.d.yin.gpc@gmail.com", "Contact Me\n")
-        page.link("https://www.github.com/Xild076", "GitHub\n")
-        page.link("https://www.linkedin.com/in/harry-yin-5493152b0/", "LinkedIn")
-        page.video("https://www.youtube.com/embed/dQw4w9WgXcQ")
-        page.code_block("print('Hello, world!')", "python")
-        page.blockquote("This is an inspiring quote.", "Author Name")
-        page.alert_box("This is an important alert!", "warning")
-        page.gallery(["https://via.placeholder.com/200", "https://via.placeholder.com/200", "https://via.placeholder.com/200"])
-        page.markdown("This is **bold** text and *italic* text with ~~strikethrough~~.", align="center")
-        page.list(["Item 1", "Item 2", "Item 3"])
-        page.accordion([("Section 1", "Content for section 1."), ("Section 2", "Content for section 2.")])
-        page.tabs([("Tab 1", "Content for tab 1."), ("Tab 2", "Content for tab 2.")])
-        page.tooltip("Hover over me", "This is a tooltip")
-        page.map("New York, NY", 600, 450)
-        page.animated("<p>This text fades in on scroll!</p>")
-        page.container("<p>This is inside a container.</p>")
-        page.divider()
-        page.button("Click Me", "https://example.com")
-        page.jumbotron("Jumbotron Title", "This is a jumbotron subtitle.", "Learn More", "https://example.com")
-        page.carousel(["https://via.placeholder.com/800x400", "https://via.placeholder.com/800x400", "https://via.placeholder.com/800x400"])
-        page.row(["Column 1 content", "Column 2 content", "Column 3 content"])
-        page.spacer(50)
-        page.timeline_full([("2025-01-01", "Project initiated."), ("2025-02-15", "First milestone reached."), ("2025-04-01", "Beta launch."), ("2025-06-30", "Official release.")])
-    with app.page("about", "About Me") as page:
-        page.heading("About Me", align="center")
-        page.write("Information about me goes here.", align="center")
-    app.add_blog_page("blog_1", "Test Blog", "blog_sample.md", date="2025-03-07", featured_image="https://via.placeholder.com/600x300", author="Harry")
-    app.add_project_page("project_1", "Project One",
-                          [("2021-01-01", "Project started"), ("2021-06-01", "Prototype completed"), ("2021-12-31", "Official release")],
-                          "project_intro.md",
-                          "https://gist.github.com/username/gistid",
-                          "This project demonstrates the awesome features of our site.",
-                          [("Paper One", "http://linktopaper1.com", "pdf", "A description of Paper One."),
-                           ("Paper Two", "blog_paper_sample.md", "md", "A description of Paper Two.")],
-                          technologies=[("Python", "A versatile programming language", "https://www.python.org"),
-                                        ("Flask", "A lightweight web framework", "https://flask.palletsprojects.com"),
-                                        ("Docker", "Containerization platform", "https://www.docker.com")])
-    with app.page("news", "News") as page:
-        page.heading("News", align="center")
-        page.write("Latest news updates.", align="center")
-    app.compile(".")
-"""
