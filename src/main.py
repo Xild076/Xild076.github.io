@@ -9,10 +9,15 @@ if __name__ == "__main__":
         page.write("This blog is dedicated to uploading my projects and sharing my thoughts on various topics, whether they be about programming or philosophy. I hope you enjoy your stay!")
 
         page.divider()
-        page.email_link("harry.d.yin.gpc@gmail.com", "✉ Contact Me")
+        page.email_link("harry.d.yin.gpc@gmail.com", "@ Contact Me")
         page.link("https://www.github.com/Xild076", "🔗 GitHub")
         page.link("https://www.linkedin.com/in/harry-yin-5493152b0/", "🔗 LinkedIn")
         
+        page.divider()
+
+        page.heading("Featured Project")
+        page.widget("", "Alitheia AI", "A project that aims to create a comprehensive pipeline to locate, determine, and objectify news.", "objectivenews")
+
         page.divider()
         
         page.heading("Latest Blog Posts")
@@ -20,23 +25,19 @@ if __name__ == "__main__":
         page.spacer(10)
         page.button("View All Blog Posts", "blog")
         
-        page.divider()
-        
-        page.heading("Featured Project")
-        page.widget("", "Alitheia AI", "A project that aims to create a comprehensive pipeline to locate, determine, and objectify news.", "objectivenews")
 
     with app.page("blog", "Blog") as page:
-        page.heading("Blogposts")
+        page.heading("Blogs")
         page.write("Here are a couple of blogposts!")
-        page.widget("", "Hello Blog!", "This is a test/hello blog post!", "hello_blog")
+        page.widget("", "Hello Blog!", "This is the first blog post!", "hello_blog")
     
     app.add_blog_page("hello_blog", "Hello Blog", "blogs/hello_blog.md", date="2025-03-07", author="Harry Yin")
     
     with app.page("projects", "Projects") as page:
         page.heading("Projects")
         page.write("Here is a list of projects.")
-        page.widget("", "Alitheia AI", "This is a project that objectifies News.", "objectivenews")
-        page.widget("", "Polystock AI", "This is a project that attempts to predict stock prices.", "stockpred")
+        page.widget("images/objective_news.png", "Alitheia AI", "This is a project that objectifies News.", "objectivenews")
+        page.widget("images/stock_pred.png", "Polystock AI", "This is a project that attempts to predict stock prices.", "stockpred")
     
     app.add_project_page(
         "objectivenews",
