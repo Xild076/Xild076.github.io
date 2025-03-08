@@ -144,7 +144,7 @@ class Page:
         self.content.append(f"""
         <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden; margin: auto;">
             <div class="image-container" style="width: 100%; height: 100%; position: relative;">
-                {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.5s ease; z-index: 1;" data-index="{i}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: cover;"></span>' for i, img in enumerate(images)])}
+                {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: {1 if i == 0 else 0}; transition: opacity 0.5s ease; z-index: 1;" data-index="{i}" class="{("active" if i == 0 else "")}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: cover;"></span>' for i, img in enumerate(images)])}
             </div>
             <div class="overlay" id="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2;">
                 <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: cover;">
@@ -156,32 +156,50 @@ class Page:
         </div>
         <style>
         .rotating-gallery-container {{}}
-        .image-container span.active {{ opacity: 1; }}
+        .image-container span.active {{ opacity: 1 !important; }}
         </style>
         <script>
         (function() {{
             var container = document.querySelector("#rotatingGallery .image-container");
             var spans = container.getElementsByTagName("span");
             var current = 0;
+            
             function showImage(index) {{
                 for (var i = 0; i < spans.length; i++) {{
                     spans[i].classList.remove("active");
+                    spans[i].style.opacity = "0";
                 }}
                 spans[index].classList.add("active");
+                spans[index].style.opacity = "1";
             }}
+            
+            // Make sure the first image is visible initially
             showImage(current);
+            
             document.getElementById("next").addEventListener("click", function() {{
                 current = (current + 1) % spans.length;
                 showImage(current);
             }});
+            
             document.getElementById("prev").addEventListener("click", function() {{
                 current = (current - 1 + spans.length) % spans.length;
                 showImage(current);
             }});
-            setInterval(function() {{
+            
+            // Auto-rotation
+            var intervalId = setInterval(function() {{
                 current = (current + 1) % spans.length;
                 showImage(current);
             }}, {interval});
+            
+            // Stop auto-rotation when user interacts with gallery
+            document.getElementById("next").addEventListener("click", function() {{
+                clearInterval(intervalId);
+            }});
+            
+            document.getElementById("prev").addEventListener("click", function() {{
+                clearInterval(intervalId);
+            }});
         }})();
         </script>
         """)
