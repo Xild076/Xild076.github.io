@@ -123,12 +123,10 @@ class Page:
         display_text = text if text else email
         newline_tag = "<br>" if newline else ""
         self.content.append(f'<a href="mailto:{email}">{display_text}</a>{newline_tag}')
-
     def link(self, url, text=None, newline=True):
         display_text = text if text else url
         newline_tag = "<br>" if newline else ""
         self.content.append(f'<a href="{url}">{display_text}</a>{newline_tag}')
-
     def code_block(self, code, language=""):
         self.content.append(f"<pre><code class='{language}'>{code}</code></pre>")
     def video(self, video_url, width=560, height=315):
@@ -238,7 +236,6 @@ class Page:
         download_attr = f'download' if download else 'target="_blank" rel="noopener noreferrer"'
         icon_html = f'<i class="{icon}"></i> ' if icon else ""
         self.content.append(f'<a href="{file_url}" {download_attr} class="btn btn-primary">{icon_html}{text}</a>')
-
     def jumbotron(self, title, subtitle, button_text=None, button_link=None):
         btn_html = f'<a class="btn btn-primary btn-lg" href="{button_link}" role="button">{button_text}</a>' if button_text and button_link else ""
         self.content.append(f'''
@@ -321,6 +318,7 @@ class Website:
             else:
                 page.write(content)
         return page
+
     def add_project_page(self, slug, title, timeline_events, project_intro, github_owner, github_repo, papers, technologies=None):
         with self.page(slug, title) as page:
             page.is_project = True
@@ -336,30 +334,35 @@ class Website:
                 side = "left" if idx % 2 == 0 else "right"
                 timeline_html += f'''
         <div class="timeline-item {side} scroll-animate">
-        <div class="timeline-date">{date}</div>
-        <div class="timeline-content">{event}</div>
+          <div class="timeline-date">{date}</div>
+          <div class="timeline-content">{event}</div>
         </div>
         '''
             timeline_html += '</div>'
+
             code_html = f'''
         <style>
+        /* Ensure tab panes don't clip content */
         .tab-content .tab-pane {{
             overflow: visible !important;
         }}
-        /* Let CodeMirror grow naturally */
+        .tab-pane {{
+            display: block; /* override potential .fade or hidden rules */
+        }}
+        /* Let CodeMirror expand naturally */
         .CodeMirror {{
-            height: auto;
+            height: auto !important;
         }}
         .CodeMirror-scroll {{
-            max-height: none;
+            max-height: none !important;
         }}
         </style>
         <div id="codeViewerContainer" class="mb-3">
-        <div id="fileList" style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
-        <div id="codeViewer" style="border:1px solid #ccc; width: 100%;"></div>
-        <a href="https://github.com/{github_owner}/{github_repo}" target="_blank" class="btn btn-secondary mt-2">
-            Star on GitHub
-        </a>
+          <div id="fileList" style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
+          <div id="codeViewer" style="border:1px solid #ccc; width: 100%;"></div>
+          <a href="https://github.com/{github_owner}/{github_repo}" target="_blank" class="btn btn-secondary mt-2">
+              Star on GitHub
+          </a>
         </div>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
@@ -370,65 +373,78 @@ class Website:
         var fileListElem = document.getElementById("fileList");
         var codeViewerElem = document.getElementById("codeViewer");
         var editor = CodeMirror(codeViewerElem, {{
-        value: "",
-        mode: "javascript",
-        lineNumbers: true,
-        viewportMargin: Infinity,
-        lineWrapping: true
+          value: "",
+          mode: "javascript",
+          lineNumbers: true,
+          viewportMargin: Infinity,
+          lineWrapping: true
         }});
         var currentPath = "";
 
         function loadFileContent(path) {{
-        fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
+          fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
             .then(r => r.json())
             .then(data => {{
-            fetch(data.download_url)
+              fetch(data.download_url)
                 .then(r => r.text())
                 .then(text => {{
-                editor.setValue(text);
+                  editor.setValue(text);
+                  // Refresh to ensure correct height after content load
+                  editor.refresh();
                 }});
             }});
         }}
 
         function fetchDirectory(path) {{
-        fileListElem.innerHTML = "";
-        if (path !== "") {{
+          fileListElem.innerHTML = "";
+          if (path !== "") {{
             var backBtn = document.createElement("button");
             backBtn.innerHTML = "⬅️ Back";
             backBtn.className = "btn btn-secondary btn-sm mb-2";
             backBtn.onclick = function() {{
-            var parts = currentPath.split("/");
-            parts.pop(); // remove empty string after slash
-            parts.pop(); // remove folder name
-            currentPath = parts.length > 0 ? parts.join("/") + "/" : "";
-            fetchDirectory(currentPath);
+              var parts = currentPath.split("/");
+              parts.pop(); // remove empty string after slash
+              parts.pop(); // remove folder name
+              currentPath = parts.length > 0 ? parts.join("/") + "/" : "";
+              fetchDirectory(currentPath);
             }};
             fileListElem.appendChild(backBtn);
-        }}
-        fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
+          }}
+          fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
             .then(r => r.json())
             .then(files => {{
-            files.forEach(file => {{
+              files.forEach(file => {{
                 var btn = document.createElement("button");
                 if (file.type === "dir") {{
-                btn.innerHTML = "📁 " + file.name;
-                btn.className = "btn btn-info btn-sm m-1";
-                btn.onclick = function() {{
+                  btn.innerHTML = "📁 " + file.name;
+                  btn.className = "btn btn-info btn-sm m-1";
+                  btn.onclick = function() {{
                     currentPath = path + file.name + "/";
                     fetchDirectory(currentPath);
-                }};
+                  }};
                 }} else {{
-                btn.innerHTML = "📄 " + file.name;
-                btn.className = "btn btn-light btn-sm m-1";
-                btn.onclick = function() {{
+                  btn.innerHTML = "📄 " + file.name;
+                  btn.className = "btn btn-light btn-sm m-1";
+                  btn.onclick = function() {{
                     loadFileContent(file.path);
-                }};
+                  }};
                 }}
                 fileListElem.appendChild(btn);
-            }});
+              }});
             }});
         }}
 
+        // When a different tab is shown, refresh CodeMirror so it recalculates height
+        document.addEventListener('DOMContentLoaded', function() {{
+          var tabTriggers = document.querySelectorAll('[data-toggle="tab"]');
+          tabTriggers.forEach(function(trigger) {{
+            trigger.addEventListener('shown.bs.tab', function() {{
+              editor.refresh();
+            }});
+          }});
+        }});
+
+        // Initial fetch of the root directory
         fetchDirectory(currentPath);
         </script>
         '''
@@ -448,19 +464,19 @@ class Website:
                     link_target = paper_link
                 widget_html = f'''
         <div class="card mb-3" style="max-width: 500px;">
-        <a href="{link_target}" style="text-decoration: none; color: inherit;">
+          <a href="{link_target}" style="text-decoration: none; color: inherit;">
             <div class="row no-gutters">
-            <div class="col-5" style="padding:0;">
+              <div class="col-5" style="padding:0;">
                 <img src="images/placeholder.png" class="card-img" alt="{paper_title}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
-            </div>
-            <div class="col-7">
+              </div>
+              <div class="col-7">
                 <div class="card-body" style="padding: 0.5rem;">
-                <h5 class="card-title" style="font-size:1.2rem;">{paper_title}</h5>
-                <p class="card-text" style="font-size:1rem;">{paper_desc}</p>
+                  <h5 class="card-title" style="font-size:1.2rem;">{paper_title}</h5>
+                  <p class="card-text" style="font-size:1rem;">{paper_desc}</p>
                 </div>
+              </div>
             </div>
-            </div>
-        </a>
+          </a>
         </div>
         '''
                 papers_html += f'<div style="margin-bottom: 15px;">{widget_html}</div>'
@@ -483,6 +499,7 @@ class Website:
             tabs.extend([("Code", code_html), ("Papers", papers_html)])
             page.tabs(tabs)
         return page
+
     def compile(self, output_dir="."):
         if output_dir != "." and not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -491,6 +508,7 @@ class Website:
             for slug, data in self.pages.items()
             if not data.get("is_blog") and not data.get("is_project")
         ])
+
         def base_template(title, content):
             return f"""<!DOCTYPE html>
 <html lang="en">
@@ -667,6 +685,7 @@ document.addEventListener('DOMContentLoaded', function () {{
     }});
   }}, {{ threshold: 0.3 }});
   document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
+
   document.getElementById("toggleTheme").addEventListener("click", function() {{
     document.documentElement.classList.toggle("dark-mode");
     if(document.documentElement.classList.contains("dark-mode")) {{
@@ -675,18 +694,21 @@ document.addEventListener('DOMContentLoaded', function () {{
       localStorage.setItem('theme', 'light');
     }}
   }});
+
   document.querySelectorAll('a[href="#top"]').forEach(function(link){{
     link.addEventListener("click", function(e){{
       e.preventDefault();
       window.scrollTo({{top: 0, behavior: "smooth"}});
     }});
   }});
+
   {self.custom_js}
 }});
 </script>
 </body>
 </html>
 """
+
         for slug, data in self.pages.items():
             content = "\n".join(data["content"])
             html = base_template(data["title"], content)
