@@ -16,7 +16,7 @@ if __name__ == "__main__":
         page.divider()
 
         page.heading("Featured Project")
-        page.widget("", "Alitheia AI", "A project that aims to create a comprehensive pipeline to locate, determine, and objectify news.", "objectivenews")
+        page.widget("images/objective_news.png", "Alitheia AI", "A project that aims to create a comprehensive pipeline to locate, determine, and objectify news.", "objectivenews")
 
         page.divider()
         
@@ -38,6 +38,8 @@ if __name__ == "__main__":
         page.write("Here is a list of projects.")
         page.widget("images/objective_news.png", "Alitheia AI", "This is a project that objectifies News.", "objectivenews")
         page.widget("images/stock_pred.png", "Polystock AI", "This is a project that attempts to predict stock prices.", "stockpred")
+        page.widget("images/lsd_ai.png", "LSD AI", "This is a project that uses AI to analyse speechs", "lsdai")
+        page.widget("images/ai_cat.png", "AI Catalog", "This is a project that uses AI to catalogue data.", "aicat")
     
     app.add_project_page(
         "objectivenews",
@@ -69,6 +71,36 @@ if __name__ == "__main__":
          [("Beta Paper", "papers/RL_for_Stocks.pdf", "pdf", "This is the first paper written upon release of the first beta version of Polystock AI. Please note that it is very outdated.")],
          [("Python 3.x for backend processing", "Python", "https://www.python.org/downloads/"), ("FRED API for data", "FRED", "https://fred.stlouisfed.org/"), ("Streamlit for hosting", "Streamlit", "https://streamlit.io/"), ("Requests for HTTP requests", "Requests", "https://pypi.org/project/requests/"), ("Yfinance for stock data", "Yfinance", "https://pypi.org/project/yfinance/"),
           ("Pandas for data manipulation", "Pandas", "https://pandas.pydata.org/"), ("Numpy for numerical operations", "Numpy", "https://numpy.org/"), ("Matplotlib for plotting", "Matplotlib", "https://matplotlib.org/"), ("PyTorch for ML development", "PyTorch", "https://pytorch.org/"), ("Github for development", "Github", "https://github.com")]
+    )
+
+    app.add_project_page(
+        "lsdai",
+        "LSD AI (Speech and Debate AI)",
+        [("2024-06-24", "Began project LSD AI"),
+         ("2024-08-11", "Completed the first beta version of LSD AI"),
+         ("2024-08-19", "Began reworking and updating the project"),
+         ("2024-09-01", "Completed the second beta of LSDAI"),
+         ("2024-10-27", "Migrated LSDAI from an app to Streamlit")],
+         "website_text/lsd_ai_intro.md",
+         "Xild076",
+         "LSDAI",
+         [("LSDAI README", "papers/lsd_ai_readme.md", "md", "This is the README for LSDAI, which includes a description of the project and how to use it.")],
+         [("Python 3.x for backend processing", "Python", "https://www.python.org/downloads/"), ("Streamlit for hosting", "Streamlit", "https://streamlit.io/"), ("OpenAI API keys for audio/content analysis", "OpenAI", "https://platform.openai.com/docs/overview"),
+          ("Kaggle for training data", "Kaggle", "https://www.kaggle.com/datasets"), ("Github for development", "Github", "https://github.com")]
+    )
+
+    app.add_project_page(
+        "aicat",
+        "AI Catalog (Basic PyTorch recreation)",
+        [("2024-02-09", "Began project AI Catalog"),
+         ("2024-04-05", "Finalized first version of VPG with only numpy"),
+         ("2024-05-03", "Began creation of PyTorch structure with Karpathy's Micrograd as reference"),
+         ("2024-07-10", "Completed first basic version of Micrograd")],
+         "website_text/ai_catolog_intro.md",
+         "Xild076",
+         "AICatalogue",
+         [],
+         [("Python 3.x for backend processing", "Python", "https://www.python.org/downloads/"), ("Numpy for numerical processing", "Numpy", "https://numpy.org/"), ("Github for development", "Github", "https://github.com")]
     )
     
     with app.page("about", "About Me") as page:

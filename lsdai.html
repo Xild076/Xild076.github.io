@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LSD AI (Speech and Debate AI)</title>
+<script>
+if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark-mode');}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 18px;
+  line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s;
+}
+html.dark-mode body {
+  background-color: #2e2e2e;
+  color: #dcdcdc;
+}
+.navbar {
+  background-color: #6c757d;
+}
+.navbar.dark-mode {
+  background-color: #343a40;
+}
+.card {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: none;
+}
+html.dark-mode .card {
+  background-color: #3a3a3a;
+}
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px 0;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  background: #6c757d;
+  transform: translateX(-50%);
+}
+.timeline-item {
+  position: relative;
+  width: 50%;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-bottom: 30px;
+}
+.timeline-item.left {
+  left: 0;
+  text-align: right;
+}
+.timeline-item.right {
+  left: 50%;
+  text-align: left;
+}
+.timeline-content {
+  padding: 15px;
+  background: #e9ecef;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+}
+.timeline-item.left .timeline-content::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
+}
+.timeline-item.right .timeline-content::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -20px;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
+}
+.timeline-date {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.animate__fadeInUp {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+html.dark-mode .timeline-content {
+  background: #444 !important;
+  color: #dcdcdc !important;
+}
+.theme-blockquote {
+    border-left: 4px solid #6c757d;
+    padding-left: 1rem;
+    color: #6c757d;
+}
+html.dark-mode .theme-blockquote {
+    border-left-color: #dcdcdc;
+    color: #dcdcdc;
+}
+figure {
+    display: block;
+    clear: both;
+    margin: 10px 0;
+}
+figcaption {
+    margin-top: 4px;
+    font-size: 0.85em;
+    font-style: italic;
+    text-align: center;
+    color: #666;
+}
+body { padding-bottom: 50px; }
+</style>
+</head>
+<body>
+<a id="top"></a>
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand" href="index.html">Harry's Blog</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li><li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li><li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li><li class="nav-item"><a class="nav-link" href="about.html">About Me</a></li>
+      <li class="nav-item">
+        <button id="toggleTheme" class="btn btn-secondary">Toggle Theme</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container mt-5">
+<ul class="nav nav-tabs" id="tabsExample" role="tablist"><li class="nav-item"><a class="nav-link active" id="tab0" data-toggle="tab" href="#content0" role="tab">Introduction</a></li><li class="nav-item"><a class="nav-link " id="tab1" data-toggle="tab" href="#content1" role="tab">Timeline</a></li><li class="nav-item"><a class="nav-link " id="tab2" data-toggle="tab" href="#content2" role="tab">Technologies</a></li><li class="nav-item"><a class="nav-link " id="tab3" data-toggle="tab" href="#content3" role="tab">Code</a></li><li class="nav-item"><a class="nav-link " id="tab4" data-toggle="tab" href="#content4" role="tab">Papers</a></li></ul><div class="tab-content mt-3" id="tabsExampleContent"><div class="tab-pane fade show active" id="content0" role="tabpanel"><div style="height: 10px;"></div></div><div class="tab-pane fade show " id="content1" role="tabpanel"><div class="timeline">
+            <div class="timeline-item left scroll-animate">
+            <div class="timeline-date">2024-10-27</div>
+            <div class="timeline-content">Migrated LSDAI from an app to Streamlit</div>
+            </div>
+            
+            <div class="timeline-item right scroll-animate">
+            <div class="timeline-date">2024-09-01</div>
+            <div class="timeline-content">Completed the second beta of LSDAI</div>
+            </div>
+            
+            <div class="timeline-item left scroll-animate">
+            <div class="timeline-date">2024-08-19</div>
+            <div class="timeline-content">Began reworking and updating the project</div>
+            </div>
+            
+            <div class="timeline-item right scroll-animate">
+            <div class="timeline-date">2024-08-11</div>
+            <div class="timeline-content">Completed the first beta version of LSD AI</div>
+            </div>
+            
+            <div class="timeline-item left scroll-animate">
+            <div class="timeline-date">2024-06-24</div>
+            <div class="timeline-content">Began project LSD AI</div>
+            </div>
+            </div></div><div class="tab-pane fade show " id="content2" role="tabpanel"><div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'><a href='https://www.python.org/downloads/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Python'>Python 3.x for backend processing</a><a href='https://streamlit.io/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Streamlit'>Streamlit for hosting</a><a href='https://platform.openai.com/docs/overview' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='OpenAI'>OpenAI API keys for audio/content analysis</a><a href='https://www.kaggle.com/datasets' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Kaggle'>Kaggle for training data</a><a href='https://github.com' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Github'>Github for development</a></div></div></div><div class="tab-pane fade show " id="content3" role="tabpanel">
+            <style>
+            .tab-content .tab-pane {
+                overflow: visible !important;
+            }
+            #codeViewer {
+                height: 800px;
+                overflow: auto;
+                width: 100%;
+            }
+            </style>
+            <div id="codeViewerContainer" class="mb-3">
+            <div id="fileList" style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
+            <div id="codeViewer" style="border:1px solid #ccc;"></div>
+            <a href="https://github.com/Xild076/LSDAI" target="_blank" class="btn btn-secondary mt-2">
+                Star on GitHub
+            </a>
+            </div>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+            <script>
+            var repoOwner = "Xild076";
+            var repoName = "LSDAI";
+            var fileListElem = document.getElementById("fileList");
+            var codeViewerElem = document.getElementById("codeViewer");
+            var editor = CodeMirror(codeViewerElem, {
+            value: "",
+            mode: "javascript",
+            lineNumbers: true,
+            lineWrapping: true
+            });
+            editor.setSize("100%", "100%");
+            var currentPath = "";
+
+            function loadFileContent(path) {
+            fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
+                .then(r => r.json())
+                .then(data => {
+                fetch(data.download_url)
+                    .then(r => r.text())
+                    .then(text => {
+                    editor.setValue(text);
+                    editor.refresh();
+                    });
+                });
+            }
+
+            function fetchDirectory(path) {
+            fileListElem.innerHTML = "";
+            if (path !== "") {
+                var backBtn = document.createElement("button");
+                backBtn.innerHTML = "⬅️ Back";
+                backBtn.className = "btn btn-secondary btn-sm mb-2";
+                backBtn.onclick = function() {
+                var parts = currentPath.split("/");
+                parts.pop();
+                parts.pop();
+                currentPath = parts.length > 0 ? parts.join("/") + "/" : "";
+                fetchDirectory(currentPath);
+                };
+                fileListElem.appendChild(backBtn);
+            }
+            fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
+                .then(r => r.json())
+                .then(files => {
+                files.forEach(file => {
+                    var btn = document.createElement("button");
+                    if (file.type === "dir") {
+                    btn.innerHTML = "📁 " + file.name;
+                    btn.className = "btn btn-info btn-sm m-1";
+                    btn.onclick = function() {
+                        currentPath = path + file.name + "/";
+                        fetchDirectory(currentPath);
+                    };
+                    } else {
+                    btn.innerHTML = "📄 " + file.name;
+                    btn.className = "btn btn-light btn-sm m-1";
+                    btn.onclick = function() {
+                        loadFileContent(file.path);
+                    };
+                    }
+                    fileListElem.appendChild(btn);
+                });
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+            var tabTriggers = document.querySelectorAll('[data-toggle="tab"]');
+            tabTriggers.forEach(function(trigger) {
+                trigger.addEventListener('shown.bs.tab', function() {
+                editor.refresh();
+                });
+            });
+            });
+
+            fetchDirectory(currentPath);
+            </script>
+            </div><div class="tab-pane fade show " id="content4" role="tabpanel"><div class="paper-widgets"><div style="margin-bottom: 15px;">
+            <div class="card mb-3" style="max-width: 500px;">
+            <a href="paper_lsdai readme.html" style="text-decoration: none; color: inherit;">
+                <div class="row no-gutters">
+                <div class="col-5" style="padding:0;">
+                    <img src="images/placeholder.png" class="card-img" alt="LSDAI README" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+                </div>
+                <div class="col-7">
+                    <div class="card-body" style="padding: 0.5rem;">
+                    <h5 class="card-title" style="font-size:1.2rem;">LSDAI README</h5>
+                    <p class="card-text" style="font-size:1rem;">This is the README for LSDAI, which includes a description of the project and how to use it.</p>
+                    </div>
+                </div>
+                </div>
+            </a>
+            </div>
+            </div></div></div></div>
+<div style="text-align: center; margin: 20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
+</div>
+<footer class="footer mt-5">
+  <div class="container">
+    <span class="text-muted">&copy; 2025 Harry Yin. All rights reserved.</span>
+  </div>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
+
+  document.getElementById("toggleTheme").addEventListener("click", function() {
+    document.documentElement.classList.toggle("dark-mode");
+    if(document.documentElement.classList.contains("dark-mode")) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  document.querySelectorAll('a[href="#top"]').forEach(function(link){
+    link.addEventListener("click", function(e){
+      e.preventDefault();
+      window.scrollTo({top: 0, behavior: "smooth"});
+    });
+  });
+
+  console.log('Custom JS loaded');
+});
+</script>
+</body>
+</html>
