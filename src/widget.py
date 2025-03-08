@@ -82,13 +82,23 @@ class Page:
   </a>
 </div>
 ''')
-    def image(self, image_url, alt_text="", width=None, height=None):
+    def image(self, image_url, alt_text="", width=None, height=None, wrap=None, crop=False, shrink=False, smart_fit=False, caption=""):
         style = ""
         if width:
-            style += f'width:{width}px;'
+            style += f'{"width" if smart_fit or not shrink else "max-width"}:{width}px;'
         if height:
-            style += f'height:{height}px;'
-        self.content.append(f'<img src="{image_url}" alt="{alt_text}" style="{style}">')
+            style += f'{"height" if smart_fit else "height"}:{height}px;'
+        if wrap in ["left", "right"]:
+            style += f' float:{wrap}; margin:10px;'
+        if crop or smart_fit:
+            style += " object-fit:cover;"
+        elif shrink:
+            style += " object-fit:contain;"
+        img_html = f'<img src="{image_url}" alt="{alt_text}" style="{style}">'
+        if caption:
+            self.content.append(f'<figure>{img_html}<figcaption>{caption}</figcaption></figure>')
+        else:
+            self.content.append(img_html)
     def email_link(self, email, text=None):
         display_text = text if text else email
         self.content.append(f'<a href="mailto:{email}">{display_text}</a><br>')
@@ -112,69 +122,27 @@ class Page:
             gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid"></div>'
         gallery_html += '</div>'
         self.content.append(gallery_html)
-    def rotating_gallery(self, images, container_width=800, container_height=600, interval=3000):
+    def rotating_gallery(self, images, container_width=800, container_height=600, interval=3000, smart_fit=False, captions=None):
         self.content.append(f"""
         <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden; margin: auto;">
             <div class="image-container" style="width: 100%; height: 100%; position: relative;">
-                {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: {1 if i == 0 else 0}; transition: opacity 0.5s ease; z-index: 1;" data-index="{i}" class="{("active" if i == 0 else "")}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: cover;"></span>' for i, img in enumerate(images)])}
+                {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: {1 if i == 0 else 0}; transition: opacity 0.5s ease; z-index: 1;" data-index="{i}" class="{("active" if i == 0 else "")}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: {"cover" if smart_fit else "contain"};"></span>' for i, img in enumerate(images)])}
             </div>
             <div class="overlay" id="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2;">
-                <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: cover;">
+                <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: {"cover" if smart_fit else "contain"};">
             </div>
             <div class="btn-container" style="position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; z-index: 3;">
                 <button class="btn btn-secondary" id="prev">Left</button>
                 <button class="btn btn-secondary" id="next">Right</button>
             </div>
         </div>
-        <style>
-        .rotating-gallery-container {{}}
-        .image-container span.active {{ opacity: 1 !important; }}
-        </style>
-        <script>
-        (function() {{
-            var container = document.querySelector("#rotatingGallery .image-container");
-            var spans = container.getElementsByTagName("span");
-            var current = 0;
-            
-            function showImage(index) {{
-                for (var i = 0; i < spans.length; i++) {{
-                    spans[i].classList.remove("active");
-                    spans[i].style.opacity = "0";
-                }}
-                spans[index].classList.add("active");
-                spans[index].style.opacity = "1";
-            }}
-            
-            // Make sure the first image is visible initially
-            showImage(current);
-            
-            document.getElementById("next").addEventListener("click", function() {{
-                current = (current + 1) % spans.length;
-                showImage(current);
-            }});
-            
-            document.getElementById("prev").addEventListener("click", function() {{
-                current = (current - 1 + spans.length) % spans.length;
-                showImage(current);
-            }});
-            
-            // Auto-rotation
-            var intervalId = setInterval(function() {{
-                current = (current + 1) % spans.length;
-                showImage(current);
-            }}, {interval});
-            
-            // Stop auto-rotation when user interacts with gallery
-            document.getElementById("next").addEventListener("click", function() {{
-                clearInterval(intervalId);
-            }});
-            
-            document.getElementById("prev").addEventListener("click", function() {{
-                clearInterval(intervalId);
-            }});
-        }})();
-        </script>
         """)
+        if captions and isinstance(captions, list):
+            captions_html = '<div class="gallery-captions" style="text-align: center;">'
+            for cap in captions:
+                captions_html += f'<div style="display: inline-block; margin: 0 10px;">{cap}</div>'
+            captions_html += '</div>'
+            self.content.append(captions_html)
     def tabs(self, tabs, tab_id="tabsExample"):
         nav_html = f'<ul class="nav nav-tabs" id="{tab_id}" role="tablist">'
         content_html = f'<div class="tab-content mt-3" id="{tab_id}Content">'
@@ -370,6 +338,7 @@ body {{
   font-family: 'Roboto', sans-serif;
   background-color: #f5f5f5;
   color: #333;
+  font-size: 18px;
   transition: background-color 0.3s, color 0.3s;
 }}
 html.dark-mode body {{
