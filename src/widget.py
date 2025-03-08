@@ -321,7 +321,7 @@ class Website:
             else:
                 page.write(content)
         return page
-    def add_project_page(self, slug, title, timeline_events, project_intro, github_gist_url, github_desc, papers, technologies=None):
+    def add_project_page(self, slug, title, timeline_events, project_intro, github_owner, github_repo, papers, technologies=None):
         with self.page(slug, title) as page:
             page.is_project = True
             with open(project_intro, "r", encoding="utf-8") as f:
@@ -335,13 +335,51 @@ class Website:
             for idx, (date, event) in enumerate(sorted_events):
                 side = "left" if idx % 2 == 0 else "right"
                 timeline_html += f'''
-<div class="timeline-item {side} scroll-animate">
-  <div class="timeline-date">{date}</div>
-  <div class="timeline-content">{event}</div>
-</div>
-'''
+    <div class="timeline-item {side} scroll-animate">
+    <div class="timeline-date">{date}</div>
+    <div class="timeline-content">{event}</div>
+    </div>
+    '''
             timeline_html += '</div>'
-            code_html = '<div style="height: 10px;"></div>' + f"<p>{github_desc}</p>" + f'<script src="{github_gist_url}.js"></script>'
+            code_html = f'''
+    <div id="codeViewerContainer">
+    <div id="fileList" style="max-height:300px;overflow:auto;border:1px solid #ccc;padding:10px;margin-bottom:10px;"></div>
+    <div id="codeViewer" style="border:1px solid #ccc;height:500px;"></div>
+    <a href="https://github.com/{github_owner}/{github_repo}" target="_blank" class="btn btn-secondary">Star on GitHub</a>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+    <script>
+    var repoOwner = "{github_owner}";
+    var repoName = "{github_repo}";
+    var fileListElem = document.getElementById("fileList");
+    var codeViewerElem = document.getElementById("codeViewer");
+    var editor = CodeMirror(codeViewerElem, {{ value: "", mode: "javascript", lineNumbers: true }});
+    function loadFileContent(path) {{
+    fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
+    .then(r => r.json())
+    .then(data => {{
+        fetch(data.download_url).then(r => r.text()).then(text => {{
+        editor.setValue(text);
+        }});
+    }});
+    }}
+    fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/")
+    .then(r => r.json())
+    .then(files => {{
+    files.forEach(file => {{
+        var btn = document.createElement("button");
+        btn.innerText = file.name;
+        btn.style.margin = "2px";
+        btn.onclick = function() {{
+        loadFileContent(file.path);
+        }};
+        fileListElem.appendChild(btn);
+    }});
+    }});
+    </script>
+    '''
             papers_html = '<div class="paper-widgets">'
             for paper in papers:
                 if len(paper) >= 4:
@@ -356,22 +394,22 @@ class Website:
                 else:
                     link_target = paper_link
                 widget_html = f'''
-<div class="card mb-3" style="max-width: 300px;">
-  <a href="{link_target}" style="text-decoration: none; color: inherit;">
-    <div class="row no-gutters">
-      <div class="col-4" style="padding:0;">
-        <img src="images/placeholder.png" class="card-img" alt="{paper_title}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
-      </div>
-      <div class="col-8">
-        <div class="card-body" style="padding: 0.5rem;">
-          <h5 class="card-title" style="font-size:1rem;">{paper_title}</h5>
-          <p class="card-text" style="font-size:0.8rem;">{paper_desc}</p>
+    <div class="card mb-3" style="max-width: 500px;">
+    <a href="{link_target}" style="text-decoration: none; color: inherit;">
+        <div class="row no-gutters">
+        <div class="col-5" style="padding:0;">
+            <img src="images/placeholder.png" class="card-img" alt="{paper_title}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
         </div>
-      </div>
+        <div class="col-7">
+            <div class="card-body" style="padding: 0.5rem;">
+            <h5 class="card-title" style="font-size:1.2rem;">{paper_title}</h5>
+            <p class="card-text" style="font-size:1rem;">{paper_desc}</p>
+            </div>
+        </div>
+        </div>
+    </a>
     </div>
-  </a>
-</div>
-'''
+    '''
                 papers_html += f'<div style="margin-bottom: 15px;">{widget_html}</div>'
             papers_html += '</div>'
             tech_html = ""

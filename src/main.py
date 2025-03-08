@@ -36,6 +36,7 @@ if __name__ == "__main__":
         page.heading("Projects")
         page.write("Here is a list of projects.")
         page.widget("", "Alitheia AI", "This is a project that objectifies News.", "objectivenews")
+        page.widget("", "Polystock AI", "This is a project that attempts to predict stock prices.", "objectivenews")
     
     app.add_project_page(
         "objectivenews",
@@ -45,12 +46,28 @@ if __name__ == "__main__":
          ("2025-01-02", "Completed the second beta version of Objective News"),
          ("2025-02-09", "Completed official proposal paper for full version of Objective News"),
          ("2025-03-06", "Renamed project to Alitheia AI (Greek for 'truth')")],
-         "papers/objective_news_intro.md",
-        "https://gist.github.com/Xild076/3c89ad41dcc72a5388226d732873bff0",
-        "The code provided illustrates the two most critical components of the project: the grouping and objectification, both of which use novel techniques to achieve the desired results. See the paper for more details.",
+         "website_text/objective_news_intro.md",
+        "Xild076",
+        "ObjectiveNews",
         [("Beta Paper", "papers/paper_vbeta.md", "md", "This is the first paper written upon release of the Beta version of Alitheia AI"), ("Official Proposal", "papers/Proposal—Objective News.pdf", "pdf", "This is the official proposal paper for a full pipeline version of Alitheia AI, created after much consideration of new methodologies and techniques.")],
         [("Python 3.x for backend processing", "Python", "https://www.python.org/downloads/"), ("Streamlit for hosting", "Streamlit", "https://streamlit.io/"), ("Stanza for NLP", "Stanza", "https://stanfordnlp.github.io/stanza/"), ("Hugging Face Transformers for state-of-the-art models", "HuggingFace", "https://huggingface.co/"),
          ("Scikit-learn for clustering", "Scikit-learn", "https://scikit-learn.org/stable/"), ("BeautifulSoup for web scraping", "BeautifulSoup", "https://pypi.org/project/beautifulsoup4/"), ("Requests for HTTP requests", "Requests", "https://pypi.org/project/requests/"), ("Github for development", "Github", "https://github.com/")]
+    )
+
+    app.add_project_page(
+        "stockpred",
+        "Polystock AI (Stock Prediction)",
+        [("2023-06-11", "Began project Polystock AI"),
+         ("2023-10-15", "Completed the first beta version of Polystock AI"),
+         ("2023-11-20", "Wrote the first paper on Polystock AI"),
+         ("2024-09-03", "Began to rework the project to use a more advanced techniques"),
+         ("2024-11-10", "Completed the second beta version of Polystock AI with full functionality and partially trained models")],
+         "website_text/stock_pred_intro.md",
+         "Xild076",
+         "StockPred",
+         [("Beta Paper", "papers/RL_for_Stocks.pdf", "pdf", "This is the first paper written upon release of the first beta version of Polystock AI. Please note that it is very outdated.")],
+         [("Python 3.x for backend processing", "Python", "https://www.python.org/downloads/"), ("FRED API for data", "FRED", "https://fred.stlouisfed.org/"), ("Streamlit for hosting", "Streamlit", "https://streamlit.io/"), ("Requests for HTTP requests", "Requests", "https://pypi.org/project/requests/"), ("Yfinance for stock data", "Yfinance", "https://pypi.org/project/yfinance/"),
+          ("Pandas for data manipulation", "Pandas", "https://pandas.pydata.org/"), ("Numpy for numerical operations", "Numpy", "https://numpy.org/"), ("Matplotlib for plotting", "Matplotlib", "https://matplotlib.org/"), ("PyTorch for ML development", "PyTorch", "https://pytorch.org/"), ("Github for development", "Github", "https://github.com")]
     )
     
     with app.page("about", "About Me") as page:
