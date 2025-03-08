@@ -101,9 +101,9 @@ class Page:
         self.content.append(f'<iframe width="{width}" height="{height}" src="{video_url}" frameborder="0" allowfullscreen></iframe>')
     def blockquote(self, quote, author=None):
         if author:
-            self.content.append(f"<blockquote class='blockquote'><p>{quote}</p><footer class='blockquote-footer'>{author}</footer></blockquote>")
+            self.content.append(f"<blockquote class='blockquote' style='border-left: 4px solid #6c757d; padding-left: 1rem; color: #6c757d;'><p><em>&ldquo;{quote}&rdquo;</em></p><footer class='blockquote-footer'><cite>{author}</cite></footer></blockquote>")
         else:
-            self.content.append(f"<blockquote class='blockquote'><p>{quote}</p></blockquote>")
+            self.content.append(f"<blockquote class='blockquote' style='border-left: 4px solid #6c757d; padding-left: 1rem; color: #6c757d;'><p><em>&ldquo;{quote}&rdquo;</em></p></blockquote>")
     def alert_box(self, message, alert_type="info"):
         self.content.append(f'<div class="alert alert-{alert_type}" role="alert">{message}</div>')
     def gallery(self, images):
@@ -140,46 +140,47 @@ class Page:
     </a>
     </div>
     ''')
-    def custom_rotating_gallery(self, images, container_width=800, container_height=600, center_width=600, center_height=400, bg_scale=0.5, bg_blur=3, offset_step=40, interval=3000):
+    def custom_rotating_gallery(self, images, container_width=800, container_height=600, interval=3000):
         self.content.append(f"""
-    <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden;">
-        {''.join([f'<img src="{img}" class="rotating-gallery-img" data-index="{i}" style="position: absolute; transition: all 0.5s ease;">' for i, img in enumerate(images)])}
+    <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden; margin: auto;">
+        <div class="image-container" style="width: 100%; height: 100%; position: relative;">
+            {''.join([f'<span style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.5s ease;" data-index="{i}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: cover;"></span>' for i, img in enumerate(images)])}
+        </div>
+        <div class="overlay" id="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center;">
+            <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: cover;">
+        </div>
+        <div class="btn-container" style="position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px;">
+            <button class="btn" id="prev">Left</button>
+            <button class="btn" id="next">Right</button>
+        </div>
     </div>
     <style>
-    .rotating-gallery-img {{ left: 50%; top: 50%; transform: translate(-50%, -50%); object-fit: cover; }}
+    .rotating-gallery-container {{ }}
+    .image-container span.active {{ opacity: 1; }}
     </style>
     <script>
-    (function(){{
-        var container = document.getElementById("rotatingGallery");
-        var images = container.getElementsByClassName("rotating-gallery-img");
-        var activeIndex = 0;
-        var centerWidth = {center_width};
-        var centerHeight = {center_height};
-        var bgScale = {bg_scale};
-        var bgBlur = {bg_blur};
-        var offsetStep = {offset_step};
-        function updateGallery() {{
-            for (var i = 0; i < images.length; i++) {{
-                if (i === activeIndex) {{
-                    images[i].style.width = centerWidth + "px";
-                    images[i].style.height = centerHeight + "px";
-                    images[i].style.zIndex = 2;
-                    images[i].style.filter = "none";
-                    images[i].style.transform = "translate(-50%, -50%) scale(1)";
-                }} else {{
-                    images[i].style.width = (centerWidth * bgScale) + "px";
-                    images[i].style.height = (centerHeight * bgScale) + "px";
-                    images[i].style.zIndex = 1;
-                    images[i].style.filter = "blur(" + bgBlur + "px)";
-                    var offset = (i - activeIndex) * offsetStep;
-                    images[i].style.transform = "translate(calc(-50% + " + offset + "px), -50%) scale(" + bgScale + ")";
-                }}
+    (function() {{
+        var container = document.querySelector("#rotatingGallery .image-container");
+        var spans = container.getElementsByTagName("span");
+        var current = 0;
+        function showImage(index) {{
+            for (var i = 0; i < spans.length; i++) {{
+                spans[i].classList.remove("active");
             }}
+            spans[index].classList.add("active");
         }}
-        updateGallery();
-        setInterval(function(){{
-            activeIndex = (activeIndex + 1) % images.length;
-            updateGallery();
+        showImage(current);
+        document.getElementById("next").addEventListener("click", function() {{
+            current = (current + 1) % spans.length;
+            showImage(current);
+        }});
+        document.getElementById("prev").addEventListener("click", function() {{
+            current = (current - 1 + spans.length) % spans.length;
+            showImage(current);
+        }});
+        setInterval(function() {{
+            current = (current + 1) % spans.length;
+            showImage(current);
         }}, {interval});
     }})();
     </script>
