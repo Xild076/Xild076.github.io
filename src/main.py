@@ -57,6 +57,6 @@ if __name__ == "__main__":
         page.heading("About Me")
         page.write("About me!")
         page.blockquote("When in doubt, look intelligent", "Garrison Keillor")
-        page.rotating_gallery(["images/archie_brownie.png", "images/archie.png", "images/brownie_archie.png"])
+        page.custom_rotating_gallery(["images/archie_brownie.png", "images/archie.png", "images/brownie_archie.png"])
     
     app.compile(".")

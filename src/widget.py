@@ -140,6 +140,50 @@ class Page:
     </a>
     </div>
     ''')
+    def custom_rotating_gallery(self, images, container_width=800, container_height=600, center_width=600, center_height=400, bg_scale=0.5, bg_blur=3, offset_step=40, interval=3000):
+        self.content.append(f"""
+    <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden;">
+        {''.join([f'<img src="{img}" class="rotating-gallery-img" data-index="{i}" style="position: absolute; transition: all 0.5s ease;">' for i, img in enumerate(images)])}
+    </div>
+    <style>
+    .rotating-gallery-img {{ left: 50%; top: 50%; transform: translate(-50%, -50%); }}
+    </style>
+    <script>
+    (function(){{
+        var container = document.getElementById("rotatingGallery");
+        var images = container.getElementsByClassName("rotating-gallery-img");
+        var activeIndex = 0;
+        var centerWidth = {center_width};
+        var centerHeight = {center_height};
+        var bgScale = {bg_scale};
+        var bgBlur = {bg_blur};
+        var offsetStep = {offset_step};
+        function updateGallery() {{
+            for (var i = 0; i < images.length; i++) {{
+                if (i === activeIndex) {{
+                    images[i].style.width = centerWidth + "px";
+                    images[i].style.height = centerHeight + "px";
+                    images[i].style.zIndex = 2;
+                    images[i].style.filter = "none";
+                    images[i].style.transform = "translate(-50%, -50%) scale(1)";
+                }} else {{
+                    images[i].style.width = (centerWidth * bgScale) + "px";
+                    images[i].style.height = (centerHeight * bgScale) + "px";
+                    images[i].style.zIndex = 1;
+                    images[i].style.filter = "blur(" + bgBlur + "px)";
+                    var offset = (i - activeIndex) * offsetStep;
+                    images[i].style.transform = "translate(calc(-50% + " + offset + "px), -50%) scale(" + bgScale + ")";
+                }}
+            }}
+        }}
+        updateGallery();
+        setInterval(function(){{
+            activeIndex = (activeIndex + 1) % images.length;
+            updateGallery();
+        }}, interval);
+    }})();
+    </script>
+    """)
     def markdown(self, text, align="left"):
         text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', text)
         text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', text)
