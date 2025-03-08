@@ -41,7 +41,12 @@ class Page:
     def __enter__(self):
         return self
     def __exit__(self, exc_type, exc_value, traceback):
-        self.website.pages[self.slug] = {"title": self.title, "content": self.content, "is_blog": self.is_blog, "is_project": self.is_project}
+        self.website.pages[self.slug] = {
+            "title": self.title,
+            "content": self.content,
+            "is_blog": self.is_blog,
+            "is_project": self.is_project
+        }
     def heading(self, text, level=1, align="left"):
         self.content.append(f"<h{level} style='text-align: {align};'>{text}</h{level}>")
     def write(self, text, align="left"):
@@ -54,7 +59,7 @@ class Page:
     def timeline_full(self, events):
         try:
             sorted_events = sorted(events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"))
-        except Exception:
+        except:
             sorted_events = events
         timeline_html = '<div class="timeline">'
         for idx, (date, event) in enumerate(sorted_events):
@@ -95,13 +100,25 @@ class Page:
             img_style += " object-fit:contain;"
         if wrap in ["left", "right"]:
             if caption:
-                figure_style += f'float:{wrap}; margin:10px; clear:both;'
+                if wrap == "left":
+                    figure_style += "float:left; margin:0 20px 20px 0;"
+                else:
+                    figure_style += "float:right; margin:0 0 20px 20px;"
             else:
-                img_style += f' float:{wrap}; margin:10px;'
+                if wrap == "left":
+                    img_style += " float:left; margin:0 20px 20px 0;"
+                else:
+                    img_style += " float:right; margin:0 0 20px 20px;"
         if caption:
-            self.content.append(f'<figure style="{figure_style} margin:10px 0;"><img src="{image_url}" alt="{alt_text}" style="{img_style} border-radius:4px;"><figcaption>{caption}</figcaption></figure>')
+            self.content.append(
+                f'<figure style="{figure_style} position:relative; display:inline-block; box-shadow:0 2px 4px rgba(0,0,0,0.1); border-radius:4px; overflow:hidden;">'
+                f'<img src="{image_url}" alt="{alt_text}" style="{img_style} border-radius:0;">'
+                f'<figcaption>{caption}</figcaption></figure>'
+            )
         else:
-            self.content.append(f'<img src="{image_url}" alt="{alt_text}" style="{img_style} border-radius:4px;">')
+            self.content.append(
+                f'<img src="{image_url}" alt="{alt_text}" style="{img_style} border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">'
+            )
     def email_link(self, email, text=None):
         display_text = text if text else email
         self.content.append(f'<a href="mailto:{email}">{display_text}</a><br>')
@@ -122,7 +139,7 @@ class Page:
     def gallery(self, images):
         gallery_html = '<div class="row">'
         for img in images:
-            gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid" style="border-radius:4px;"></div>'
+            gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid" style="border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:20px;"></div>'
         gallery_html += '</div>'
         self.content.append(gallery_html)
     def rotating_gallery(self, images, container_width=800, container_height=600, interval=3000, smart_fit=False, captions=None):
@@ -132,10 +149,10 @@ class Page:
         gallery_html = f"""
         <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden; margin: auto;">
             <div class="image-container" style="width: 100%; height: 100%; position: relative;">
-                {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: {1 if i == 0 else 0}; transition: opacity 0.5s ease; z-index: 1;" data-index="{i}" class="{"active" if i == 0 else ""}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: {"cover" if smart_fit else "contain"}; border-radius:4px;"></span>' for i, img in enumerate(images)])}
+                {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: {1 if i == 0 else 0}; transition: opacity 0.5s ease; z-index: 1;" data-index="{i}" class="{"active" if i == 0 else ""}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: {"cover" if smart_fit else "contain"}; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1);"></span>' for i, img in enumerate(images)])}
             </div>
             <div class="overlay" id="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2;">
-                <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: {"cover" if smart_fit else "contain"}; border-radius:4px;">
+                <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: {"cover" if smart_fit else "contain"}; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.2);">
             </div>
             <div class="btn-container" style="position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; z-index: 3;">
                 <button class="btn btn-secondary" id="prev">Left</button>
@@ -303,7 +320,7 @@ class Website:
             intro_html = '<div style="height: 10px;"></div>' + convert_markdown_full(project_intro)
             try:
                 sorted_events = sorted(timeline_events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"), reverse=True)
-            except Exception:
+            except:
                 sorted_events = timeline_events
             timeline_html = '<div class="timeline">'
             for idx, (date, event) in enumerate(sorted_events):
@@ -349,7 +366,7 @@ class Website:
                 papers_html += f'<div style="margin-bottom: 15px;">{widget_html}</div>'
             papers_html += '</div>'
             tech_html = ""
-            if technologies is not None:
+            if technologies:
                 tech_badges = ""
                 for tech in technologies:
                     if isinstance(tech, tuple):
@@ -367,9 +384,13 @@ class Website:
     def compile(self, output_dir="."):
         if output_dir != "." and not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        nav_links = "".join([f'<li class="nav-item"><a class="nav-link" href="{slug}.html">{data["title"]}</a></li>' 
-                             for slug, data in self.pages.items() if not data.get("is_blog") and not data.get("is_project")])
-        base_template = lambda title, content: f"""<!DOCTYPE html>
+        nav_links = "".join([
+            f'<li class="nav-item"><a class="nav-link" href="{slug}.html">{data["title"]}</a></li>'
+            for slug, data in self.pages.items()
+            if not data.get("is_blog") and not data.get("is_project")
+        ])
+        def base_template(title, content):
+            return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
