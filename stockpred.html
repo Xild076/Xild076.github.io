@@ -152,85 +152,112 @@ body { padding-bottom: 50px; }
 </nav>
 <div class="container mt-5">
 <ul class="nav nav-tabs" id="tabsExample" role="tablist"><li class="nav-item"><a class="nav-link active" id="tab0" data-toggle="tab" href="#content0" role="tab">Introduction</a></li><li class="nav-item"><a class="nav-link " id="tab1" data-toggle="tab" href="#content1" role="tab">Timeline</a></li><li class="nav-item"><a class="nav-link " id="tab2" data-toggle="tab" href="#content2" role="tab">Technologies</a></li><li class="nav-item"><a class="nav-link " id="tab3" data-toggle="tab" href="#content3" role="tab">Code</a></li><li class="nav-item"><a class="nav-link " id="tab4" data-toggle="tab" href="#content4" role="tab">Papers</a></li></ul><div class="tab-content mt-3" id="tabsExampleContent"><div class="tab-pane fade show active" id="content0" role="tabpanel"><div style="height: 10px;"></div></div><div class="tab-pane fade show " id="content1" role="tabpanel"><div class="timeline">
-    <div class="timeline-item left scroll-animate">
-    <div class="timeline-date">2024-11-10</div>
-    <div class="timeline-content">Completed the second beta version of Polystock AI with full functionality and partially trained models</div>
-    </div>
-    
-    <div class="timeline-item right scroll-animate">
-    <div class="timeline-date">2024-09-03</div>
-    <div class="timeline-content">Began to rework the project to use a more advanced techniques</div>
-    </div>
-    
-    <div class="timeline-item left scroll-animate">
-    <div class="timeline-date">2023-11-20</div>
-    <div class="timeline-content">Wrote the first paper on Polystock AI</div>
-    </div>
-    
-    <div class="timeline-item right scroll-animate">
-    <div class="timeline-date">2023-10-15</div>
-    <div class="timeline-content">Completed the first beta version of Polystock AI</div>
-    </div>
-    
-    <div class="timeline-item left scroll-animate">
-    <div class="timeline-date">2023-06-11</div>
-    <div class="timeline-content">Began project Polystock AI</div>
-    </div>
-    </div></div><div class="tab-pane fade show " id="content2" role="tabpanel"><div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'><a href='https://www.python.org/downloads/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Python'>Python 3.x for backend processing</a><a href='https://fred.stlouisfed.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='FRED'>FRED API for data</a><a href='https://streamlit.io/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Streamlit'>Streamlit for hosting</a><a href='https://pypi.org/project/requests/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Requests'>Requests for HTTP requests</a><a href='https://pypi.org/project/yfinance/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Yfinance'>Yfinance for stock data</a><a href='https://pandas.pydata.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Pandas'>Pandas for data manipulation</a><a href='https://numpy.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Numpy'>Numpy for numerical operations</a><a href='https://matplotlib.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Matplotlib'>Matplotlib for plotting</a><a href='https://pytorch.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='PyTorch'>PyTorch for ML development</a><a href='https://github.com' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Github'>Github for development</a></div></div></div><div class="tab-pane fade show " id="content3" role="tabpanel">
-    <div id="codeViewerContainer">
-    <div id="fileList" style="max-height:300px;overflow:auto;border:1px solid #ccc;padding:10px;margin-bottom:10px;"></div>
-    <div id="codeViewer" style="border:1px solid #ccc;height:500px;"></div>
-    <a href="https://github.com/Xild076/StockPred" target="_blank" class="btn btn-secondary">Star on GitHub</a>
-    </div>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
-    <script>
-    var repoOwner = "Xild076";
-    var repoName = "StockPred";
-    var fileListElem = document.getElementById("fileList");
-    var codeViewerElem = document.getElementById("codeViewer");
-    var editor = CodeMirror(codeViewerElem, { value: "", mode: "javascript", lineNumbers: true });
-    function loadFileContent(path) {
-    fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
-    .then(r => r.json())
-    .then(data => {
-        fetch(data.download_url).then(r => r.text()).then(text => {
-        editor.setValue(text);
+        <div class="timeline-item left scroll-animate">
+        <div class="timeline-date">2024-11-10</div>
+        <div class="timeline-content">Completed the second beta version of Polystock AI with full functionality and partially trained models</div>
+        </div>
+        
+        <div class="timeline-item right scroll-animate">
+        <div class="timeline-date">2024-09-03</div>
+        <div class="timeline-content">Began to rework the project to use a more advanced techniques</div>
+        </div>
+        
+        <div class="timeline-item left scroll-animate">
+        <div class="timeline-date">2023-11-20</div>
+        <div class="timeline-content">Wrote the first paper on Polystock AI</div>
+        </div>
+        
+        <div class="timeline-item right scroll-animate">
+        <div class="timeline-date">2023-10-15</div>
+        <div class="timeline-content">Completed the first beta version of Polystock AI</div>
+        </div>
+        
+        <div class="timeline-item left scroll-animate">
+        <div class="timeline-date">2023-06-11</div>
+        <div class="timeline-content">Began project Polystock AI</div>
+        </div>
+        </div></div><div class="tab-pane fade show " id="content2" role="tabpanel"><div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'><a href='https://www.python.org/downloads/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Python'>Python 3.x for backend processing</a><a href='https://fred.stlouisfed.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='FRED'>FRED API for data</a><a href='https://streamlit.io/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Streamlit'>Streamlit for hosting</a><a href='https://pypi.org/project/requests/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Requests'>Requests for HTTP requests</a><a href='https://pypi.org/project/yfinance/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Yfinance'>Yfinance for stock data</a><a href='https://pandas.pydata.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Pandas'>Pandas for data manipulation</a><a href='https://numpy.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Numpy'>Numpy for numerical operations</a><a href='https://matplotlib.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Matplotlib'>Matplotlib for plotting</a><a href='https://pytorch.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='PyTorch'>PyTorch for ML development</a><a href='https://github.com' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Github'>Github for development</a></div></div></div><div class="tab-pane fade show " id="content3" role="tabpanel">
+        <div id="codeViewerContainer" class="mb-3">
+        <div id="fileList" style="max-height:300px;overflow:auto;border:1px solid #ccc;padding:10px;margin-bottom:10px;"></div>
+        <div id="codeViewer" style="border:1px solid #ccc;height:500px;"></div>
+        <a href="https://github.com/Xild076/StockPred" target="_blank" class="btn btn-secondary mt-2">Star on GitHub</a>
+        </div>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+        <script>
+        var repoOwner = "Xild076";
+        var repoName = "StockPred";
+        var fileListElem = document.getElementById("fileList");
+        var codeViewerElem = document.getElementById("codeViewer");
+        var editor = CodeMirror(codeViewerElem, { value: "", mode: "javascript", lineNumbers: true });
+        var currentPath = "";
+        function loadFileContent(path) {
+        fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
+        .then(r => r.json())
+        .then(data => {
+            fetch(data.download_url).then(r => r.text()).then(text => {
+            editor.setValue(text);
+            });
         });
-    });
-    }
-    fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/")
-    .then(r => r.json())
-    .then(files => {
-    files.forEach(file => {
-        var btn = document.createElement("button");
-        btn.innerText = file.name;
-        btn.style.margin = "2px";
-        btn.onclick = function() {
-        loadFileContent(file.path);
-        };
-        fileListElem.appendChild(btn);
-    });
-    });
-    </script>
-    </div><div class="tab-pane fade show " id="content4" role="tabpanel"><div class="paper-widgets"><div style="margin-bottom: 15px;">
-    <div class="card mb-3" style="max-width: 500px;">
-    <a href="papers/RL_for_Stocks.pdf" style="text-decoration: none; color: inherit;">
-        <div class="row no-gutters">
-        <div class="col-5" style="padding:0;">
-            <img src="images/placeholder.png" class="card-img" alt="Beta Paper" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
-        </div>
-        <div class="col-7">
-            <div class="card-body" style="padding: 0.5rem;">
-            <h5 class="card-title" style="font-size:1.2rem;">Beta Paper</h5>
-            <p class="card-text" style="font-size:1rem;">This is the first paper written upon release of the first beta version of Polystock AI. Please note that it is very outdated.</p>
+        }
+        function fetchDirectory(path) {
+        fileListElem.innerHTML = "";
+        if(path !== "") {
+            var backBtn = document.createElement("button");
+            backBtn.innerHTML = "<- Back";
+            backBtn.className = "btn btn-secondary btn-sm mb-2";
+            backBtn.onclick = function() {
+            var parts = currentPath.split("/");
+            parts.pop();
+            parts.pop();
+            currentPath = parts.length > 0 ? parts.join("/") + "/" : "";
+            fetchDirectory(currentPath);
+            };
+            fileListElem.appendChild(backBtn);
+        }
+        fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
+        .then(r => r.json())
+        .then(files => {
+            files.forEach(file => {
+            var btn = document.createElement("button");
+            if(file.type === "dir") {
+                btn.innerHTML = "📁 " + file.name;
+                btn.className = "btn btn-info btn-sm m-1";
+                btn.onclick = function() {
+                currentPath = path + file.name + "/";
+                fetchDirectory(currentPath);
+                };
+            } else {
+                btn.innerHTML = "📄 " + file.name;
+                btn.className = "btn btn-light btn-sm m-1";
+                btn.onclick = function() {
+                loadFileContent(file.path);
+                };
+            }
+            fileListElem.appendChild(btn);
+            });
+        });
+        }
+        fetchDirectory(currentPath);
+        </script>
+        </div><div class="tab-pane fade show " id="content4" role="tabpanel"><div class="paper-widgets"><div style="margin-bottom: 15px;">
+        <div class="card mb-3" style="max-width: 500px;">
+        <a href="papers/RL_for_Stocks.pdf" style="text-decoration: none; color: inherit;">
+            <div class="row no-gutters">
+            <div class="col-5" style="padding:0;">
+                <img src="images/placeholder.png" class="card-img" alt="Beta Paper" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
             </div>
+            <div class="col-7">
+                <div class="card-body" style="padding: 0.5rem;">
+                <h5 class="card-title" style="font-size:1.2rem;">Beta Paper</h5>
+                <p class="card-text" style="font-size:1rem;">This is the first paper written upon release of the first beta version of Polystock AI. Please note that it is very outdated.</p>
+                </div>
+            </div>
+            </div>
+        </a>
         </div>
-        </div>
-    </a>
-    </div>
-    </div></div></div></div>
+        </div></div></div></div>
 <div style="text-align: center; margin: 20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
 </div>
 <footer class="footer mt-5">

@@ -36,7 +36,7 @@ if __name__ == "__main__":
         page.heading("Projects")
         page.write("Here is a list of projects.")
         page.widget("", "Alitheia AI", "This is a project that objectifies News.", "objectivenews")
-        page.widget("", "Polystock AI", "This is a project that attempts to predict stock prices.", "objectivenews")
+        page.widget("", "Polystock AI", "This is a project that attempts to predict stock prices.", "stockpred")
     
     app.add_project_page(
         "objectivenews",
