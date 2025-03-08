@@ -55,8 +55,19 @@ if __name__ == "__main__":
     
     with app.page("about", "About Me") as page:
         page.heading("About Me")
-        page.image("images/very bad photo.png", "A very bad photo of me", 250, 325, "left", False, False, True, "A very bad photo of me")
-        page.import_text("website_text/aboutme_part1.md")
+        page.divider()
+        page.write("Contacts:")
+        page.email_link("harry.d.yin.gpc@gmail.com", "Email ---")
+        page.link("https://www.github.com/Xild076", "GitHub ---")
+        page.link("https://www.linkedin.com/in/harry-yin-5493152b0/", "LinkedIn ---")
+        page.image("images/very bad photo.png", "A very bad photo of me", 250, 325, "left", False, False, True, "A very bad photo of me lol")
+        page.import_text("website_text/aboutme.md")
+        page.divider()
+        page.heading("Some Important Documents")
+        page.write("Below, I've included my resume and transcripts just in case anyone might need them.")
+        page.file_download("website_text/Harry Yin - Resume.pdf", "Resume", False)
+        page.file_download("website_text/Transcript.pdf", "Transcript", False)
+        page.divider()
         page.write("That aside, here are some photos of my cat (the small one was one our friend's cats)!")
         page.rotating_gallery(["images/archie_brownie.png", "images/archie.png", "images/brownie_archie.png"], container_height=300, container_width=400, interval=1000, smart_fit=True)
     

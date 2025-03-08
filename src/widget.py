@@ -230,6 +230,11 @@ class Page:
         self.content.append('<hr>')
     def button(self, text, link, style="primary"):
         self.content.append(f'<a href="{link}" class="btn btn-{style}">{text}</a>')
+    def file_download(self, file_url, text="Download File", download=True, icon=""):
+        download_attr = f'download' if download else 'target="_blank" rel="noopener noreferrer"'
+        icon_html = f'<i class="{icon}"></i> ' if icon else ""
+        self.content.append(f'<a href="{file_url}" {download_attr} class="btn btn-primary">{icon_html}{text}</a>')
+
     def jumbotron(self, title, subtitle, button_text=None, button_link=None):
         btn_html = f'<a class="btn btn-primary btn-lg" href="{button_link}" role="button">{button_text}</a>' if button_text and button_link else ""
         self.content.append(f'''
