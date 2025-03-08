@@ -342,10 +342,24 @@ class Website:
         '''
             timeline_html += '</div>'
             code_html = f'''
+        <style>
+        .tab-content .tab-pane {{
+            overflow: visible !important;
+        }}
+        /* Let CodeMirror grow naturally */
+        .CodeMirror {{
+            height: auto;
+        }}
+        .CodeMirror-scroll {{
+            max-height: none;
+        }}
+        </style>
         <div id="codeViewerContainer" class="mb-3">
-        <div id="fileList" style="max-height:300px;overflow:auto;border:1px solid #ccc;padding:10px;margin-bottom:10px;"></div>
-        <div id="codeViewer" style="border:1px solid #ccc;height:600px;overflow:auto;"></div>
-        <a href="https://github.com/{github_owner}/{github_repo}" target="_blank" class="btn btn-secondary mt-2">Star on GitHub</a>
+        <div id="fileList" style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
+        <div id="codeViewer" style="border:1px solid #ccc; width: 100%;"></div>
+        <a href="https://github.com/{github_owner}/{github_repo}" target="_blank" class="btn btn-secondary mt-2">
+            Star on GitHub
+        </a>
         </div>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
@@ -355,58 +369,70 @@ class Website:
         var repoName = "{github_repo}";
         var fileListElem = document.getElementById("fileList");
         var codeViewerElem = document.getElementById("codeViewer");
-        var editor = CodeMirror(codeViewerElem, { value: "", mode: "javascript", lineNumbers: true, viewportMargin: Infinity });
+        var editor = CodeMirror(codeViewerElem, {{
+        value: "",
+        mode: "javascript",
+        lineNumbers: true,
+        viewportMargin: Infinity,
+        lineWrapping: true
+        }});
         var currentPath = "";
-        function loadFileContent(path) {
+
+        function loadFileContent(path) {{
         fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
-        .then(r => r.json())
-        .then(data => {
-            fetch(data.download_url).then(r => r.text()).then(text => {
-            editor.setValue(text);
-            });
-        });
-        }
-        function fetchDirectory(path) {
+            .then(r => r.json())
+            .then(data => {{
+            fetch(data.download_url)
+                .then(r => r.text())
+                .then(text => {{
+                editor.setValue(text);
+                }});
+            }});
+        }}
+
+        function fetchDirectory(path) {{
         fileListElem.innerHTML = "";
-        if(path !== "") {
+        if (path !== "") {{
             var backBtn = document.createElement("button");
             backBtn.innerHTML = "⬅️ Back";
             backBtn.className = "btn btn-secondary btn-sm mb-2";
-            backBtn.onclick = function() {
+            backBtn.onclick = function() {{
             var parts = currentPath.split("/");
-            parts.pop();
-            parts.pop();
+            parts.pop(); // remove empty string after slash
+            parts.pop(); // remove folder name
             currentPath = parts.length > 0 ? parts.join("/") + "/" : "";
             fetchDirectory(currentPath);
-            };
+            }};
             fileListElem.appendChild(backBtn);
-        }
+        }}
         fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
-        .then(r => r.json())
-        .then(files => {
-            files.forEach(file => {
-            var btn = document.createElement("button");
-            if(file.type === "dir") {
+            .then(r => r.json())
+            .then(files => {{
+            files.forEach(file => {{
+                var btn = document.createElement("button");
+                if (file.type === "dir") {{
                 btn.innerHTML = "📁 " + file.name;
                 btn.className = "btn btn-info btn-sm m-1";
-                btn.onclick = function() {
-                currentPath = path + file.name + "/";
-                fetchDirectory(currentPath);
-                };
-            } else {
+                btn.onclick = function() {{
+                    currentPath = path + file.name + "/";
+                    fetchDirectory(currentPath);
+                }};
+                }} else {{
                 btn.innerHTML = "📄 " + file.name;
                 btn.className = "btn btn-light btn-sm m-1";
-                btn.onclick = function() {
-                loadFileContent(file.path);
-                };
-            }
-            fileListElem.appendChild(btn);
-            });
-        });
-        }
+                btn.onclick = function() {{
+                    loadFileContent(file.path);
+                }};
+                }}
+                fileListElem.appendChild(btn);
+            }});
+            }});
+        }}
+
         fetchDirectory(currentPath);
         </script>
         '''
+
             papers_html = '<div class="paper-widgets">'
             for paper in papers:
                 if len(paper) >= 4:
@@ -439,6 +465,7 @@ class Website:
         '''
                 papers_html += f'<div style="margin-bottom: 15px;">{widget_html}</div>'
             papers_html += '</div>'
+
             tech_html = ""
             if technologies:
                 tech_badges = ""
@@ -449,6 +476,7 @@ class Website:
                     else:
                         tech_badges += f"<span class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;'>{tech}</span>"
                 tech_html = f"<div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'>{tech_badges}</div></div>"
+
             tabs = [("Introduction", intro_html), ("Timeline", timeline_html)]
             if tech_html:
                 tabs.append(("Technologies", tech_html))
