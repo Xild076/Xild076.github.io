@@ -344,7 +344,7 @@ class Website:
             code_html = f'''
         <div id="codeViewerContainer" class="mb-3">
         <div id="fileList" style="max-height:300px;overflow:auto;border:1px solid #ccc;padding:10px;margin-bottom:10px;"></div>
-        <div id="codeViewer" style="border:1px solid #ccc;height:500px;"></div>
+        <div id="codeViewer" style="border:1px solid #ccc;height:600px;overflow:auto;"></div>
         <a href="https://github.com/{github_owner}/{github_repo}" target="_blank" class="btn btn-secondary mt-2">Star on GitHub</a>
         </div>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
@@ -355,55 +355,55 @@ class Website:
         var repoName = "{github_repo}";
         var fileListElem = document.getElementById("fileList");
         var codeViewerElem = document.getElementById("codeViewer");
-        var editor = CodeMirror(codeViewerElem, {{ value: "", mode: "javascript", lineNumbers: true }});
+        var editor = CodeMirror(codeViewerElem, { value: "", mode: "javascript", lineNumbers: true, viewportMargin: Infinity });
         var currentPath = "";
-        function loadFileContent(path) {{
+        function loadFileContent(path) {
         fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
         .then(r => r.json())
-        .then(data => {{
-            fetch(data.download_url).then(r => r.text()).then(text => {{
+        .then(data => {
+            fetch(data.download_url).then(r => r.text()).then(text => {
             editor.setValue(text);
-            }});
-        }});
-        }}
-        function fetchDirectory(path) {{
+            });
+        });
+        }
+        function fetchDirectory(path) {
         fileListElem.innerHTML = "";
-        if(path !== "") {{
+        if(path !== "") {
             var backBtn = document.createElement("button");
-            backBtn.innerHTML = "<- Back";
+            backBtn.innerHTML = "⬅️ Back";
             backBtn.className = "btn btn-secondary btn-sm mb-2";
-            backBtn.onclick = function() {{
+            backBtn.onclick = function() {
             var parts = currentPath.split("/");
             parts.pop();
             parts.pop();
             currentPath = parts.length > 0 ? parts.join("/") + "/" : "";
             fetchDirectory(currentPath);
-            }};
+            };
             fileListElem.appendChild(backBtn);
-        }}
+        }
         fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
         .then(r => r.json())
-        .then(files => {{
-            files.forEach(file => {{
+        .then(files => {
+            files.forEach(file => {
             var btn = document.createElement("button");
-            if(file.type === "dir") {{
+            if(file.type === "dir") {
                 btn.innerHTML = "📁 " + file.name;
                 btn.className = "btn btn-info btn-sm m-1";
-                btn.onclick = function() {{
+                btn.onclick = function() {
                 currentPath = path + file.name + "/";
                 fetchDirectory(currentPath);
-                }};
-            }} else {{
+                };
+            } else {
                 btn.innerHTML = "📄 " + file.name;
                 btn.className = "btn btn-light btn-sm m-1";
-                btn.onclick = function() {{
+                btn.onclick = function() {
                 loadFileContent(file.path);
-                }};
-            }}
+                };
+            }
             fileListElem.appendChild(btn);
-            }});
-        }});
-        }}
+            });
+        });
+        }
         fetchDirectory(currentPath);
         </script>
         '''
