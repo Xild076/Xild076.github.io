@@ -119,12 +119,16 @@ class Page:
             self.content.append(
                 f'<img src="{image_url}" alt="{alt_text}" style="{img_style} border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">'
             )
-    def email_link(self, email, text=None):
+    def email_link(self, email, text=None, newline=True):
         display_text = text if text else email
-        self.content.append(f'<a href="mailto:{email}">{display_text}</a><br>')
-    def link(self, url, text=None):
+        newline_tag = "<br>" if newline else ""
+        self.content.append(f'<a href="mailto:{email}">{display_text}</a>{newline_tag}')
+
+    def link(self, url, text=None, newline=True):
         display_text = text if text else url
-        self.content.append(f'<a href="{url}">{display_text}</a><br>')
+        newline_tag = "<br>" if newline else ""
+        self.content.append(f'<a href="{url}">{display_text}</a>{newline_tag}')
+
     def code_block(self, code, language=""):
         self.content.append(f"<pre><code class='{language}'>{code}</code></pre>")
     def video(self, video_url, width=560, height=315):
