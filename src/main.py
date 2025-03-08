@@ -55,7 +55,7 @@ if __name__ == "__main__":
     
     with app.page("about", "About Me") as page:
         page.heading("About Me")
-        page.image("images/very bad photo.png", "A very bad photo of me", 372, 430, "left", False, False, True, "A very bad photo of me")
+        page.image("images/very bad photo.png", "A very bad photo of me", 200, 325, "left", False, False, True, "A very bad photo of me")
         page.import_text("website_text/aboutme_part1.md")
         page.write("That aside, here are some photos of my cat (the small one was one our friend's cats)!")
         page.rotating_gallery(["images/archie_brownie.png", "images/archie.png", "images/brownie_archie.png"], container_height=300, container_width=400, interval=1000, smart_fit=True)

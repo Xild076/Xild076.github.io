@@ -96,7 +96,7 @@ class Page:
             style += " object-fit:contain;"
         img_html = f'<img src="{image_url}" alt="{alt_text}" style="{style}">'
         if caption:
-            self.content.append(f'<figure>{img_html}<figcaption>{caption}</figcaption></figure>')
+            self.content.append(f'<figure style="clear: both; margin: 10px 0;">{img_html}<figcaption>{caption}</figcaption></figure>')
         else:
             self.content.append(img_html)
     def email_link(self, email, text=None):
@@ -487,6 +487,8 @@ html.dark-mode .theme-blockquote {{
     color: #dcdcdc;
 }}
 figure {{
+    display: block;
+    clear: both;
     margin: 10px 0;
 }}
 figcaption {{
