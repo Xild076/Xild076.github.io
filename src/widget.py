@@ -146,7 +146,7 @@ class Page:
         {''.join([f'<img src="{img}" class="rotating-gallery-img" data-index="{i}" style="position: absolute; transition: all 0.5s ease;">' for i, img in enumerate(images)])}
     </div>
     <style>
-    .rotating-gallery-img {{ left: 50%; top: 50%; transform: translate(-50%, -50%); }}
+    .rotating-gallery-img {{ left: 50%; top: 50%; transform: translate(-50%, -50%); object-fit: cover; }}
     </style>
     <script>
     (function(){{
@@ -180,7 +180,7 @@ class Page:
         setInterval(function(){{
             activeIndex = (activeIndex + 1) % images.length;
             updateGallery();
-        }}, interval);
+        }}, {interval});
     }})();
     </script>
     """)
