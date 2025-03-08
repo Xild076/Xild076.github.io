@@ -7,7 +7,11 @@ The two main reasons I develop AI systems are for **1.** a possible future emplo
 I believe, on a more philosophical level, that AI systems and technology in general should, ideally, be used as **tools for the benefit of everyone**. While that is impossible, I aim to make my projects accessible and useful for everyone across the globe.
 
 Outside of all this, I love reading! I especially love reading fantasy/scifi novels. While I haven't picked up any fun books recently due to a variety of reasons, some less mainstream titles I would highly recommend are: 
+
 - The Three Body Problem *(the second book in particular)*
+
 - Re:Zero *(technically a light novel but still one of my favorites)*
+
 - Artemis Fowl *(more of a childhood classic, up to the fifth book)*
+
 I also enjoy playing Hollow Knight, swimming, and last but not least: sleeping! My favorite drink is apple juice, my favorite color oscillates between green and black, and my favorite animal are cats!
