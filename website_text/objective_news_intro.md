@@ -1,9 +1,17 @@
+<center>
+
 ## Alitheia AI - Objectifying News
+
+</center>
 
 ### The status quo of misinformation
 Misinformation has always been a historical issue, whether it be in the era of the Greeks or the Dark ages. However, with growing access to technology and information, access to misinformation has also been amplified. This issue is worsened by the fact technology has made it much harder to distinguish between fact and fiction, resulting in even more confusion.
 
+<center>
+
 <img src="images/misinformation.png" alt="41% of Americans state that they see misinformation at least once a week." width="600">
+
+</center>
 
 According to a survey done by Citizen Data in 2024, at least 83% of individuals have reported seeing some form of misinformation, with another 10% being unsure whether they've seen misinformation.
 
@@ -12,7 +20,11 @@ Furthermore, misinformation can have devastating consequences, both on a societa
 ### Alitheia AI and its solution
 Alitheia AI presents a novel solution to providing unbiased and reliable news by implementing a full pipeline with AI elements to find, categorize, and objectify news.
 
+<center>
+
 <img src="images/objective_news_pipeline.png" alt="Pipeline for Alitheia AI." width="600">
+
+</center>
 
 The process begins by collecting news articles and opinion pieces from various sources using information retrieval techniques. The system employs a combination of web scraping and API-based retrieval (e.g., Google News API, Bing News API, and NewsAPI) to ensure a diverse range of perspectives. Additionally, sources are filtered and ranked based on reliability metrics, ensuring that high-quality sources are prioritized.
 
@@ -33,10 +45,10 @@ Through this multi-stage pipeline, Alitheia AI aims to empower users with factua
 ### Innovations
 Alitheia AI includes some novel key improvements when compared to previous methods of objectifying news:
 
-1. It collects news from diverse sources to ensure a comprehensive perspective
-2. It groups similar points of information within articles together for easy reading using innovative techniques like context and untrained self-attention
-3. It uses a novel rule-based method to objectify text with NLP
-4. It creates a dynamic reliability score to avoid the binary choice of "fact" and "fiction"
+1. It collects news from diverse sources to ensure a comprehensive perspective  
+2. It groups similar points of information within articles together for easy reading using innovative techniques like context and untrained self-attention  
+3. It uses a novel rule-based method to objectify text with NLP  
+4. It creates a dynamic reliability score to avoid the binary choice of "fact" and "fiction"  
 
 ### Conclusion
 
