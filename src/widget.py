@@ -101,7 +101,7 @@ class Page:
         self.content.append(f'<iframe width="{width}" height="{height}" src="{video_url}" frameborder="0" allowfullscreen></iframe>')
     def blockquote(self, quote, author=None):
         if author:
-            self.content.append(f"<blockquote class='blockquote theme-blockquote'><p><em>&ldquo;{quote}&rdquo;</em></p><footer class='blockquote-footer'><cite>{author}</cite></footer></blockquote>")
+            self.content.append(f"<blockquote class='blockquote theme-blockquote'><p><em>&ldquo;{quote}&rdquo;</em></p><footer class='blockquote-footer'><small>{author}</small></footer></blockquote>")
         else:
             self.content.append(f"<blockquote class='blockquote theme-blockquote'><p><em>&ldquo;{quote}&rdquo;</em></p></blockquote>")
     def alert_box(self, message, alert_type="info"):
@@ -142,79 +142,49 @@ class Page:
     ''')
     def custom_rotating_gallery(self, images, container_width=800, container_height=600, interval=3000):
         self.content.append(f"""
-        <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden; margin: auto;">
-            <div class="image-container" style="width: 100%; height: 100%; position: relative;">
-                {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.5s ease;" data-index="{i}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: cover;"></span>' for i, img in enumerate(images)])}
-            </div>
-            <div class="overlay" id="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center;">
-                <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: cover;">
-            </div>
-            <div class="btn-container" style="position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px;">
-                <button class="btn" id="prev">Left</button>
-                <button class="btn" id="next">Right</button>
-            </div>
-        </div>
-        <style>
-        .rotating-gallery-container {{ }}
-        .image-container span.active {{ opacity: 1; }}
-        </style>
-        <script>
-        (function() {{
-            var container = document.querySelector("#rotatingGallery .image-container");
-            var spans = container.getElementsByTagName("span");
-            var current = 0;
-            function showImage(index) {{
-                for (var i = 0; i < spans.length; i++) {{
-                    spans[i].classList.remove("active");
-                }}
-                spans[index].classList.add("active");
-            }}
-            showImage(current);
-            document.getElementById("next").addEventListener("click", function() {{
-                current = (current + 1) % spans.length;
-                showImage(current);
-            }});
-            document.getElementById("prev").addEventListener("click", function() {{
-                current = (current - 1 + spans.length) % spans.length;
-                showImage(current);
-            }});
-            setInterval(function() {{
-                current = (current + 1) % spans.length;
-                showImage(current);
-            }}, {interval});
-        }})();
-        </script>
-        """)
-    def markdown(self, text, align="left"):
-        text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', text)
-        text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', text)
-        text = re.sub(r'\~\~(.*?)\~\~', r'<del>\1</del>', text)
-        self.content.append(f"<p style='text-align: {align};'>{text}</p>")
-    def list(self, items, ordered=False):
-        tag = "ol" if ordered else "ul"
-        list_html = f"<{tag}>" + "".join([f"<li>{item}</li>" for item in items]) + f"</{tag}>"
-        self.content.append(list_html)
-    def accordion(self, sections, accordion_id="accordionExample"):
-        accordion_html = f'<div class="accordion" id="{accordion_id}">'
-        for idx, (header, body) in enumerate(sections):
-            accordion_html += f'''
-<div class="card">
-  <div class="card-header" id="heading{idx}">
-    <h2 class="mb-0">
-      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{idx}" aria-expanded="true" aria-controls="collapse{idx}">
-        {header}
-      </button>
-    </h2>
-  </div>
-  <div id="collapse{idx}" class="collapse" aria-labelledby="heading{idx}" data-parent="#{accordion_id}">
-    <div class="card-body">
-      {body}
+    <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden; margin: auto;">
+    <div class="image-container" style="width: 100%; height: 100%; position: relative;">
+        {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; transition: opacity 0.5s ease; z-index: 1;" data-index="{i}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: cover;"></span>' for i, img in enumerate(images)])}
     </div>
-  </div>
-</div>
-'''
-        accordion_html += "</div>"
-        self.content.append(accordion_html)
+    <div class="overlay" id="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2;">
+        <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: cover;">
+    </div>
+    <div class="btn-container" style="position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; z-index: 3;">
+        <button class="btn btn-secondary" id="prev">Left</button>
+        <button class="btn btn-secondary" id="next">Right</button>
+    </div>
+    </div>
+    <style>
+    .rotating-gallery-container {{}}
+    .image-container span.active {{ opacity: 1; }}
+    </style>
+    <script>
+    (function() {{
+    var container = document.querySelector("#rotatingGallery .image-container");
+    var spans = container.getElementsByTagName("span");
+    var current = 0;
+    function showImage(index) {{
+        for (var i = 0; i < spans.length; i++) {{
+        spans[i].classList.remove("active");
+        }}
+        spans[index].classList.add("active");
+    }}
+    showImage(current);
+    document.getElementById("next").addEventListener("click", function() {{
+        current = (current + 1) % spans.length;
+        showImage(current);
+    }});
+    document.getElementById("prev").addEventListener("click", function() {{
+        current = (current - 1 + spans.length) % spans.length;
+        showImage(current);
+    }});
+    setInterval(function() {{
+        current = (current + 1) % spans.length;
+        showImage(current);
+    }}, {interval});
+    }})();
+    </script>
+    """)
     def tabs(self, tabs, tab_id="tabsExample"):
         nav_html = f'<ul class="nav nav-tabs" id="{tab_id}" role="tablist">'
         content_html = f'<div class="tab-content mt-3" id="{tab_id}Content">'
