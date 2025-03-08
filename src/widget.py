@@ -318,7 +318,6 @@ class Website:
             else:
                 page.write(content)
         return page
-
     def add_project_page(self, slug, title, timeline_events, project_intro, github_owner, github_repo, papers, technologies=None):
         with self.page(slug, title) as page:
             page.is_project = True
@@ -333,121 +332,112 @@ class Website:
             for idx, (date, event) in enumerate(sorted_events):
                 side = "left" if idx % 2 == 0 else "right"
                 timeline_html += f'''
-        <div class="timeline-item {side} scroll-animate">
-          <div class="timeline-date">{date}</div>
-          <div class="timeline-content">{event}</div>
-        </div>
-        '''
+            <div class="timeline-item {side} scroll-animate">
+            <div class="timeline-date">{date}</div>
+            <div class="timeline-content">{event}</div>
+            </div>
+            '''
             timeline_html += '</div>'
 
             code_html = f'''
-        <style>
-        /* Ensure tab panes don't clip content */
-        .tab-content .tab-pane {{
-            overflow: visible !important;
-        }}
-        .tab-pane {{
-            display: block; /* override potential .fade or hidden rules */
-        }}
-        /* Let CodeMirror expand naturally */
-        .CodeMirror {{
-            height: auto !important;
-        }}
-        .CodeMirror-scroll {{
-            max-height: none !important;
-        }}
-        </style>
-        <div id="codeViewerContainer" class="mb-3">
-          <div id="fileList" style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
-          <div id="codeViewer" style="border:1px solid #ccc; width: 100%;"></div>
-          <a href="https://github.com/{github_owner}/{github_repo}" target="_blank" class="btn btn-secondary mt-2">
-              Star on GitHub
-          </a>
-        </div>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
-        <script>
-        var repoOwner = "{github_owner}";
-        var repoName = "{github_repo}";
-        var fileListElem = document.getElementById("fileList");
-        var codeViewerElem = document.getElementById("codeViewer");
-        var editor = CodeMirror(codeViewerElem, {{
-          value: "",
-          mode: "javascript",
-          lineNumbers: true,
-          viewportMargin: Infinity,
-          lineWrapping: true
-        }});
-        var currentPath = "";
+            <style>
+            .tab-content .tab-pane {{
+                overflow: visible !important;
+            }}
+            #codeViewer {{
+                height: 800px;
+                overflow: auto;
+                width: 100%;
+            }}
+            </style>
+            <div id="codeViewerContainer" class="mb-3">
+            <div id="fileList" style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
+            <div id="codeViewer" style="border:1px solid #ccc;"></div>
+            <a href="https://github.com/{github_owner}/{github_repo}" target="_blank" class="btn btn-secondary mt-2">
+                Star on GitHub
+            </a>
+            </div>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+            <script>
+            var repoOwner = "{github_owner}";
+            var repoName = "{github_repo}";
+            var fileListElem = document.getElementById("fileList");
+            var codeViewerElem = document.getElementById("codeViewer");
+            var editor = CodeMirror(codeViewerElem, {{
+            value: "",
+            mode: "javascript",
+            lineNumbers: true,
+            lineWrapping: true
+            }});
+            editor.setSize("100%", "100%");
+            var currentPath = "";
 
-        function loadFileContent(path) {{
-          fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
-            .then(r => r.json())
-            .then(data => {{
-              fetch(data.download_url)
-                .then(r => r.text())
-                .then(text => {{
-                  editor.setValue(text);
-                  // Refresh to ensure correct height after content load
-                  editor.refresh();
+            function loadFileContent(path) {{
+            fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
+                .then(r => r.json())
+                .then(data => {{
+                fetch(data.download_url)
+                    .then(r => r.text())
+                    .then(text => {{
+                    editor.setValue(text);
+                    editor.refresh();
+                    }});
+                }});
+            }}
+
+            function fetchDirectory(path) {{
+            fileListElem.innerHTML = "";
+            if (path !== "") {{
+                var backBtn = document.createElement("button");
+                backBtn.innerHTML = "⬅️ Back";
+                backBtn.className = "btn btn-secondary btn-sm mb-2";
+                backBtn.onclick = function() {{
+                var parts = currentPath.split("/");
+                parts.pop();
+                parts.pop();
+                currentPath = parts.length > 0 ? parts.join("/") + "/" : "";
+                fetchDirectory(currentPath);
+                }};
+                fileListElem.appendChild(backBtn);
+            }}
+            fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
+                .then(r => r.json())
+                .then(files => {{
+                files.forEach(file => {{
+                    var btn = document.createElement("button");
+                    if (file.type === "dir") {{
+                    btn.innerHTML = "📁 " + file.name;
+                    btn.className = "btn btn-info btn-sm m-1";
+                    btn.onclick = function() {{
+                        currentPath = path + file.name + "/";
+                        fetchDirectory(currentPath);
+                    }};
+                    }} else {{
+                    btn.innerHTML = "📄 " + file.name;
+                    btn.className = "btn btn-light btn-sm m-1";
+                    btn.onclick = function() {{
+                        loadFileContent(file.path);
+                    }};
+                    }}
+                    fileListElem.appendChild(btn);
+                }});
+                }});
+            }}
+
+            document.addEventListener('DOMContentLoaded', function() {{
+            var tabTriggers = document.querySelectorAll('[data-toggle="tab"]');
+            tabTriggers.forEach(function(trigger) {{
+                trigger.addEventListener('shown.bs.tab', function() {{
+                editor.refresh();
                 }});
             }});
-        }}
-
-        function fetchDirectory(path) {{
-          fileListElem.innerHTML = "";
-          if (path !== "") {{
-            var backBtn = document.createElement("button");
-            backBtn.innerHTML = "⬅️ Back";
-            backBtn.className = "btn btn-secondary btn-sm mb-2";
-            backBtn.onclick = function() {{
-              var parts = currentPath.split("/");
-              parts.pop(); // remove empty string after slash
-              parts.pop(); // remove folder name
-              currentPath = parts.length > 0 ? parts.join("/") + "/" : "";
-              fetchDirectory(currentPath);
-            }};
-            fileListElem.appendChild(backBtn);
-          }}
-          fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
-            .then(r => r.json())
-            .then(files => {{
-              files.forEach(file => {{
-                var btn = document.createElement("button");
-                if (file.type === "dir") {{
-                  btn.innerHTML = "📁 " + file.name;
-                  btn.className = "btn btn-info btn-sm m-1";
-                  btn.onclick = function() {{
-                    currentPath = path + file.name + "/";
-                    fetchDirectory(currentPath);
-                  }};
-                }} else {{
-                  btn.innerHTML = "📄 " + file.name;
-                  btn.className = "btn btn-light btn-sm m-1";
-                  btn.onclick = function() {{
-                    loadFileContent(file.path);
-                  }};
-                }}
-                fileListElem.appendChild(btn);
-              }});
             }});
-        }}
 
-        // When a different tab is shown, refresh CodeMirror so it recalculates height
-        document.addEventListener('DOMContentLoaded', function() {{
-          var tabTriggers = document.querySelectorAll('[data-toggle="tab"]');
-          tabTriggers.forEach(function(trigger) {{
-            trigger.addEventListener('shown.bs.tab', function() {{
-              editor.refresh();
-            }});
-          }});
-        }});
-
-        // Initial fetch of the root directory
-        fetchDirectory(currentPath);
-        </script>
-        '''
+            fetchDirectory(currentPath);
+            </script>
+            '''
 
             papers_html = '<div class="paper-widgets">'
             for paper in papers:
@@ -463,22 +453,22 @@ class Website:
                 else:
                     link_target = paper_link
                 widget_html = f'''
-        <div class="card mb-3" style="max-width: 500px;">
-          <a href="{link_target}" style="text-decoration: none; color: inherit;">
-            <div class="row no-gutters">
-              <div class="col-5" style="padding:0;">
-                <img src="images/placeholder.png" class="card-img" alt="{paper_title}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
-              </div>
-              <div class="col-7">
-                <div class="card-body" style="padding: 0.5rem;">
-                  <h5 class="card-title" style="font-size:1.2rem;">{paper_title}</h5>
-                  <p class="card-text" style="font-size:1rem;">{paper_desc}</p>
+            <div class="card mb-3" style="max-width: 500px;">
+            <a href="{link_target}" style="text-decoration: none; color: inherit;">
+                <div class="row no-gutters">
+                <div class="col-5" style="padding:0;">
+                    <img src="images/placeholder.png" class="card-img" alt="{paper_title}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
                 </div>
-              </div>
+                <div class="col-7">
+                    <div class="card-body" style="padding: 0.5rem;">
+                    <h5 class="card-title" style="font-size:1.2rem;">{paper_title}</h5>
+                    <p class="card-text" style="font-size:1rem;">{paper_desc}</p>
+                    </div>
+                </div>
+                </div>
+            </a>
             </div>
-          </a>
-        </div>
-        '''
+            '''
                 papers_html += f'<div style="margin-bottom: 15px;">{widget_html}</div>'
             papers_html += '</div>'
 
@@ -499,7 +489,6 @@ class Website:
             tabs.extend([("Code", code_html), ("Papers", papers_html)])
             page.tabs(tabs)
         return page
-
     def compile(self, output_dir="."):
         if output_dir != "." and not os.path.exists(output_dir):
             os.makedirs(output_dir)
