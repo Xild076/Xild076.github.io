@@ -55,8 +55,10 @@ if __name__ == "__main__":
     
     with app.page("about", "About Me") as page:
         page.heading("About Me")
-        page.write("About me!")
-        page.blockquote("When in doubt, look intelligent", "Garrison Keillor")
-        page.custom_rotating_gallery(["images/archie_brownie.png", "images/archie.png", "images/brownie_archie.png"])
+        page.image("images/very bad photo.png", "A very bad photo of me", 372, 430)
+        page.write("A very bad photo of me :(")
+        page.import_text("website_text/aboutme_part1.md")
+        page.write("That aside, here are some photos of my cat (the small one was one our friend's cats)!")
+        page.rotating_gallery(["images/archie_brownie.png", "images/archie.png", "images/brownie_archie.png"], interval=1000)
     
     app.compile(".")

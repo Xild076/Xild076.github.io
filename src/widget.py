@@ -112,35 +112,7 @@ class Page:
             gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid"></div>'
         gallery_html += '</div>'
         self.content.append(gallery_html)
-    def rotating_gallery(self, images, carousel_id="rotatingGallery", interval=3000):
-        indicators = "".join([f'<li data-target="#{carousel_id}" data-slide-to="{i}" {"class=\'active\'" if i==0 else ""}></li>' for i in range(len(images))])
-        slides = ""
-        for i, img in enumerate(images):
-            active = "active" if i == 0 else ""
-            slides += f'''
-    <div class="carousel-item {active}">
-    <img src="{img}" class="d-block w-100" alt="Slide {i+1}">
-    </div>
-    '''
-        self.content.append(f'''
-    <div id="{carousel_id}" class="carousel slide" data-ride="carousel" data-interval="{interval}">
-    <ol class="carousel-indicators">
-        {indicators}
-    </ol>
-    <div class="carousel-inner">
-        {slides}
-    </div>
-    <a class="carousel-control-prev" href="#{carousel_id}" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#{carousel_id}" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-    </div>
-    ''')
-    def custom_rotating_gallery(self, images, container_width=800, container_height=600, interval=3000):
+    def rotating_gallery(self, images, container_width=800, container_height=600, interval=3000):
         self.content.append(f"""
         <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden; margin: auto;">
             <div class="image-container" style="width: 100%; height: 100%; position: relative;">
@@ -273,10 +245,8 @@ class Page:
     def import_text(self, file_path):
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read().strip()
-        paragraphs = content.split("\n\n")
-        for para in paragraphs:
-            self.markdown(para)
-            self.content.append("<br>")
+        content = convert_markdown_full(content)
+        self.content.append(content)
 
 class Website:
     def __init__(self, title, footer="", custom_css="", custom_js=""):
