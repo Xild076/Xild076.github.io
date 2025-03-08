@@ -83,22 +83,25 @@ class Page:
 </div>
 ''')
     def image(self, image_url, alt_text="", width=None, height=None, wrap=None, crop=False, shrink=False, smart_fit=False, caption=""):
-        style = ""
+        img_style = ""
+        figure_style = ""
         if width:
-            style += f'{"width" if smart_fit or not shrink else "max-width"}:{width}px;'
+            img_style += f'{"width" if smart_fit or not shrink else "max-width"}:{width}px;'
         if height:
-            style += f'{"height" if smart_fit else "height"}:{height}px;'
-        if wrap in ["left", "right"]:
-            style += f' float:{wrap}; margin:10px;'
+            img_style += f'{"height" if smart_fit else "height"}:{height}px;'
         if crop or smart_fit:
-            style += " object-fit:cover;"
+            img_style += " object-fit:cover;"
         elif shrink:
-            style += " object-fit:contain;"
-        img_html = f'<img src="{image_url}" alt="{alt_text}" style="{style}">'
+            img_style += " object-fit:contain;"
+        if wrap in ["left", "right"]:
+            if caption:
+                figure_style += f'float:{wrap}; margin:10px; clear:both;'
+            else:
+                img_style += f' float:{wrap}; margin:10px;'
         if caption:
-            self.content.append(f'<figure style="clear: both; margin: 10px 0;">{img_html}<figcaption>{caption}</figcaption></figure>')
+            self.content.append(f'<figure style="{figure_style} margin:10px 0;"><img src="{image_url}" alt="{alt_text}" style="{img_style} border-radius:4px;"><figcaption>{caption}</figcaption></figure>')
         else:
-            self.content.append(img_html)
+            self.content.append(f'<img src="{image_url}" alt="{alt_text}" style="{img_style} border-radius:4px;">')
     def email_link(self, email, text=None):
         display_text = text if text else email
         self.content.append(f'<a href="mailto:{email}">{display_text}</a><br>')
@@ -119,7 +122,7 @@ class Page:
     def gallery(self, images):
         gallery_html = '<div class="row">'
         for img in images:
-            gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid"></div>'
+            gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid" style="border-radius:4px;"></div>'
         gallery_html += '</div>'
         self.content.append(gallery_html)
     def rotating_gallery(self, images, container_width=800, container_height=600, interval=3000, smart_fit=False, captions=None):
@@ -129,10 +132,10 @@ class Page:
         gallery_html = f"""
         <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden; margin: auto;">
             <div class="image-container" style="width: 100%; height: 100%; position: relative;">
-                {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: {1 if i == 0 else 0}; transition: opacity 0.5s ease; z-index: 1;" data-index="{i}" class="{"active" if i == 0 else ""}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: {"cover" if smart_fit else "contain"};"></span>' for i, img in enumerate(images)])}
+                {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: {1 if i == 0 else 0}; transition: opacity 0.5s ease; z-index: 1;" data-index="{i}" class="{"active" if i == 0 else ""}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: {"cover" if smart_fit else "contain"}; border-radius:4px;"></span>' for i, img in enumerate(images)])}
             </div>
             <div class="overlay" id="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2;">
-                <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: {"cover" if smart_fit else "contain"};">
+                <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: {"cover" if smart_fit else "contain"}; border-radius:4px;">
             </div>
             <div class="btn-container" style="position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; z-index: 3;">
                 <button class="btn btn-secondary" id="prev">Left</button>
@@ -331,7 +334,7 @@ class Website:
   <a href="{link_target}" style="text-decoration: none; color: inherit;">
     <div class="row no-gutters">
       <div class="col-4" style="padding:0;">
-        <img src="images/placeholder.png" class="card-img" alt="{paper_title}" style="width:100%; height:100%; object-fit:cover;">
+        <img src="images/placeholder.png" class="card-img" alt="{paper_title}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
       </div>
       <div class="col-8">
         <div class="card-body" style="padding: 0.5rem;">
@@ -384,6 +387,7 @@ body {{
   background-color: #f5f5f5;
   color: #333;
   font-size: 18px;
+  line-height: 1.6;
   transition: background-color 0.3s, color 0.3s;
 }}
 html.dark-mode body {{
@@ -492,6 +496,7 @@ figure {{
     margin: 10px 0;
 }}
 figcaption {{
+    margin-top: 4px;
     font-size: 0.85em;
     font-style: italic;
     text-align: center;
