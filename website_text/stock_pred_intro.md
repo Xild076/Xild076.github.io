@@ -46,7 +46,9 @@ The pipeline consists of several experimental components:
     - Instead of providing binary "buy/sell" recommendations, StockPred generates confidence-weighted forecasts.
     - Uses an adaptive scoring system to quantify the reliability of its predictions based on data quality and market conditions.
 
-### Key Innovations
+You can try this program out here: [https://xild-stockpred.streamlit.app/](https://xild-stockpred.streamlit.app/)
+
+### Innovations
 StockPred introduces several experimental ideas in stock market forecasting:
 
 1. Hybrid AI Approach: Tests the effectiveness of combining LSTMs, Transformers, and RL in financial predictions.

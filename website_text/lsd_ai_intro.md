@@ -6,24 +6,26 @@
 
 ### Fear of Public Speaking > Fear of Death
 
-Public speaking is one of the most common fears, affecting millions of people worldwide. Whether it's a formal presentation, an interview, or a classroom discussion, the ability to communicate effectively plays a crucial role in success. However, many individuals struggle with issues such as unclear articulation, monotone delivery, poor pacing, or a lack of emphasis on key points.  
+Public speaking is one of the most common fears, affecting millions of people worldwide. Whether it's a formal presentation, an interview, or a classroom discussion, the ability to communicate effectively plays a crucial role in success. However, many individuals struggle with issues such as unclear articulation, monotone delivery, poor pacing, or a lack of emphasis on key points.
 
-<center>  
-<img src="images/fear_of_public_speaking.png" alt="Fear of public speaking statistics" width="600">  
-</center>  
+<center>
 
-One of the biggest hurdles in improving public speaking is receiving constructive, objective feedback. Traditional coaching methods rely on human evaluators, which can be inconsistent, subjective, or inaccessible. Automated tools that can analyze speech delivery and provide real-time, data-driven feedback could revolutionize the way individuals refine their speaking skills.  
+<img src="images/fear_of_public_speaking.png" alt="Fear of public speaking statistics" width="600">
+
+</center>
+
+One of the biggest hurdles in improving public speaking is receiving constructive, objective feedback. Traditional coaching methods rely on human evaluators, which can be inconsistent, subjective, or inaccessible. Automated tools that can analyze speech delivery and provide real-time, data-driven feedback could revolutionize the way individuals refine their speaking skills.
 
 ### LSDAI - A Data-Driven Approach to Speech Analysis  
 
-LSDAI is a comprehensive AI-powered tool designed to*analyze and enhance speech delivery through a multi-layered approach. It evaluates speech recordings based on multiple criteria, providing users with insights on their speaking style and areas for improvement. By leveraging machine learning and NLP models trained on Kaggle datasets, LSDAI objectively assesses speech in ways that traditional methods cannot.  
+LSDAI is a comprehensive AI-powered tool designed to analyze and enhance speech delivery through a multi-layered approach. It evaluates speech recordings based on multiple criteria, providing users with insights on their speaking style and areas for improvement. By leveraging machine learning and NLP models trained on Kaggle datasets, LSDAI objectively assesses speech in ways that traditional methods cannot.
 
-LSDAI employs a structured pipeline that breaks speech down into key components:  
+LSDAI employs a structured pipeline that breaks speech down into key components:
 
 1. Content Analysis:
-    - Uses NLP techniques to analyze the structure and clarity of spoken content.  
-    - Identifies filler words, redundant phrases, and overall coherence.  
-    - Highlights areas where speech could be more concise or impactful.  
+    - Uses NLP techniques to analyze the structure and clarity of spoken content.
+    - Identifies filler words, redundant phrases, and overall coherence.
+    - Highlights areas where speech could be more concise or impactful.
 
 2. Emphasis Detection:
     - Applies signal processing and prosody analysis to identify stressed words and syllables.  
@@ -44,7 +46,9 @@ LSDAI employs a structured pipeline that breaks speech down into key components:
     - Users can upload speech recordings and receive real-time feedback through an intuitive UI.  
     - Analysis results are displayed with visual breakdowns for easy interpretation.  
 
-### Key Innovations  
+You can try this program out here: [https://lsd-ai.streamlit.app/](https://lsd-ai.streamlit.app/)
+
+### Innovations  
 
 LSDAI stands out due to its unique blend of content, emphasis, and delivery analysis, providing a holistic approach to public speaking improvement:  
 

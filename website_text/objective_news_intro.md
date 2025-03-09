@@ -42,6 +42,8 @@ Finally, all processed information is presented through an interactive user inte
 
 Through this multi-stage pipeline, Alitheia AI aims to empower users with factual, unbiased, and objective news, ensuring that misinformation and bias no longer distort the truth.
 
+You can try this program out here: [https://objectivenews.streamlit.app/](https://objectivenews.streamlit.app/)
+
 ### Innovations
 Alitheia AI includes some novel key improvements when compared to previous methods of objectifying news:
 
