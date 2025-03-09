@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home</title>
+<title>Programming - Self Attention in Textual Clustering</title>
 <script>
 if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark-mode');}
 </script>
@@ -151,56 +151,21 @@ body { padding-bottom: 50px; }
   </div>
 </nav>
 <div class="container mt-5">
-<h1 style='text-align: center;'>Harry's Blog</h1>
-<p style='text-align: center;'>Hello and welcome to my blog! :D</p>
-<p style='text-align: left;'>My name is Harry and I am an aspiring data scientist (specifically in the form of data collection and AI models) with a focus on computational linguistics. I am currently a student at Leland High School in San Jose, California and am looking for opportunities to further my knowledge in the field.</p>
-<p style='text-align: left;'>This blog is dedicated to uploading my projects and sharing my thoughts on various topics, whether they be about programming or philosophy. I hope you enjoy your stay!</p>
+<h1 style='text-align: left;'>Programming - Self Attention in Textual Clustering</h1>
+<p style='text-align: left;'><small>2025-03-08</small></p>
+<p style='text-align: left;'><small>By Harry Yin</small></p>
+<p style='text-align: left;'><small>Estimated read time: 2 minutes</small></p>
 <hr>
-<a href="mailto:harry.d.yin.gpc@gmail.com">@ Contact Me</a><br>
-<a href="https://www.github.com/Xild076">🔗 GitHub</a><br>
-<a href="https://www.linkedin.com/in/harry-yin-5493152b0/">🔗 LinkedIn</a><br>
-<hr>
-<h1 style='text-align: left;'>Featured Project</h1>
-
-<div class="card mb-3" style="max-width: 540px;">
-  <a href="objectivenews.html" style="text-decoration: none; color: inherit;">
-    <div class="row no-gutters">
-      <div class="col-md-4">
-        <img src="images/objective_news.png" class="card-img" alt="Alitheia AI">
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title">Alitheia AI</h5>
-          <p class="card-text">A project that aims to create a comprehensive pipeline to locate, determine, and objectify news.</p>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
-
-<div style="height: 10px;"></div>
-<a href="projects" class="btn btn-primary">View All Projects</a>
-<hr>
-<h1 style='text-align: left;'>Latest Blog Posts</h1>
-
-<div class="card mb-3" style="max-width: 540px;">
-  <a href="hello_blog.html" style="text-decoration: none; color: inherit;">
-    <div class="row no-gutters">
-      <div class="col-md-4">
-        <img src="images/placeholder.png" class="card-img" alt="Hello Blog!">
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title">Hello Blog!</h5>
-          <p class="card-text">This is a test/hello blog post!</p>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
-
-<div style="height: 10px;"></div>
-<a href="blog" class="btn btn-primary">View All Blog Posts</a>
+<p>A while back, while working on Alitheia AI, I had the idea to apply self-attention to textual clustering after learning about what self-attention was. Unfortunately, I didn't know how to train the self-attention model then, so I left it untrained.</p>
+<p>Surprisingly, however, the self-attention often somewhat improved the textual clarity of the clustering while also massively improving the cluster's scoring on a series of metrics. </p>
+<p>Thus, in this blog, I wanted to explore some possibilities as to why this may have occurred.</p>
+<p>First and foremost, it turned out that my idea was not as novel as I thought it was as. There is an excellent paper about this topic that I will be using as reference for the rest of the blog: Lovedeep Singh's <a href="https://arxiv.org/pdf/2201.02816">Clustering Text Using Attention</a>.</p>
+<p>Taking a look at Singh's results the average improvement of about 174.65% from baseline clustering to clustering after applying AP2 (attention clustering w/pre-trained embeddings and using 20% of data for training), which is certainly impressive. Furthermore, applying AP9 saw even more improvement, although variable.</p>
+<p>However, the issue lies with the fact that when doing my own tests with an untrained self-attention model, I saw a consistent improvement of about 161.22%, which isn't too far off from Singh's result with trained models. </p>
+<p>That was surprising since theoretically, the untrained model should have seen, on average, no improvement in clustering, yet it showed consistent improvements. This got me thinking that maybe given how silhouette scores were calculated, any sort of self-attention, if consistent, could improve clustering.</p>
+<p>The idea behind this depends on the fact that silhouette scores are calculated purely on a numerical basis and determined through relative similarity between clusters. Self-attention, meanwhile applies both amplifying and dampening weights, meaning that if applied consistently, certain similar sets of values will be decreased or increased. My belief is that given such effects, a sort of artificial dimensional reduction is applied. Due to some values being dampened into irrelevance, an effect similar to that of UMAP of PCA reduction might have occurred, resulting in greater cluster separability due to the algorithm having less nuance to worry about.</p>
+<p>The issue with this is that such clustering doesn't actually guarantee better clustering since random words or phrases will be amplified. Thus, I can only chalk up the improved perceived clustering to luck, but I still need to do more tests on the perceived clustering improvements to be sure. Furthermore, I think it is necessary to find a better and more universal scoring metric for textual clustering in particular, as, otherwise, there won't be a consistent method to determine the validity of textual clusters.</p>
+<p>All in all, the conclusion I came to was that self-attention is indeed a useful tool for improving textual clustering and that using silhouette scores as a scoring metric is not such a good idea. Overall, this was a very interesting topic to look into, and I think it is an area that needs a lot more research. Cheers!</p>
 <div style="text-align: center; margin: 20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
 </div>
 <footer class="footer mt-5">

@@ -17,6 +17,8 @@ if __name__ == "__main__":
 
         page.heading("Featured Project")
         page.widget("images/objective_news.png", "Alitheia AI", "A project that aims to create a comprehensive pipeline to locate, determine, and objectify news.", "objectivenews")
+        page.spacer(10)
+        page.button("View All Projects", "projects")
 
         page.divider()
         
@@ -29,13 +31,15 @@ if __name__ == "__main__":
     with app.page("blog", "Blog") as page:
         page.heading("Blogs")
         page.write("Here are a couple of blogposts!")
+        page.widget("images/self_atten.png", "Self Attention in Textual Clustering", "This is a blog post about self attention in textual clustering.", "self_atten_blog")
         page.widget("", "Hello Blog!", "This is the first blog post!", "hello_blog")
     
+    app.add_blog_page("self_atten_blog", "Programming - Self Attention in Textual Clustering", "blogs/self_atten_blog.md", date="2025-03-08", author="Harry Yin")
     app.add_blog_page("hello_blog", "Hello Blog", "blogs/hello_blog.md", date="2025-03-07", author="Harry Yin")
     
     with app.page("projects", "Projects") as page:
         page.heading("Projects")
-        page.write("Here is a list of projects.")
+        page.write("Here is a list of the projects I did!")
         page.widget("images/objective_news.png", "Alitheia AI", "This is a project that objectifies News.", "objectivenews")
         page.widget("images/stock_pred.png", "Polystock AI", "This is a project that attempts to predict stock prices.", "stockpred")
         page.widget("images/lsd_ai.png", "LSD AI", "This is a project that uses AI to analyse speechs", "lsdai")
