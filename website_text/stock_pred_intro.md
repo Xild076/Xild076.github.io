@@ -34,27 +34,22 @@ The pipeline consists of several experimental components:
     - Combines LSTMs for sequential trend detection and Transformer models for enhanced pattern recognition.
     - Implements a custom loss function that prioritizes directional accuracy over raw price prediction.
 
-4. Reinforcement Learning for Strategy Simulation:
-    - Uses Proximal Policy Optimization (PPO) reinforcement learning to simulate potential trading strategies.
-    - Explores how AI agents can optimize decision-making based on historical data.
-
-5. Sentiment & News Analysis:
-    - Applies a fine-tuned BART-based model for analyzing financial news sentiment.
+4. Sentiment & News Analysis:
+    - NLP sentiment model for analyzing financial news sentiment.
     - Weighs sentiment data alongside quantitative stock indicators to adjust predictions dynamically.
 
-6. Experimental Reliability Scoring:
-    - Instead of providing binary "buy/sell" recommendations, StockPred generates confidence-weighted forecasts.
-    - Uses an adaptive scoring system to quantify the reliability of its predictions based on data quality and market conditions.
+5. Calculated Stock Values:
+    - Instead of providing binary "buy/sell" recommendations, StockPred generates actual stock values.
+    - This provides the user with more agency, as it predicts future prices instead of given assumptions for buying and selling.
 
 You can try this program out here: [https://xild-stockpred.streamlit.app/](https://xild-stockpred.streamlit.app/)
 
 ### Innovations
 StockPred introduces several experimental ideas in stock market forecasting:
 
-1. Hybrid AI Approach: Tests the effectiveness of combining LSTMs, Transformers, and RL in financial predictions.
+1. Hybrid AI Approach: Tests the effectiveness of combining LSTMs and Transformers
 2. Sentiment-Driven Adjustments: Evaluates how real-time financial news and investor sentiment influence market trends.
 3. Multi-Source Data Fusion: Merges stock history, macroeconomic data, and sentiment analysis for a broader market perspective.
-4. Adaptive Learning & Reliability Scores: Explores confidence-based forecasts instead of deterministic predictions.
 
 ### Conclusion
 
