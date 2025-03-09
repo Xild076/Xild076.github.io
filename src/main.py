@@ -24,7 +24,7 @@ if __name__ == "__main__":
         
         page.heading("Latest Blog Posts")
         page.widget("images/self_atten.png", "Self Attention in Textual Clustering", "This is a blog post about self attention in textual clustering.", "self_atten_blog")
-        page.widget("likeable_character.png", "What makes a likeable character?", "This is a blog post about my thoughs on what makes a likeable character.", "likeable_character")
+        page.widget("images/likeable_character.png", "What makes a likeable character?", "This is a blog post about my thoughs on what makes a likeable character.", "likeable_character")
         page.widget("", "Hello Blog!", "This is a test/hello blog post!", "hello_blog")
         page.spacer(10)
         page.button("View All Blog Posts", "blog")
@@ -34,11 +34,11 @@ if __name__ == "__main__":
         page.heading("Blogs")
         page.write("Here are a couple of blogposts!")
         page.widget("images/self_atten.png", "Self Attention in Textual Clustering", "This is a blog post about self attention in textual clustering.", "self_atten_blog")
-        page.widget("likeable_character.png", "What makes a likeable character?", "This is a blog post about my thoughs on what makes a likeable character.", "likeable_character")
+        page.widget("images/likeable_character.png", "What makes a likeable character?", "This is a blog post about my thoughs on what makes a likeable character.", "likeable_character")
         page.widget("", "Hello Blog!", "This is the first blog post!", "hello_blog")
     
     app.add_blog_page("self_atten_blog", "Programming - Self Attention in Textual Clustering", "blogs/self_atten_blog.md", date="2025-03-08", author="Harry Yin")
-    app.add_blog_page("likeable_character", "Misc - What makes a likeable character?", "blogs/likeable_character.md", date="2025-03-08", author="Harry Yin")
+    app.add_blog_page("images/likeable_character.png", "Misc - What makes a likeable character?", "blogs/likeable_character.md", date="2025-03-08", author="Harry Yin")
     app.add_blog_page("hello_blog", "Hello Blog", "blogs/hello_blog.md", date="2025-03-07", author="Harry Yin")
     
     with app.page("projects", "Projects") as page:
