@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programming - Methods to Detect Fake News</title>
+<script>
+if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark-mode');}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 18px;
+  line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s;
+}
+html.dark-mode body {
+  background-color: #2e2e2e;
+  color: #dcdcdc;
+}
+.navbar {
+  background-color: #6c757d;
+}
+.navbar.dark-mode {
+  background-color: #343a40;
+}
+.card {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: none;
+}
+html.dark-mode .card {
+  background-color: #3a3a3a;
+}
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px 0;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  background: #6c757d;
+  transform: translateX(-50%);
+}
+.timeline-item {
+  position: relative;
+  width: 50%;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-bottom: 30px;
+}
+.timeline-item.left {
+  left: 0;
+  text-align: right;
+}
+.timeline-item.right {
+  left: 50%;
+  text-align: left;
+}
+.timeline-content {
+  padding: 15px;
+  background: #e9ecef;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+}
+.timeline-item.left .timeline-content::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
+}
+.timeline-item.right .timeline-content::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -20px;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
+}
+.timeline-date {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.animate__fadeInUp {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+html.dark-mode .timeline-content {
+  background: #444 !important;
+  color: #dcdcdc !important;
+}
+.theme-blockquote {
+    border-left: 4px solid #6c757d;
+    padding-left: 1rem;
+    color: #6c757d;
+}
+html.dark-mode .theme-blockquote {
+    border-left-color: #dcdcdc;
+    color: #dcdcdc;
+}
+figure {
+    display: block;
+    clear: both;
+    margin: 10px 0;
+}
+figcaption {
+    margin-top: 4px;
+    font-size: 0.85em;
+    font-style: italic;
+    text-align: center;
+    color: #666;
+}
+body { padding-bottom: 50px; }
+</style>
+</head>
+<body>
+<a id="top"></a>
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand" href="index.html">Harry's Blog</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li><li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li><li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li><li class="nav-item"><a class="nav-link" href="about.html">About Me</a></li>
+      <li class="nav-item">
+        <button id="toggleTheme" class="btn btn-secondary">Toggle Theme</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container mt-5">
+<h1 style='text-align: left;'>Programming - Methods to Detect Fake News</h1>
+<p style='text-align: left;'><small>2025-03-09</small></p>
+<p style='text-align: left;'><small>By Harry Yin</small></p>
+<p style='text-align: left;'><small>Estimated read time: 4 minutes</small></p>
+<hr>
+<p>While looking into stuff I could add to Alitheia AI to improve it, I came across the idea of using ML to detect fake news, so I did some research into it. </p>
+<p>It turns out, there are much more ways to detect fake news using ML than I thought. In this blog post, I thought I'd look at a couple of these methods and give my own input on possible directions that this can be taken.</p>
+<p>A paper, <a href="https://www.sciencedirect.com/science/article/pii/S2665917424000047"><em>Detection of fake news from social media using support vector machine learning algorithms</em> by Sudhakar and Kaliyamurthie</a>, included a comprehensive list of the most mainstream methods, of which included:</p>
+<ul>
+<li>
+<p>Naive Bayes</p>
+</li>
+<li>
+<p>Logistic Regression</p>
+</li>
+<li>
+<p>Support Vector Machine</p>
+</li>
+<li>
+<p>Decision Tree</p>
+</li>
+<li>
+<p>Random Forest and K-Nearest Neighbor</p>
+</li>
+<li>
+<p>Convolutional Neural Networks</p>
+</li>
+<li>
+<p>Long Short-Term Memory</p>
+</li>
+</ul>
+<p>The results of the paper indicated that the best method was SVM, which sat at an accuracy of about 98%, while the worst was LSTM, which sat at an accuracy of about 54%. Logistic Regression also provided surprising accuracy at a rate of around 95%. SVM and Logistic Regression's success is consistent with the findings in other papers—<a href="https://www.scitepress.org/PublishedPapers/2021/105620/105620.pdf"><em>Fake News Detection using Support Vector Machine</em> by Patel et al</a> found that out of NB, Decision Tree, Random Forest, Multinomial NB, Logistic Regression, and SVM, Logistic Regression and SVM were the most accurate at 94.92% and 94.93% accuracy respectively.</p>
+<p>In fact, the highest accuracy I found for SVM was in <a href="https://arxiv.org/html/2411.12703v1"><em>Strengthening Fake News Detection: Leveraging SVM and Sophisticated Text Vectorization Techniques. Defying BERT?</em> by Karim et al</a>, where an optimized SVM method produced a 99.81% accuracy, which is remarkably high, especially since it was being compared to BERT, a transformer model.</p>
+<p>However, I also came across another very interesting technique—a CNN-LSTM hybrid model approach discussed in <a href="https://www.sciencedirect.com/science/article/pii/S2405844024012751"><em>LSTMCNN: A hybrid machine learning model to unmask fake news by</em> Dev et al</a>. While the accuracy presented was only 98% compared to an optimized and intensively-trained SVM's 99.81%, the interesting thing was that within the paper, the CNN-LSTM hybrid model is compared to a Logistic Regression model with an accuracy of 95%. That would make it closer to the accuracy found in Patel et al's paper, meaning that relatively, SVM should be much less accurate compared to a CNN-LSTM hybrid model.</p>
+<p>However, since there is no direct comparison with both models trained to the max, we can't be sure which one is the better one, although transformer models will likely still remain king.</p>
+<p>From reading all those papers, the key takeaway I got was:</p>
+<ol>
+<li>For the greatest cost-performance ratio, SVM is the best fake news detection method.</li>
+<li>For a more intensive but more widely applicable and flexible method, CNN-LSTM hybrid models are the best.</li>
+<li>For the most intensive but most accurate model, BERT is the best.</li>
+</ol>
+<p>However, I do have a few thoughts and gripes about the current methodologies.</p>
+<p>First, I believe that it is worth looking into more hybrid model options. I have a few random ideas for those: CNN-BiLSTM, CNN-SVM, and (Bi)LSTM-SVM. Since I'm only familiar with LSTM, I'm not sure I can explain the merit of the hybrid models, but I do think given patterns and trends I've seen within the models, these models could be worth a try. </p>
+<p>The second issue I have with current methodologies is the binary approach. Personally, I think that a binary approach is not accurate to what is necessary in the modern age. I believe that fake news and misinformation are more commonly half-lies or half-truths instead of full lies. For instance, while a piece of news may provide correct information on one part of the issue, it may provide incorrect information or just not provide information on another important part of the information. This presents a bit of an issue because, with a binary system for classifying news, a lot of nuance is lost within the sauce. </p>
+<p>I did find some good solutions—<a href="https://scholarspace.manoa.hawaii.edu/server/api/core/bitstreams/2eb9a917-e4dc-4371-bb5a-dd894001bf57/content"><em>Toward Automatic Fake News Classification</em> by Souvick Ghosh and Chirag Shah</a> presented a ternary classification method which I believe accounts for a lot of the nuance needed by creating a "suspicious" section and <a href="https://www.kaggle.com/datasets/doanquanvietnamca/liar-dataset"><em>"Liar, Liar Pants on Fire": A New Benchmark Dataset for Fake News Detection</em> by William Wang</a> presented a good dataset with nuanced distinguishing of what news was almost true or almost false. </p>
+<p>All in all, I do believe that more research needs to be done and better methodologies need to be created, as misinformation is a growing and massively pressing issue.</p>
+<p>Cheers!</p>
+<div style="text-align: center; margin: 20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
+</div>
+<footer class="footer mt-5">
+  <div class="container">
+    <span class="text-muted">&copy; 2025 Harry Yin. All rights reserved.</span>
+  </div>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
+
+  document.getElementById("toggleTheme").addEventListener("click", function() {
+    document.documentElement.classList.toggle("dark-mode");
+    if(document.documentElement.classList.contains("dark-mode")) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  document.querySelectorAll('a[href="#top"]').forEach(function(link){
+    link.addEventListener("click", function(e){
+      e.preventDefault();
+      window.scrollTo({top: 0, behavior: "smooth"});
+    });
+  });
+
+  console.log('Custom JS loaded');
+});
+</script>
+</body>
+</html>
