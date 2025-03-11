@@ -16,4 +16,6 @@ The idea behind this depends on the fact that silhouette scores are calculated p
 
 The issue with this is that such clustering doesn't actually guarantee better clustering since random words or phrases will be amplified. Thus, I can only chalk up the improved perceived clustering to luck, but I still need to do more tests on the perceived clustering improvements to be sure. Furthermore, I think it is necessary to find a better and more universal scoring metric for textual clustering in particular, as, otherwise, there won't be a consistent method to determine the validity of textual clusters.
 
-All in all, the conclusion I came to was that self-attention is indeed a useful tool for improving textual clustering and that using silhouette scores as a scoring metric is not such a good idea. Overall, this was a very interesting topic to look into, and I think it is an area that needs a lot more research. Cheers!
+All in all, the conclusion I came to was that self-attention is indeed a useful tool for improving textual clustering and that using silhouette scores as a scoring metric is not such a good idea. Overall, this was a very interesting topic to look into, and I think it is an area that needs a lot more research. 
+
+Cheers!

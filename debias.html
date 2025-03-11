@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programming - Removing Bias from Text</title>
+<script>
+if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark-mode');}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 18px;
+  line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s;
+}
+html.dark-mode body {
+  background-color: #2e2e2e;
+  color: #dcdcdc;
+}
+.navbar {
+  background-color: #6c757d;
+}
+.navbar.dark-mode {
+  background-color: #343a40;
+}
+.card {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: none;
+}
+html.dark-mode .card {
+  background-color: #3a3a3a;
+}
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px 0;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  background: #6c757d;
+  transform: translateX(-50%);
+}
+.timeline-item {
+  position: relative;
+  width: 50%;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-bottom: 30px;
+}
+.timeline-item.left {
+  left: 0;
+  text-align: right;
+}
+.timeline-item.right {
+  left: 50%;
+  text-align: left;
+}
+.timeline-content {
+  padding: 15px;
+  background: #e9ecef;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+}
+.timeline-item.left .timeline-content::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
+}
+.timeline-item.right .timeline-content::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -20px;
+  width: 20px;
+  height: 2px;
+  background: #6c757d;
+}
+.timeline-date {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.animate__fadeInUp {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+html.dark-mode .timeline-content {
+  background: #444 !important;
+  color: #dcdcdc !important;
+}
+.theme-blockquote {
+    border-left: 4px solid #6c757d;
+    padding-left: 1rem;
+    color: #6c757d;
+}
+html.dark-mode .theme-blockquote {
+    border-left-color: #dcdcdc;
+    color: #dcdcdc;
+}
+figure {
+    display: block;
+    clear: both;
+    margin: 10px 0;
+}
+figcaption {
+    margin-top: 4px;
+    font-size: 0.85em;
+    font-style: italic;
+    text-align: center;
+    color: #666;
+}
+body { padding-bottom: 50px; }
+</style>
+</head>
+<body>
+<a id="top"></a>
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand" href="index.html">Harry's Blog</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li><li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li><li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li><li class="nav-item"><a class="nav-link" href="about.html">About Me</a></li>
+      <li class="nav-item">
+        <button id="toggleTheme" class="btn btn-secondary">Toggle Theme</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container mt-5">
+<h1 style='text-align: left;'>Programming - Removing Bias from Text</h1>
+<p style='text-align: left;'><small>2025-03-10</small></p>
+<p style='text-align: left;'><small>By Harry Yin</small></p>
+<p style='text-align: left;'><small>Estimated read time: 5 minutes</small></p>
+<hr>
+<p>While working on Alitheia AI (once again lol), I came across an issue: how do you remove bias and subjectivity from a text without altering its fundemental meaning? In order to present information in the most objective way possible, this was a necessary step that I needed to take, but unfortunately, there was basically no research done on it.</p>
+<p>When it came to objectifying sentences, I had two main ideas: 1. creating a rule-based algorithm to alter the text to improve objectivity and 2. fine-tuning summarization models to add the function of objectifying text.</p>
+<p>Due to my inexperience in fine-tuning summarization models and the computational power necessary to do so (I do all my programming and processing on a MacBook Air with the occasional use of Collab), I ended up going with the first option.</p>
+<p>Looking into things a bit more, I found some reseach that attempted to do similar things—<a href="https://arxiv.org/pdf/2208.05777"><em>Dbias: Detecting biases and ensuring Fairness in news articles</em> by Raza et al</a> and <a href="https://nlp.stanford.edu/pubs/pryzant2020bias.pdf"><em>Automatically Neutralizing Subjective Bias in Text</em> by Pryzant et al</a>, though a few things about their methodolgy and results confused me.</p>
+<p>The main issue I had with these projects were their complexity. While a comprehensive pipeline definitely good for accuracy, the four-teired BERT-based model in Dbias seemed a bit too computationally intensive to be run casually, and while Pryzant et al's methods were a more computationally friendly with just a two larger BERT-based models used, overall, it was still relatively intensive. While using distilled versions may improve its efficiency, I still feel that there are better ways to go about this.</p>
+<p>Another issue I had with the systems was the usage of a masking method to find word replacements. While masking methods are great at finding contextual fits, they often miss the point of the entire text. For instance, an text saying "They were elated." that masks "elated" ("They were [MASK].") could have a lot of things fit into that mask—"happy", "sad", "angry", and evidently some of those words don't fit due to context mismatches.</p>
+<p>This issue is seen more prominently in Dbias, where the sentence "Billy Eilish issues apology for mouthing an anti-Asian derogatory term in resurface video." masked "mouthing" and "anti-Asian" ("Billy Eilish issues apology for [MASK] an [MASK] derogatory term in resurface video."), and while the masking makes sense, the results don't. While results varied for for the word "mouthing", with the better ones being "using" and the worse ones being "wearing", the "anti-Asian" result made more sense; the replacement was "intentional" all the way through. While the issues were more obvious in Dbias, the issues also showed themselves in Pryzant's work as they used the same masking methods. While I admit that larger models and more context do somewhat account for the issue, I do feel that given the computational cost-to-result ratio, using a BERT masking method is just not a good idea.</p>
+<p>Thus, I decided to look into my own methods of improvement, one geared towards improved efficiency and accuracy in de-biasing.</p>
+<p>The first issue comes with determining what actually causes subjectivity and bias within text. Doing some research led me to a <a href="https://www.adelaide.edu.au/writingcentre/ua/media/21/learningguide-objectivelanguage.pdf">The University of Adelaide's <em>Objective Language Writing Centre Learning Guide</em></a>, in which it outlined the common points of subjectivity within writing:</p>
+<ul>
+<li>
+<p>Personal language</p>
+</li>
+<li>
+<p>Judgmental language</p>
+</li>
+<li>
+<p>Emotive language</p>
+</li>
+</ul>
+<p>Personal language isn't as large of an issue in bias removal—in fact, I believe that personal language is pretty important for distinguishing opinion from percieved "fact", thus I will ignore it for now.</p>
+<p>Judgemental and emotive language, on the other hand, are problematic issues. From what I can tell, these are found most predominantly in adjectives, adverbs, titular nouns, and verbs (not accounting for more structural of system bias that may be more hidden). To debias, these words need to be altered. </p>
+<p>However, there needs to be a criteria to determine how to alter these words, as each word in a sentence has a property that may make it uniquely difficult to alter.</p>
+<ol>
+<li>Structural value: Does the removal of the word impact the structure of the sentence?</li>
+<li>Is the word subjective: Does the removal/alteration of the word improve bias, or is it an important descriptive word</li>
+<li>Does the removal of this one word improve the subjectivity of the entire text: Sometimes, words can be subjective but prove to improve the overall objectivity of the text in rare cases. This also must be accounted for.</li>
+</ol>
+<p>Thus, given this, it is decently straightforward to develop a rule-base objectivity based off of NLP pipelines like NLTK and Stanza where words can be marked for change and removal.</p>
+<p>Furthermore, for word replacement, I thought to turn to the more unique method of synonym finding using a dictionary API. While this may not produce the same nuance, by creating a list of words and checking for which word provides the most objective alternative, it should hold up much better than a BERT-based model when it comes to retaining meaning.</p>
+<p>All in all, while I kept the explanation of my methodology rather short, I do believe that it can serve as a different, more algorithmic approach to debiasing within the ML community, though I am no expert so I'd love to hear from anyone with more experience in this field about their perspective on my methodology.</p>
+<p>More research definitely needs to be done in this area, though, with growing polarization often fueled by such bias-riddled rhetoric. But, that is a worry for tomorrow's me.</p>
+<p>Cheers!</p>
+<div style="text-align: center; margin: 20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
+</div>
+<footer class="footer mt-5">
+  <div class="container">
+    <span class="text-muted">&copy; 2025 Harry Yin. All rights reserved.</span>
+  </div>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
+
+  document.getElementById("toggleTheme").addEventListener("click", function() {
+    document.documentElement.classList.toggle("dark-mode");
+    if(document.documentElement.classList.contains("dark-mode")) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  document.querySelectorAll('a[href="#top"]').forEach(function(link){
+    link.addEventListener("click", function(e){
+      e.preventDefault();
+      window.scrollTo({top: 0, behavior: "smooth"});
+    });
+  });
+
+  console.log('Custom JS loaded');
+});
+</script>
+</body>
+</html>

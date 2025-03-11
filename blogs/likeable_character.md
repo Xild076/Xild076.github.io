@@ -10,7 +10,7 @@ Instead, I think that the character's goals and/or values ultimately determine i
 
 What I mean by this is that when a likable character has a final goal, it can't be an ideology, a material object, or a concept—it has to be the well-being of a person. For instance, a character's final goal should not be to obtain unlimited power, the legendary lightsaber, or universal democracy, rather, it should be their own happiness, the happiness of their friends or family, or even the happiness of a pet.
 
-That is not to say that getting unlimited power, a legendary lightsaber, or universal democracy isn't a bad goal init of itself, it is a nice stepping goal to have, especially for a fun story, but it can't be the final goal. The power, lightsaber, or democracy has to be obtained for the sake of somebody, otherwise, the character is not likable, they are just fun.
+That is not to say that getting unlimited power, a legendary lightsaber, or universal democracy isn't a bad goal in and of itself, it is a nice stepping goal to have, especially for a fun story, but it can't be the final goal. The power, lightsaber, or democracy has to be obtained for the sake of somebody, otherwise, the character is not likable, they are just fun.
 
 Primarily, this idea is grounded in personal feeling, but it is also grounded in aspects of Kantian philosophy. Kantian's second principle dictates calls individuals to "Treat people as an end, and never as a means to an end". In the case of stories, when characters place people as ends, I believe that it creates an inherent affinity between the reader and the character out of empathy.
 
