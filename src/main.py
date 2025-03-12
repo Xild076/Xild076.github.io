@@ -23,7 +23,8 @@ if __name__ == "__main__":
         page.divider()
         
         page.heading("Latest Blog Posts")
-        page.widget("images/bias_removal.png", "Removing bias from text", "This is a blog post about methods to algorithmically remove bias from text.", "debias")
+        page.widget("images/fatalism.png", "My Thoughts on Fatalism", "This is a blog post on my thoughts about fatalism.", "fatalism")
+        page.widget("images/bias_removal.png", "Removing Bias from Text", "This is a blog post about methods to algorithmically remove bias from text.", "debias")
         page.widget("images/fake_news.png", "Methods to Detect Fake News", "This is a blog post about methods to detect fake news.", "fake_news")
         page.widget("images/self_atten.png", "Self Attention in Textual Clustering", "This is a blog post about self attention in textual clustering.", "self_atten_blog")
         page.widget("images/likeable_character.png", "What makes a likeable character?", "This is a blog post about my thoughs on what makes a likeable character.", "likeable_character")
@@ -34,12 +35,14 @@ if __name__ == "__main__":
     with app.page("blog", "Blog") as page:
         page.heading("Blogs")
         page.write("Here are a couple of blogposts!")
-        page.widget("images/bias_removal.png", "Removing bias from text", "This is a blog post about methods to algorithmically remove bias from text.", "debias")
+        page.widget("images/fatalism.png", "My Thoughts on Fatalism", "This is a blog post on my thoughts about fatalism.", "fatalism")
+        page.widget("images/bias_removal.png", "Removing Bias from Text", "This is a blog post about methods to algorithmically remove bias from text.", "debias")
         page.widget("images/fake_news.png", "Methods to Detect Fake News", "This is a blog post about methods to detect fake news.", "fake_news")
         page.widget("images/self_atten.png", "Self Attention in Textual Clustering", "This is a blog post about self attention in textual clustering.", "self_atten_blog")
         page.widget("images/likeable_character.png", "What makes a likeable character?", "This is a blog post about my thoughs on what makes a likeable character.", "likeable_character")
         page.widget("", "Hello Blog!", "This is the first blog post!", "hello_blog")
     
+    app.add_blog_page("fatalism", "Misc - My Thoughts on Fatalism", "blogs/fatalism.md", date="2025-03-11", author="Harry Yin")
     app.add_blog_page("debias", "Programming - Removing Bias from Text", "blogs/bias_removal.md", date="2025-03-10", author="Harry Yin")
     app.add_blog_page("fake_news", "Programming - Methods to Detect Fake News", "blogs/fake_news.md", date="2025-03-09", author="Harry Yin")
     app.add_blog_page("self_atten_blog", "Programming - Self Attention in Textual Clustering", "blogs/self_atten_blog.md", date="2025-03-08", author="Harry Yin")
