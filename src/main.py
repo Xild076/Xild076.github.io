@@ -42,7 +42,7 @@ if __name__ == "__main__":
         page.widget("images/likeable_character.png", "What makes a likeable character?", "This is a blog post about my thoughs on what makes a likeable character.", "likeable_character")
         page.widget("", "Hello Blog!", "This is the first blog post!", "hello_blog")
     
-    app.add_blog_page("bias_types", "Programming - Types of Bias", "blogs/modern_media.md", date="2025-03-11", author="Harry Yin")
+    app.add_blog_page("bias_types", "Programming - Types of Bias", "blogs/modern_media.md", date="2025-03-12", author="Harry Yin")
     app.add_blog_page("fatalism", "Misc - My Thoughts on Fatalism", "blogs/fatalism.md", date="2025-03-11", author="Harry Yin")
     app.add_blog_page("debias", "Programming - Removing Bias from Text", "blogs/bias_removal.md", date="2025-03-10", author="Harry Yin")
     app.add_blog_page("fake_news", "Programming - Methods to Detect Fake News", "blogs/fake_news.md", date="2025-03-09", author="Harry Yin")
