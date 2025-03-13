@@ -21,12 +21,11 @@ if __name__ == "__main__":
         page.button("View All Projects", "projects")
 
         page.divider()
-        
         page.heading("Latest Blog Posts")
+        page.widget("images/ai_vs_algorithm.png", "Stockfish vs AlphaZero, Algorithm vs AI", "This is a blog post on the differences between algorithms and AI.", "ai_vs_algorithm")
         page.widget("images/bias_types.png", "Types of Bias", "This is a blog post on my thoughts on the types of biases.", "bias_types")
         page.widget("images/fatalism.png", "My Thoughts on Fatalism", "This is a blog post on my thoughts about fatalism.", "fatalism")
         page.widget("images/bias_removal.png", "Removing Bias from Text", "This is a blog post about methods to algorithmically remove bias from text.", "debias")
-        page.widget("images/fake_news.png", "Methods to Detect Fake News", "This is a blog post about methods to detect fake news.", "fake_news")
         page.spacer(10)
         page.button("View All Blog Posts", "blog")
         
@@ -34,6 +33,7 @@ if __name__ == "__main__":
     with app.page("blog", "Blog") as page:
         page.heading("Blogs")
         page.write("Here are a couple of blogposts!")
+        page.widget("images/ai_vs_algorithm.png", "Stockfish vs AlphaZero, Algorithm vs AI", "This is a blog post on the differences between algorithms and AI.", "ai_vs_algorithm")
         page.widget("images/bias_types.png", "Types of Bias", "This is a blog post on my thoughts on the types of biases.", "bias_types")
         page.widget("images/fatalism.png", "My Thoughts on Fatalism", "This is a blog post on my thoughts about fatalism.", "fatalism")
         page.widget("images/bias_removal.png", "Removing Bias from Text", "This is a blog post about methods to algorithmically remove bias from text.", "debias")
@@ -42,6 +42,7 @@ if __name__ == "__main__":
         page.widget("images/likeable_character.png", "What makes a likeable character?", "This is a blog post about my thoughs on what makes a likeable character.", "likeable_character")
         page.widget("", "Hello Blog!", "This is the first blog post!", "hello_blog")
     
+    app.add_blog_page("ai_vs_algorithm", "Programming - Stockfish vs AlphaZero, Algorithm vs AI", "blogs/ai_algorithm.md", date="2025-03-13", author="Harry Yin")
     app.add_blog_page("bias_types", "Programming - Types of Bias", "blogs/modern_media.md", date="2025-03-12", author="Harry Yin")
     app.add_blog_page("fatalism", "Misc - My Thoughts on Fatalism", "blogs/fatalism.md", date="2025-03-11", author="Harry Yin")
     app.add_blog_page("debias", "Programming - Removing Bias from Text", "blogs/bias_removal.md", date="2025-03-10", author="Harry Yin")
