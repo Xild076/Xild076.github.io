@@ -1,11 +1,12 @@
 Honestly, I'm not sure what compelled me to write this blog, but I thought I'd discuss my thoughts on fatalism.
 
-Fatalist thought is a train of thought that I've had of on and off for a few years now. It started in freshman year of high school after reading the Three Body Problem series. Within the series was a crucial scene where one of the characters described how if he hit the billard ball in the exact same location, then the billard ball would always go to the same place. He did this because he wanted to show the main character the irrefutability of physics to contrast it with the irrefutability scientists found when performing particle collisions.
+Fatalist thought is a train of thought that I've had of on and off for a few years now. It started in freshman year of high school after reading the Three Body Problem series. Within the series was a crucial scene where one of the characters described how if he hit the billard ball in the exact same location, then the billard ball would always go to the same place. He did this because he wanted to show the main character the irrefutability of physics to contrast it with the refutability scientists found when performing particle collisions.
 
 <details>
   <summary>Spoilers!</summary>
   However, it turned out that the irrefutability was not a mistake—it was a result of interference by more advanced aliens.
 </details>
+
 
 However, this book got to think—if physics can find a rule in all aspects of the universe, does that mean that we live by some rule? This train of thought naturally lead me to question if we had free will at all. However, since I was pretty busy getting adjusted to high school, I put the train of thought to the side.
 
