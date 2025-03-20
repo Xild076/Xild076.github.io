@@ -10,11 +10,10 @@ Although there are a few media sources like AP News that have relatively avoided
 
 Echo chambers, reinforcement, and tribal mentality have all contributed to the collapse of critical thinking, reflection, and collaboration, and it is both saddening and upsetting to think. The fact that a desperate shift in the business model could lead to grand political polarization is so absurd it's almost fascinating, and yet it happened.
 
-However, all metacommentary talk aside, something that really caught my eye was some failed solutions the article mentioned.
+However, all metacommentary talk aside, something that really caught my eye was some failed solutions the article mentioned—
 
-<blockquote>
-Therefore, Klein hypothesizes that the solution may be for liberals to watch more of Fox News and for conservatives to tune into MSNBC. However, studies have shown that hearing contrary opinions drives partisans towards 'not just a deeper certainty in the rightness of their cause but more polarized policy positions.'
-</blockquote>
+
+*"Therefore, Klein hypothesizes that the solution may be for liberals to watch more of Fox News and for conservatives to tune into MSNBC. However, studies have shown that hearing contrary opinions drives partisans towards 'not just a deeper certainty in the rightness of their cause but more polarized policy positions.'"*
 
 While it seems counterintuitive, it is a pattern we can see all over society. When told a long-held position is wrong, most people don't accept it—in fact, they often double down on it. I can attest to this myself—in the past, I've had some small political leanings and I tried to read the opposite news source, however, it did very little to sway my position. 
 
