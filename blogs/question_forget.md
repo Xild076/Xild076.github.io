@@ -1,0 +1,1 @@
+There is a question I feel like a lot of us, including myself, are forgetting to ask ourselves. It is a very important question both 
