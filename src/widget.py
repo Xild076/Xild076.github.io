@@ -315,6 +315,8 @@ class Website:
             if file_path.lower().endswith(".md"):
                 html_content = convert_markdown_full(content)
                 page.custom(html_content)
+            elif file_path.lower().endswith(".html"):
+                page.custom(content)
             else:
                 page.write(content)
         return page
