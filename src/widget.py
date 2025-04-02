@@ -316,7 +316,15 @@ class Website:
                 html_content = convert_markdown_full(content)
                 page.custom(html_content)
             elif file_path.lower().endswith(".html"):
-                page.custom(content)
+                if "<body" in content.lower():
+                    body_match = re.search(r'<body[^>]*>(.*?)</body>', content, re.DOTALL | re.IGNORECASE)
+                    if body_match:
+                        body_content = body_match.group(1)
+                    else:
+                        body_content = content
+                    page.custom(body_content)
+                else:
+                    page.custom(content)
             else:
                 page.write(content)
         return page
