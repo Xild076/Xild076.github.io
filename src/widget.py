@@ -10,25 +10,26 @@ except ImportError:
 def convert_markdown_full(markdown_text):
     if md:
         return md.markdown(markdown_text)
-    else:
-        lines = markdown_text.splitlines()
-        html_lines = []
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
-            heading_match = re.match(r'^(#{1,6})\s*(.*)', line)
-            if heading_match:
-                level = len(heading_match.group(1))
-                content = heading_match.group(2)
-                html_lines.append(f"<h{level}>{content}</h{level}>")
-            else:
-                html_lines.append(f"<p>{line}</p>")
-        html_content = "\n".join(html_lines)
-        html_content = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', html_content)
-        html_content = re.sub(r'\*(.*?)\*', r'<em>\1</em>', html_content)
-        html_content = re.sub(r'\~\~(.*?)\~\~', r'<del>\1</del>', html_content)
-        return html_content
+    
+    lines = markdown_text.splitlines()
+    html_lines = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        heading_match = re.match(r'^(#{1,6})\s*(.*)', line)
+        if heading_match:
+            level = len(heading_match.group(1))
+            content = heading_match.group(2)
+            html_lines.append(f"<h{level}>{content}</h{level}>")
+        else:
+            html_lines.append(f"<p>{line}</p>")
+    
+    html_content = "\n".join(html_lines)
+    html_content = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', html_content)
+    html_content = re.sub(r'\*(.*?)\*', r'<em>\1</em>', html_content)
+    html_content = re.sub(r'\~\~(.*?)\~\~', r'<del>\1</del>', html_content)
+    return html_content
 
 class Page:
     def __init__(self, slug, title, website):
@@ -38,8 +39,10 @@ class Page:
         self.content = []
         self.is_blog = False
         self.is_project = False
+        
     def __enter__(self):
         return self
+        
     def __exit__(self, exc_type, exc_value, traceback):
         self.website.pages[self.slug] = {
             "title": self.title,
@@ -47,29 +50,35 @@ class Page:
             "is_blog": self.is_blog,
             "is_project": self.is_project
         }
+        
     def heading(self, text, level=1, align="left"):
         self.content.append(f"<h{level} style='text-align: {align};'>{text}</h{level}>")
+        
     def write(self, text, align="left"):
         self.content.append(f"<p style='text-align: {align};'>{text}</p>")
+        
     def custom(self, html):
         self.content.append(html)
+        
     def timeline_entry(self, date, event, icon=""):
         icon_html = f"<i class='{icon}'></i> " if icon else ""
         self.content.append(f'<div class="timeline-item scroll-animate"><div class="timeline-date">{date}</div><div class="timeline-content">{icon_html}{event}</div></div>')
+        
     def timeline_full(self, events):
         try:
             sorted_events = sorted(events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"))
         except:
             sorted_events = events
+            
         timeline_html = '<div class="timeline">'
         for idx, (date, event) in enumerate(sorted_events):
             side = "left" if idx % 2 == 0 else "right"
             timeline_html += f'<div class="timeline-item {side} scroll-animate"><div class="timeline-date">{date}</div><div class="timeline-content">{event}</div></div>'
         timeline_html += '</div>'
         self.content.append(timeline_html)
+        
     def widget(self, image_url, title, description, link):
-        if not image_url:
-            image_url = "images/placeholder.png"
+        image_url = image_url or "images/placeholder.png"
         self.content.append(f'''
 <div class="card mb-3" style="max-width: 540px;">
   <a href="{link}.html" style="text-decoration: none; color: inherit;">
@@ -87,9 +96,11 @@ class Page:
   </a>
 </div>
 ''')
+        
     def image(self, image_url, alt_text="", width=None, height=None, wrap=None, crop=False, shrink=False, smart_fit=False, caption=""):
         img_style = ""
         figure_style = ""
+        
         if width:
             img_style += f'{"width" if smart_fit or not shrink else "max-width"}:{width}px;'
         if height:
@@ -98,17 +109,12 @@ class Page:
             img_style += " object-fit:cover;"
         elif shrink:
             img_style += " object-fit:contain;"
+            
         if wrap in ["left", "right"]:
-            if caption:
-                if wrap == "left":
-                    figure_style += "float:left; margin:0 20px 20px 0;"
-                else:
-                    figure_style += "float:right; margin:0 0 20px 20px;"
-            else:
-                if wrap == "left":
-                    img_style += " float:left; margin:0 20px 20px 0;"
-                else:
-                    img_style += " float:right; margin:0 0 20px 20px;"
+            margin_style = f"float:{wrap}; margin:0 {0 if wrap == 'right' else 20}px 20px {20 if wrap == 'right' else 0}px;"
+            figure_style = margin_style if caption else ""
+            img_style += margin_style if not caption else ""
+            
         if caption:
             self.content.append(
                 f'<figure style="{figure_style} position:relative; display:inline-block; box-shadow:0 2px 4px rgba(0,0,0,0.1); border-radius:4px; overflow:hidden;">'
@@ -119,66 +125,78 @@ class Page:
             self.content.append(
                 f'<img src="{image_url}" alt="{alt_text}" style="{img_style} border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">'
             )
+            
     def email_link(self, email, text=None, newline=True):
         display_text = text if text else email
         newline_tag = "<br>" if newline else ""
         self.content.append(f'<a href="mailto:{email}">{display_text}</a>{newline_tag}')
+        
     def link(self, url, text=None, newline=True):
         display_text = text if text else url
         newline_tag = "<br>" if newline else ""
         self.content.append(f'<a href="{url}">{display_text}</a>{newline_tag}')
+        
     def code_block(self, code, language=""):
         self.content.append(f"<pre><code class='{language}'>{code}</code></pre>")
+        
     def video(self, video_url, width=560, height=315):
         self.content.append(f'<iframe width="{width}" height="{height}" src="{video_url}" frameborder="0" allowfullscreen></iframe>')
+        
     def blockquote(self, quote, author=None):
-        if author:
-            self.content.append(f"<blockquote class='blockquote theme-blockquote'><p><em>&ldquo;{quote}&rdquo;</em></p><footer class='blockquote-footer'><small>{author}</small></footer></blockquote>")
-        else:
-            self.content.append(f"<blockquote class='blockquote theme-blockquote'><p><em>&ldquo;{quote}&rdquo;</em></p></blockquote>")
+        author_html = f'<footer class="blockquote-footer"><small>{author}</small></footer>' if author else ''
+        self.content.append(f"<blockquote class='blockquote theme-blockquote'><p><em>&ldquo;{quote}&rdquo;</em></p>{author_html}</blockquote>")
+        
     def alert_box(self, message, alert_type="info"):
         self.content.append(f'<div class="alert alert-{alert_type}" role="alert">{message}</div>')
+        
     def gallery(self, images):
         gallery_html = '<div class="row">'
         for img in images:
             gallery_html += f'<div class="col-md-4"><img src="{img}" class="img-fluid" style="border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:20px;"></div>'
         gallery_html += '</div>'
         self.content.append(gallery_html)
+        
     def rotating_gallery(self, images, container_width=800, container_height=600, interval=3000, smart_fit=False, captions=None):
         captions_js = "null"
         if captions and isinstance(captions, list) and len(captions) == len(images):
             captions_js = '[' + ','.join(f'"{cap}"' for cap in captions) + ']'
+            
+        image_spans = ''.join([
+            f'<span style="position:absolute; display:block; width:100%; height:100%; top:0; left:0; opacity:{1 if i==0 else 0}; transition:opacity 0.5s ease; z-index:1;" data-index="{i}" class="{"active" if i==0 else ""}"><img src="{img}" alt="Gallery Image" style="width:100%; height:100%; object-fit:{"cover" if smart_fit else "contain"}; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1);"></span>' 
+            for i, img in enumerate(images)
+        ])
+        
         gallery_html = f"""
-        <div id="rotatingGallery" class="rotating-gallery-container" style="width: {container_width}px; height: {container_height}px; position: relative; overflow: hidden; margin: auto;">
-            <div class="image-container" style="width: 100%; height: 100%; position: relative;">
-                {''.join([f'<span style="position: absolute; display: block; width: 100%; height: 100%; top: 0; left: 0; opacity: {1 if i == 0 else 0}; transition: opacity 0.5s ease; z-index: 1;" data-index="{i}" class="{"active" if i == 0 else ""}"><img src="{img}" alt="Gallery Image" style="width: 100%; height: 100%; object-fit: {"cover" if smart_fit else "contain"}; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1);"></span>' for i, img in enumerate(images)])}
+        <div id="rotatingGallery" class="rotating-gallery-container" style="width:{container_width}px; height:{container_height}px; position:relative; overflow:hidden; margin:auto;">
+            <div class="image-container" style="width:100%; height:100%; position:relative;">{image_spans}</div>
+            <div class="overlay" id="overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; justify-content:center; align-items:center; z-index:2;">
+                <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width:90%; max-height:90%; object-fit:{"cover" if smart_fit else "contain"}; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.2);">
             </div>
-            <div class="overlay" id="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2;">
-                <img class="popup-img" id="popup-img" src="" alt="Popup Image" style="max-width: 90%; max-height: 90%; object-fit: {"cover" if smart_fit else "contain"}; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.2);">
-            </div>
-            <div class="btn-container" style="position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; z-index: 3;">
+            <div class="btn-container" style="position:absolute; bottom:10px; width:100%; display:flex; justify-content:space-between; padding:0 20px; z-index:3;">
                 <button class="btn btn-secondary" id="prev">Left</button>
                 <button class="btn btn-secondary" id="next">Right</button>
             </div>
         </div>
         """
+        
         if captions and isinstance(captions, list) and len(captions) == len(images):
-            gallery_html += '<div id="galleryCaption" style="text-align: center; font-size: 0.9em; font-style: italic; margin-top: 5px;">' + captions[0] + '</div>'
+            gallery_html += f'<div id="galleryCaption" style="text-align:center; font-size:0.9em; font-style:italic; margin-top:5px;">{captions[0]}</div>'
+            
         self.content.append(gallery_html)
         self.content.append(f"""
         <style>
-        .rotating-gallery-container {{}}
-        .image-container span.active {{ opacity: 1 !important; }}
+        .image-container span.active {{ opacity:1 !important; }}
         </style>
         <script>
         (function() {{
-            var container = document.querySelector("#rotatingGallery .image-container");
-            var spans = container.getElementsByTagName("span");
-            var current = 0;
-            var captions = {captions_js};
-            var captionElem = document.getElementById("galleryCaption");
+            const container = document.querySelector("#rotatingGallery .image-container");
+            const spans = container.getElementsByTagName("span");
+            let current = 0;
+            const captions = {captions_js};
+            const captionElem = document.getElementById("galleryCaption");
+            
             function showImage(index) {{
-                for (var i = 0; i < spans.length; i++) {{
+                for (let i = 0; i < spans.length; i++) {{
                     spans[i].classList.remove("active");
                     spans[i].style.opacity = "0";
                 }}
@@ -188,54 +206,70 @@ class Page:
                     captionElem.innerText = captions[index];
                 }}
             }}
+            
             showImage(current);
-            document.getElementById("next").addEventListener("click", function() {{
+            
+            const nextBtn = document.getElementById("next");
+            const prevBtn = document.getElementById("prev");
+            
+            nextBtn.addEventListener("click", function() {{
                 current = (current + 1) % spans.length;
                 showImage(current);
             }});
-            document.getElementById("prev").addEventListener("click", function() {{
+            
+            prevBtn.addEventListener("click", function() {{
                 current = (current - 1 + spans.length) % spans.length;
                 showImage(current);
             }});
-            var intervalId = setInterval(function() {{
+            
+            let intervalId = setInterval(function() {{
                 current = (current + 1) % spans.length;
                 showImage(current);
             }}, {interval});
-            document.getElementById("next").addEventListener("click", function() {{
-                clearInterval(intervalId);
-            }});
-            document.getElementById("prev").addEventListener("click", function() {{
-                clearInterval(intervalId);
+            
+            [nextBtn, prevBtn].forEach(btn => {{
+                btn.addEventListener("click", () => clearInterval(intervalId));
             }});
         }})();
         </script>
         """)
+        
     def tabs(self, tabs, tab_id="tabsExample"):
         nav_html = f'<ul class="nav nav-tabs" id="{tab_id}" role="tablist">'
         content_html = f'<div class="tab-content mt-3" id="{tab_id}Content">'
+        
         for idx, (tab_title, tab_content) in enumerate(tabs):
             active = "active" if idx == 0 else ""
             nav_html += f'<li class="nav-item"><a class="nav-link {active}" id="tab{idx}" data-toggle="tab" href="#content{idx}" role="tab">{tab_title}</a></li>'
             content_html += f'<div class="tab-pane fade show {active}" id="content{idx}" role="tabpanel">{tab_content}</div>'
+            
         nav_html += '</ul>'
         content_html += '</div>'
         self.content.append(nav_html + content_html)
+        
     def tooltip(self, text, tooltip_text):
         self.content.append(f'<span data-toggle="tooltip" title="{tooltip_text}">{text}</span>')
+        
     def map(self, location, width=600, height=450):
         self.content.append(f'<iframe src="https://www.google.com/maps?q={location}&output=embed" width="{width}" height="{height}" frameborder="0" style="border:0;" allowfullscreen aria-hidden="false" tabindex="0"></iframe>')
+        
     def animated(self, html, animation="animate__fadeInUp"):
         self.content.append(f'<div class="animate__animated {animation} scroll-animate">{html}</div>')
+        
     def container(self, content, class_name="container"):
         self.content.append(f'<div class="{class_name}">{content}</div>')
+        
     def divider(self):
         self.content.append('<hr>')
+        
     def button(self, text, link, style="primary"):
         self.content.append(f'<a href="{link}" class="btn btn-{style}">{text}</a>')
+        
     def file_download(self, file_url, text="Download File", download=True, icon=""):
-        download_attr = f'download' if download else 'target="_blank" rel="noopener noreferrer"'
+        download_attr = 'download' if download else 'target="_blank" rel="noopener noreferrer"'
         icon_html = f'<i class="{icon}"></i> ' if icon else ""
         self.content.append(f'<a href="{file_url}" {download_attr} class="btn btn-primary">{icon_html}{text}</a>')
+        
     def jumbotron(self, title, subtitle, button_text=None, button_link=None):
         btn_html = f'<a class="btn btn-primary btn-lg" href="{button_link}" role="button">{button_text}</a>' if button_text and button_link else ""
         self.content.append(f'''
@@ -245,24 +279,22 @@ class Page:
   {btn_html}
 </div>
 ''')
+        
     def carousel(self, images, carousel_id="carouselExample"):
-        indicators = "".join([f'<li data-target="#{carousel_id}" data-slide-to="{i}" {"class=\'active\'" if i==0 else ""}></li>' for i in range(len(images))])
-        slides = ""
-        for i, img in enumerate(images):
-            active = "active" if i == 0 else ""
-            slides += f'''
-<div class="carousel-item {active}">
-  <img src="{img}" class="d-block w-100" alt="Slide {i+1}">
-</div>
-'''
+        indicators = "".join([
+            f'<li data-target="#{carousel_id}" data-slide-to="{i}" {"class=\'active\'" if i==0 else ""}></li>' 
+            for i in range(len(images))
+        ])
+        
+        slides = "".join([
+            f'<div class="carousel-item {("active" if i==0 else "")}"><img src="{img}" class="d-block w-100" alt="Slide {i+1}"></div>'
+            for i, img in enumerate(images)
+        ])
+        
         self.content.append(f'''
 <div id="{carousel_id}" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    {indicators}
-  </ol>
-  <div class="carousel-inner">
-    {slides}
-  </div>
+  <ol class="carousel-indicators">{indicators}</ol>
+  <div class="carousel-inner">{slides}</div>
   <a class="carousel-control-prev" href="#{carousel_id}" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="sr-only">Previous</span>
@@ -273,19 +305,23 @@ class Page:
   </a>
 </div>
 ''')
+        
     def row(self, columns):
-        row_html = '<div class="row">'
-        for col in columns:
-            row_html += f'<div class="col">{col}</div>'
-        row_html += '</div>'
+        row_html = '<div class="row">' + ''.join([f'<div class="col">{col}</div>' for col in columns]) + '</div>'
         self.content.append(row_html)
+        
     def spacer(self, height):
-        self.content.append(f'<div style="height: {height}px;"></div>')
+        self.content.append(f'<div style="height:{height}px;"></div>')
+        
     def import_text(self, file_path):
-        with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read().strip()
-        content = convert_markdown_full(content)
-        self.content.append(content)
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read().strip()
+                
+            content = convert_markdown_full(content)
+            self.content.append(content)
+        except Exception as e:
+            self.content.append(f'<div class="alert alert-danger">Error loading file: {e}</div>')
 
 class Website:
     def __init__(self, title, footer="", custom_css="", custom_js=""):
@@ -294,214 +330,252 @@ class Website:
         self.custom_css = custom_css
         self.custom_js = custom_js
         self.pages = {}
+        
     def page(self, slug, title):
         return Page(slug, title, self)
+        
     def add_blog_page(self, slug, title, file_path, date=None, featured_image=None, author=None):
         with self.page(slug, title) as page:
             page.is_blog = True
+            
             if featured_image:
                 page.image(featured_image)
+                
             page.heading(title)
+            
             if date:
                 page.write(f"<small>{date}</small>")
+                
             if author:
                 page.write(f"<small>By {author}</small>")
-            with open(file_path, "r", encoding="utf-8") as f:
-                content = f.read().strip()
-            word_count = len(content.split())
-            read_time = max(1, round(word_count / 200))
-            page.write(f"<small>Estimated read time: {read_time} minute{'s' if read_time != 1 else ''}</small>")
-            page.divider()
-            if file_path.lower().endswith(".md"):
-                html_content = convert_markdown_full(content)
-                page.custom(html_content)
-            elif file_path.lower().endswith(".html"):
-                if "<body" in content.lower():
-                    body_match = re.search(r'<body[^>]*>(.*?)</body>', content, re.DOTALL | re.IGNORECASE)
-                    if body_match:
-                        body_content = body_match.group(1)
+                
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    content = f.read().strip()
+                    
+                word_count = len(content.split())
+                read_time = max(1, round(word_count / 200))
+                page.write(f"<small>Estimated read time: {read_time} minute{'s' if read_time != 1 else ''}</small>")
+                
+                page.divider()
+                
+                if file_path.lower().endswith(".md"):
+                    html_content = convert_markdown_full(content)
+                    page.custom(html_content)
+                elif file_path.lower().endswith(".html"):
+                    if "<body" in content.lower():
+                        body_match = re.search(r'<body[^>]*>(.*?)</body>', content, re.DOTALL | re.IGNORECASE)
+                        if body_match:
+                            body_content = body_match.group(1)
+                        else:
+                            body_content = content
+                        page.custom(body_content)
                     else:
-                        body_content = content
-                    page.custom(body_content)
+                        page.custom(content)
                 else:
-                    page.custom(content)
-            else:
-                page.write(content)
+                    page.write(content)
+            except Exception as e:
+                page.alert_box(f"Error loading blog content: {e}", "danger")
+                
         return page
+        
     def add_project_page(self, slug, title, timeline_events, project_intro, github_owner, github_repo, papers, technologies=None):
         with self.page(slug, title) as page:
             page.is_project = True
-            with open(project_intro, "r", encoding="utf-8") as f:
-                project_intro = f.read().strip()
-            intro_html = '<div style="height: 10px;"></div>' + convert_markdown_full(project_intro)
+            
             try:
-                sorted_events = sorted(timeline_events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"), reverse=True)
-            except:
-                sorted_events = timeline_events
-            timeline_html = '<div class="timeline">'
-            for idx, (date, event) in enumerate(sorted_events):
-                side = "left" if idx % 2 == 0 else "right"
-                timeline_html += f'''
-            <div class="timeline-item {side} scroll-animate">
-            <div class="timeline-date">{date}</div>
-            <div class="timeline-content">{event}</div>
-            </div>
-            '''
-            timeline_html += '</div>'
+                with open(project_intro, "r", encoding="utf-8") as f:
+                    project_intro = f.read().strip()
+                    
+                intro_html = '<div style="height:10px;"></div>' + convert_markdown_full(project_intro)
+                
+                try:
+                    sorted_events = sorted(timeline_events, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"), reverse=True)
+                except:
+                    sorted_events = timeline_events
+                    
+                timeline_html = '<div class="timeline">'
+                for idx, (date, event) in enumerate(sorted_events):
+                    side = "left" if idx % 2 == 0 else "right"
+                    timeline_html += f'''
+                <div class="timeline-item {side} scroll-animate">
+                <div class="timeline-date">{date}</div>
+                <div class="timeline-content">{event}</div>
+                </div>
+                '''
+                timeline_html += '</div>'
 
-            code_html = f'''
-            <style>
-            .tab-content .tab-pane {{
-                overflow: visible !important;
-            }}
-            #codeViewer {{
-                height: 800px;
-                overflow: auto;
-                width: 100%;
-            }}
-            </style>
-            <div id="codeViewerContainer" class="mb-3">
-            <div id="fileList" style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
-            <div id="codeViewer" style="border:1px solid #ccc;"></div>
-            <a href="https://github.com/{github_owner}/{github_repo}" target="_blank" class="btn btn-secondary mt-2">
-                Star on GitHub
-            </a>
-            </div>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
-            <script>
-            var repoOwner = "{github_owner}";
-            var repoName = "{github_repo}";
-            var fileListElem = document.getElementById("fileList");
-            var codeViewerElem = document.getElementById("codeViewer");
-            var editor = CodeMirror(codeViewerElem, {{
-            value: "",
-            mode: "javascript",
-            lineNumbers: true,
-            lineWrapping: true
-            }});
-            editor.setSize("100%", "100%");
-            var currentPath = "";
+                code_html = f'''
+                <style>
+                .tab-content .tab-pane {{ overflow:visible !important; }}
+                #codeViewer {{ height:800px; overflow:auto; width:100%; }}
+                </style>
+                <div id="codeViewerContainer" class="mb-3">
+                <div id="fileList" style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
+                <div id="codeViewer" style="border:1px solid #ccc;"></div>
+                <a href="https://github.com/{github_owner}/{github_repo}" target="_blank" class="btn btn-secondary mt-2">
+                    Star on GitHub
+                </a>
+                </div>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+                <script>
+                const repoOwner = "{github_owner}";
+                const repoName = "{github_repo}";
+                const fileListElem = document.getElementById("fileList");
+                const codeViewerElem = document.getElementById("codeViewer");
+                const editor = CodeMirror(codeViewerElem, {{
+                    value: "",
+                    mode: "javascript",
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    theme: document.documentElement.classList.contains('dark-mode') ? 'material-darker' : 'default'
+                }});
+                
+                editor.setSize("100%", "100%");
+                let currentPath = "";
 
-            function loadFileContent(path) {{
-            fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
-                .then(r => r.json())
-                .then(data => {{
-                fetch(data.download_url)
-                    .then(r => r.text())
-                    .then(text => {{
-                    editor.setValue(text);
-                    editor.refresh();
+                function loadFileContent(path) {{
+                    fetch(`https://api.github.com/repos/${{repoOwner}}/${{repoName}}/contents/${{path}}`)
+                        .then(r => r.json())
+                        .then(data => {{
+                            if (data.encoding && data.encoding === 'base64') {{
+                                const content = atob(data.content);
+                                editor.setValue(content);
+                            }} else {{
+                                fetch(data.download_url)
+                                    .then(r => r.text())
+                                    .then(text => editor.setValue(text));
+                            }}
+                            editor.refresh();
+                        }})
+                        .catch(err => console.error("Error loading file:", err));
+                }}
+
+                function fetchDirectory(path) {{
+                    fileListElem.innerHTML = "";
+                    if (path !== "") {{
+                        const backBtn = document.createElement("button");
+                        backBtn.innerHTML = "⬅️ Back";
+                        backBtn.className = "btn btn-secondary btn-sm mb-2";
+                        backBtn.onclick = function() {{
+                            const parts = currentPath.split("/");
+                            parts.pop();
+                            parts.pop();
+                            currentPath = parts.length > 0 ? parts.join("/") + "/" : "";
+                            fetchDirectory(currentPath);
+                        }};
+                        fileListElem.appendChild(backBtn);
+                    }}
+                    
+                    fetch(`https://api.github.com/repos/${{repoOwner}}/${{repoName}}/contents/${{path}}`)
+                        .then(r => r.json())
+                        .then(files => {{
+                            files.sort((a, b) => {{
+                                if (a.type === b.type) return a.name.localeCompare(b.name);
+                                return a.type === 'dir' ? -1 : 1;
+                            }}).forEach(file => {{
+                                const btn = document.createElement("button");
+                                if (file.type === "dir") {{
+                                    btn.innerHTML = "📁 " + file.name;
+                                    btn.className = "btn btn-info btn-sm m-1";
+                                    btn.onclick = function() {{
+                                        currentPath = path + file.name + "/";
+                                        fetchDirectory(currentPath);
+                                    }};
+                                }} else {{
+                                    btn.innerHTML = "📄 " + file.name;
+                                    btn.className = "btn btn-light btn-sm m-1";
+                                    btn.onclick = function() {{
+                                        loadFileContent(file.path);
+                                    }};
+                                }}
+                                fileListElem.appendChild(btn);
+                            }});
+                        }})
+                        .catch(err => {{
+                            fileListElem.innerHTML = `<div class="alert alert-danger">Error loading directory: ${{err.message}}</div>`;
+                        }});
+                }}
+
+                document.addEventListener('DOMContentLoaded', () => {{
+                    document.querySelectorAll('[data-toggle="tab"]').forEach(trigger => {{
+                        trigger.addEventListener('shown.bs.tab', () => editor.refresh());
+                    }});
+                    
+                    document.getElementById('toggleTheme').addEventListener('click', () => {{
+                        setTimeout(() => {{
+                            editor.setOption('theme', document.documentElement.classList.contains('dark-mode') ? 'material-darker' : 'default');
+                        }}, 100);
                     }});
                 }});
-            }}
 
-            function fetchDirectory(path) {{
-            fileListElem.innerHTML = "";
-            if (path !== "") {{
-                var backBtn = document.createElement("button");
-                backBtn.innerHTML = "⬅️ Back";
-                backBtn.className = "btn btn-secondary btn-sm mb-2";
-                backBtn.onclick = function() {{
-                var parts = currentPath.split("/");
-                parts.pop();
-                parts.pop();
-                currentPath = parts.length > 0 ? parts.join("/") + "/" : "";
                 fetchDirectory(currentPath);
-                }};
-                fileListElem.appendChild(backBtn);
-            }}
-            fetch("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/" + path)
-                .then(r => r.json())
-                .then(files => {{
-                files.forEach(file => {{
-                    var btn = document.createElement("button");
-                    if (file.type === "dir") {{
-                    btn.innerHTML = "📁 " + file.name;
-                    btn.className = "btn btn-info btn-sm m-1";
-                    btn.onclick = function() {{
-                        currentPath = path + file.name + "/";
-                        fetchDirectory(currentPath);
-                    }};
-                    }} else {{
-                    btn.innerHTML = "📄 " + file.name;
-                    btn.className = "btn btn-light btn-sm m-1";
-                    btn.onclick = function() {{
-                        loadFileContent(file.path);
-                    }};
-                    }}
-                    fileListElem.appendChild(btn);
-                }});
-                }});
-            }}
+                </script>
+                '''
 
-            document.addEventListener('DOMContentLoaded', function() {{
-            var tabTriggers = document.querySelectorAll('[data-toggle="tab"]');
-            tabTriggers.forEach(function(trigger) {{
-                trigger.addEventListener('shown.bs.tab', function() {{
-                editor.refresh();
-                }});
-            }});
-            }});
-
-            fetchDirectory(currentPath);
-            </script>
-            '''
-
-            papers_html = '<div class="paper-widgets">'
-            for paper in papers:
-                if len(paper) >= 4:
-                    paper_title, paper_link, paper_type, paper_desc = paper
-                else:
-                    paper_title, paper_link, paper_type = paper
-                    paper_desc = ""
-                if paper_type.lower() == "md":
-                    paper_slug = f"paper_{re.sub(r'\\W+', '', paper_title).lower()}"
-                    self.add_blog_page(paper_slug, paper_title, paper_link)
-                    link_target = f"{paper_slug}.html"
-                else:
-                    link_target = paper_link
-                widget_html = f'''
-            <div class="card mb-3" style="max-width: 500px;">
-            <a href="{link_target}" style="text-decoration: none; color: inherit;">
-                <div class="row no-gutters">
-                <div class="col-5" style="padding:0;">
-                    <img src="images/placeholder.png" class="card-img" alt="{paper_title}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
-                </div>
-                <div class="col-7">
-                    <div class="card-body" style="padding: 0.5rem;">
-                    <h5 class="card-title" style="font-size:1.2rem;">{paper_title}</h5>
-                    <p class="card-text" style="font-size:1rem;">{paper_desc}</p>
-                    </div>
-                </div>
-                </div>
-            </a>
-            </div>
-            '''
-                papers_html += f'<div style="margin-bottom: 15px;">{widget_html}</div>'
-            papers_html += '</div>'
-
-            tech_html = ""
-            if technologies:
-                tech_badges = ""
-                for tech in technologies:
-                    if isinstance(tech, tuple):
-                        tech_name, tech_desc, tech_link = tech
-                        tech_badges += f"<a href='{tech_link}' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='{tech_desc}'>{tech_name}</a>"
+                papers_html = '<div class="paper-widgets">'
+                for paper in papers:
+                    if len(paper) >= 4:
+                        paper_title, paper_link, paper_type, paper_desc = paper
                     else:
-                        tech_badges += f"<span class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;'>{tech}</span>"
-                tech_html = f"<div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'>{tech_badges}</div></div>"
+                        paper_title, paper_link, paper_type = paper
+                        paper_desc = ""
+                        
+                    if paper_type.lower() == "md":
+                        paper_slug = f"paper_{re.sub(r'\\W+', '', paper_title).lower()}"
+                        self.add_blog_page(paper_slug, paper_title, paper_link)
+                        link_target = f"{paper_slug}.html"
+                    else:
+                        link_target = paper_link
+                        
+                    widget_html = f'''
+                <div class="card mb-3" style="max-width:500px;">
+                <a href="{link_target}" style="text-decoration:none; color:inherit;">
+                    <div class="row no-gutters">
+                    <div class="col-5" style="padding:0;">
+                        <img src="images/placeholder.png" class="card-img" alt="{paper_title}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+                    </div>
+                    <div class="col-7">
+                        <div class="card-body" style="padding:0.5rem;">
+                        <h5 class="card-title" style="font-size:1.2rem;">{paper_title}</h5>
+                        <p class="card-text" style="font-size:1rem;">{paper_desc}</p>
+                        </div>
+                    </div>
+                    </div>
+                </a>
+                </div>
+                '''
+                    papers_html += f'<div style="margin-bottom:15px;">{widget_html}</div>'
+                papers_html += '</div>'
 
-            tabs = [("Introduction", intro_html), ("Timeline", timeline_html)]
-            if tech_html:
-                tabs.append(("Technologies", tech_html))
-            tabs.extend([("Code", code_html), ("Papers", papers_html)])
-            page.tabs(tabs)
+                tech_html = ""
+                if technologies:
+                    tech_badges = ""
+                    for tech in technologies:
+                        if isinstance(tech, tuple):
+                            tech_name, tech_desc, tech_link = tech
+                            tech_badges += f"<a href='{tech_link}' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='{tech_desc}'>{tech_name}</a>"
+                        else:
+                            tech_badges += f"<span class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;'>{tech}</span>"
+                    tech_html = f"<div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'>{tech_badges}</div></div>"
+
+                tabs = [("Introduction", intro_html), ("Timeline", timeline_html)]
+                if tech_html:
+                    tabs.append(("Technologies", tech_html))
+                tabs.extend([("Code", code_html), ("Papers", papers_html)])
+                page.tabs(tabs)
+                
+            except Exception as e:
+                page.alert_box(f"Error creating project page: {e}", "danger")
+                
         return page
+        
     def compile(self, output_dir="."):
         if output_dir != "." and not os.path.exists(output_dir):
             os.makedirs(output_dir)
+            
         nav_links = "".join([
             f'<li class="nav-item"><a class="nav-link" href="{slug}.html">{data["title"]}</a></li>'
             for slug, data in self.pages.items()
@@ -515,38 +589,53 @@ class Website:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
-<script>
-if(localStorage.getItem('theme')==='dark'){{document.documentElement.classList.add('dark-mode');}}
-</script>
+<script>if(localStorage.getItem('theme')==='dark'){{document.documentElement.classList.add('dark-mode');}}</script>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material-darker.min.css">
 <style>
+:root {{
+  --text-color: #333;
+  --bg-color: #f5f5f5;
+  --card-bg: #ffffff;
+  --timeline-bg: #e9ecef;
+  --border-color: #dee2e6;
+  --shadow-color: rgba(0,0,0,0.1);
+  --blockquote-color: #6c757d;
+}}
+html.dark-mode {{
+  --text-color: #dcdcdc;
+  --bg-color: #2e2e2e;
+  --card-bg: #3a3a3a;
+  --timeline-bg: #444;
+  --border-color: #555;
+  --shadow-color: rgba(0,0,0,0.25);
+  --blockquote-color: #aaa;
+}}
 body {{
   font-family: 'Roboto', sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   font-size: 18px;
   line-height: 1.6;
   transition: background-color 0.3s, color 0.3s;
 }}
-html.dark-mode body {{
-  background-color: #2e2e2e;
-  color: #dcdcdc;
-}}
 .navbar {{
   background-color: #6c757d;
+  box-shadow: 0 2px 5px var(--shadow-color);
 }}
 .navbar.dark-mode {{
   background-color: #343a40;
 }}
 .card {{
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 4px var(--shadow-color);
   border: none;
+  transition: background-color 0.3s, box-shadow 0.3s;
 }}
-html.dark-mode .card {{
-  background-color: #3a3a3a;
+.card:hover {{
+  box-shadow: 0 4px 8px var(--shadow-color);
 }}
 .timeline {{
   position: relative;
@@ -581,10 +670,11 @@ html.dark-mode .card {{
 }}
 .timeline-content {{
   padding: 15px;
-  background: #e9ecef;
+  background: var(--timeline-bg);
   border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px var(--shadow-color);
   position: relative;
+  transition: background-color 0.3s;
 }}
 .timeline-item.left .timeline-content::after {{
   content: "";
@@ -617,30 +707,82 @@ html.dark-mode .card {{
   opacity: 1 !important;
   transform: translateY(0) !important;
 }}
-html.dark-mode .timeline-content {{
-  background: #444 !important;
-  color: #dcdcdc !important;
-}}
 .theme-blockquote {{
-    border-left: 4px solid #6c757d;
-    padding-left: 1rem;
-    color: #6c757d;
-}}
-html.dark-mode .theme-blockquote {{
-    border-left-color: #dcdcdc;
-    color: #dcdcdc;
+  border-left: 4px solid var(--blockquote-color);
+  padding-left: 1rem;
+  color: var(--blockquote-color);
+  transition: border-left-color 0.3s, color 0.3s;
 }}
 figure {{
-    display: block;
-    clear: both;
-    margin: 10px 0;
+  display: block;
+  clear: both;
+  margin: 10px 0;
+  transition: box-shadow 0.3s;
 }}
 figcaption {{
-    margin-top: 4px;
-    font-size: 0.85em;
-    font-style: italic;
-    text-align: center;
-    color: #666;
+  margin-top: 4px;
+  font-size: 0.85em;
+  font-style: italic;
+  text-align: center;
+  color: var(--text-color);
+  opacity: 0.8;
+  transition: color 0.3s;
+}}
+pre {{
+  background-color: var(--card-bg);
+  border-radius: 4px;
+  padding: 15px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: background-color 0.3s;
+}}
+.btn {{
+  transition: transform 0.2s, box-shadow 0.2s;
+}}
+.btn:hover {{
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}}
+@media (max-width: 768px) {{
+  .timeline::before {{
+    left: 10px;
+  }}
+  .timeline-item {{
+    width: 100%;
+    text-align: left;
+  }}
+  .timeline-item.left, .timeline-item.right {{
+    left: 0;
+  }}
+  .timeline-item.left .timeline-content::after,
+  .timeline-item.right .timeline-content::after {{
+    left: -20px;
+    right: auto;
+  }}
+}}
+.CodeMirror {{
+  height: 100%;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+}}
+html.dark-mode .CodeMirror {{
+  border-color: var(--border-color);
+}}
+html.dark-mode .btn-light {{
+  background-color: #555;
+  color: #dcdcdc;
+  border-color: #666;
+}}
+html.dark-mode .alert {{
+  color: #f8f9fa;
+}}
+html.dark-mode .alert-info {{
+  background-color: #17a2b8;
+}}
+html.dark-mode .alert-danger {{
+  background-color: #dc3545;
+}}
+html.dark-mode .jumbotron {{
+  background-color: #343a40;
 }}
 {self.custom_css}
 </style>
@@ -648,24 +790,26 @@ figcaption {{
 <body>
 <a id="top"></a>
 <nav class="navbar navbar-expand-lg navbar-dark">
-  <a class="navbar-brand" href="index.html">{self.title}</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
-      {nav_links}
-      <li class="nav-item">
-        <button id="toggleTheme" class="btn btn-secondary">Toggle Theme</button>
-      </li>
-    </ul>
+  <div class="container">
+    <a class="navbar-brand" href="index.html">{self.title}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        {nav_links}
+        <li class="nav-item">
+          <button id="toggleTheme" class="btn btn-outline-light">🌓</button>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 <div class="container mt-5">
 {content}
-<div style="text-align: center; margin: 20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
+<div style="text-align:center; margin:20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
 </div>
-<footer class="footer mt-5">
+<footer class="footer mt-5 py-3 bg-light text-center">
   <div class="container">
     <span class="text-muted">{self.footer}</span>
   </div>
@@ -675,30 +819,45 @@ figcaption {{
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {{
-  const observer = new IntersectionObserver((entries, observer) => {{
+  const observer = new IntersectionObserver((entries) => {{
     entries.forEach(entry => {{
       if (entry.isIntersecting) {{
         entry.target.classList.add('animate__animated', 'animate__fadeInUp');
         observer.unobserve(entry.target);
       }}
     }});
-  }}, {{ threshold: 0.3 }});
+  }}, {{ threshold: 0.3, rootMargin: '0px 0px -50px 0px' }});
+  
   document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
 
-  document.getElementById("toggleTheme").addEventListener("click", function() {{
+  const themeToggle = document.getElementById("toggleTheme");
+  themeToggle.addEventListener("click", function() {{
     document.documentElement.classList.toggle("dark-mode");
-    if(document.documentElement.classList.contains("dark-mode")) {{
-      localStorage.setItem('theme', 'dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains("dark-mode") ? 'dark' : 'light');
+    
+    // Update footer class based on theme
+    const footer = document.querySelector('footer');
+    if (document.documentElement.classList.contains("dark-mode")) {{
+      footer.classList.replace('bg-light', 'bg-dark');
     }} else {{
-      localStorage.setItem('theme', 'light');
+      footer.classList.replace('bg-dark', 'bg-light');
     }}
   }});
+  
+  // Setup correct footer class on load
+  if (document.documentElement.classList.contains('dark-mode')) {{
+    document.querySelector('footer').classList.replace('bg-light', 'bg-dark');
+  }}
 
-  document.querySelectorAll('a[href="#top"]').forEach(function(link){{
-    link.addEventListener("click", function(e){{
+  document.querySelectorAll('a[href="#top"]').forEach(function(link) {{
+    link.addEventListener("click", function(e) {{
       e.preventDefault();
       window.scrollTo({{top: 0, behavior: "smooth"}});
     }});
+  }});
+
+  document.querySelectorAll('[data-toggle="tooltip"]').forEach(el => {{
+    new bootstrap.Tooltip(el);
   }});
 
   {self.custom_js}

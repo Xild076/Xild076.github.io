@@ -4,38 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Misc - My Thoughts on Fatalism</title>
-<script>
-if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark-mode');}
-</script>
+<script>if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark-mode');}</script>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material-darker.min.css">
 <style>
+:root {
+  --text-color: #333;
+  --bg-color: #f5f5f5;
+  --card-bg: #ffffff;
+  --timeline-bg: #e9ecef;
+  --border-color: #dee2e6;
+  --shadow-color: rgba(0,0,0,0.1);
+  --blockquote-color: #6c757d;
+}
+html.dark-mode {
+  --text-color: #dcdcdc;
+  --bg-color: #2e2e2e;
+  --card-bg: #3a3a3a;
+  --timeline-bg: #444;
+  --border-color: #555;
+  --shadow-color: rgba(0,0,0,0.25);
+  --blockquote-color: #aaa;
+}
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   font-size: 18px;
   line-height: 1.6;
   transition: background-color 0.3s, color 0.3s;
 }
-html.dark-mode body {
-  background-color: #2e2e2e;
-  color: #dcdcdc;
-}
 .navbar {
   background-color: #6c757d;
+  box-shadow: 0 2px 5px var(--shadow-color);
 }
 .navbar.dark-mode {
   background-color: #343a40;
 }
 .card {
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 4px var(--shadow-color);
   border: none;
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
-html.dark-mode .card {
-  background-color: #3a3a3a;
+.card:hover {
+  box-shadow: 0 4px 8px var(--shadow-color);
 }
 .timeline {
   position: relative;
@@ -70,10 +85,11 @@ html.dark-mode .card {
 }
 .timeline-content {
   padding: 15px;
-  background: #e9ecef;
+  background: var(--timeline-bg);
   border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px var(--shadow-color);
   position: relative;
+  transition: background-color 0.3s;
 }
 .timeline-item.left .timeline-content::after {
   content: "";
@@ -106,30 +122,82 @@ html.dark-mode .card {
   opacity: 1 !important;
   transform: translateY(0) !important;
 }
-html.dark-mode .timeline-content {
-  background: #444 !important;
-  color: #dcdcdc !important;
-}
 .theme-blockquote {
-    border-left: 4px solid #6c757d;
-    padding-left: 1rem;
-    color: #6c757d;
-}
-html.dark-mode .theme-blockquote {
-    border-left-color: #dcdcdc;
-    color: #dcdcdc;
+  border-left: 4px solid var(--blockquote-color);
+  padding-left: 1rem;
+  color: var(--blockquote-color);
+  transition: border-left-color 0.3s, color 0.3s;
 }
 figure {
-    display: block;
-    clear: both;
-    margin: 10px 0;
+  display: block;
+  clear: both;
+  margin: 10px 0;
+  transition: box-shadow 0.3s;
 }
 figcaption {
-    margin-top: 4px;
-    font-size: 0.85em;
-    font-style: italic;
-    text-align: center;
-    color: #666;
+  margin-top: 4px;
+  font-size: 0.85em;
+  font-style: italic;
+  text-align: center;
+  color: var(--text-color);
+  opacity: 0.8;
+  transition: color 0.3s;
+}
+pre {
+  background-color: var(--card-bg);
+  border-radius: 4px;
+  padding: 15px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: background-color 0.3s;
+}
+.btn {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+@media (max-width: 768px) {
+  .timeline::before {
+    left: 10px;
+  }
+  .timeline-item {
+    width: 100%;
+    text-align: left;
+  }
+  .timeline-item.left, .timeline-item.right {
+    left: 0;
+  }
+  .timeline-item.left .timeline-content::after,
+  .timeline-item.right .timeline-content::after {
+    left: -20px;
+    right: auto;
+  }
+}
+.CodeMirror {
+  height: 100%;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+}
+html.dark-mode .CodeMirror {
+  border-color: var(--border-color);
+}
+html.dark-mode .btn-light {
+  background-color: #555;
+  color: #dcdcdc;
+  border-color: #666;
+}
+html.dark-mode .alert {
+  color: #f8f9fa;
+}
+html.dark-mode .alert-info {
+  background-color: #17a2b8;
+}
+html.dark-mode .alert-danger {
+  background-color: #dc3545;
+}
+html.dark-mode .jumbotron {
+  background-color: #343a40;
 }
 body { padding-bottom: 50px; }
 </style>
@@ -137,17 +205,19 @@ body { padding-bottom: 50px; }
 <body>
 <a id="top"></a>
 <nav class="navbar navbar-expand-lg navbar-dark">
-  <a class="navbar-brand" href="index.html">Harry's Blog</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li><li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li><li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li><li class="nav-item"><a class="nav-link" href="about.html">About Me</a></li>
-      <li class="nav-item">
-        <button id="toggleTheme" class="btn btn-secondary">Toggle Theme</button>
-      </li>
-    </ul>
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Harry's Blog</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li><li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li><li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li><li class="nav-item"><a class="nav-link" href="about.html">About Me</a></li>
+        <li class="nav-item">
+          <button id="toggleTheme" class="btn btn-outline-light">🌓</button>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 <div class="container mt-5">
@@ -177,9 +247,9 @@ body { padding-bottom: 50px; }
 <p>However, it is what we choose to do with out limited or non-existant free will that matters.</p>
 <p>Though, I do admit that a. this is not a philisophically satisfactory as it is almost a non-answer and b. fatalist though is hard to escape, I know that on a personal level. Still, even if I'm saying these words for my own motivation, I do think that learning to push free will to its limits is what defines humananity, especially if that free will is used for good.</p>
 <p>Cheers!</p>
-<div style="text-align: center; margin: 20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
+<div style="text-align:center; margin:20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
 </div>
-<footer class="footer mt-5">
+<footer class="footer mt-5 py-3 bg-light text-center">
   <div class="container">
     <span class="text-muted">&copy; 2025 Harry Yin. All rights reserved.</span>
   </div>
@@ -189,30 +259,45 @@ body { padding-bottom: 50px; }
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  const observer = new IntersectionObserver((entries, observer) => {
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('animate__animated', 'animate__fadeInUp');
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.3 });
+  }, { threshold: 0.3, rootMargin: '0px 0px -50px 0px' });
+  
   document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
 
-  document.getElementById("toggleTheme").addEventListener("click", function() {
+  const themeToggle = document.getElementById("toggleTheme");
+  themeToggle.addEventListener("click", function() {
     document.documentElement.classList.toggle("dark-mode");
-    if(document.documentElement.classList.contains("dark-mode")) {
-      localStorage.setItem('theme', 'dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains("dark-mode") ? 'dark' : 'light');
+    
+    // Update footer class based on theme
+    const footer = document.querySelector('footer');
+    if (document.documentElement.classList.contains("dark-mode")) {
+      footer.classList.replace('bg-light', 'bg-dark');
     } else {
-      localStorage.setItem('theme', 'light');
+      footer.classList.replace('bg-dark', 'bg-light');
     }
   });
+  
+  // Setup correct footer class on load
+  if (document.documentElement.classList.contains('dark-mode')) {
+    document.querySelector('footer').classList.replace('bg-light', 'bg-dark');
+  }
 
-  document.querySelectorAll('a[href="#top"]').forEach(function(link){
-    link.addEventListener("click", function(e){
+  document.querySelectorAll('a[href="#top"]').forEach(function(link) {
+    link.addEventListener("click", function(e) {
       e.preventDefault();
       window.scrollTo({top: 0, behavior: "smooth"});
     });
+  });
+
+  document.querySelectorAll('[data-toggle="tooltip"]').forEach(el => {
+    new bootstrap.Tooltip(el);
   });
 
   console.log('Custom JS loaded');
