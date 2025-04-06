@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material-darker.min.css">
 <style>
 :root {
@@ -18,46 +19,150 @@
   --border-color: #dee2e6;
   --shadow-color: rgba(0,0,0,0.1);
   --blockquote-color: #6c757d;
+  --accent-color: #007bff;
+  --header-color: #495057;
+  --footer-bg: #f8f9fa;
+  --footer-text: #6c757d;
 }
+
 html.dark-mode {
-  --text-color: #dcdcdc;
-  --bg-color: #2e2e2e;
-  --card-bg: #3a3a3a;
-  --timeline-bg: #444;
-  --border-color: #555;
+  --text-color: #e9e9e9;
+  --bg-color: #252525;
+  --card-bg: #2e2e2e;
+  --timeline-bg: #3a3a3a;
+  --border-color: #444;
   --shadow-color: rgba(0,0,0,0.25);
   --blockquote-color: #aaa;
+  --accent-color: #61afef;
+  --header-color: #e0e0e0;
+  --footer-bg: #1a1a1a;
+  --footer-text: #aaa;
 }
+
 body {
   font-family: 'Roboto', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
   font-size: 18px;
   line-height: 1.6;
-  transition: background-color 0.3s, color 0.3s;
+  transition: all 0.3s ease;
+  overflow-x: hidden;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--header-color);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.heading {
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.heading:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 50px;
+  background-color: var(--accent-color);
+}
+
+p {
+  margin-bottom: 1.2rem;
+}
+
+a {
+  color: var(--accent-color);
+  transition: color 0.2s;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #0056b3;
+}
+
 .navbar {
   background-color: #6c757d;
-  box-shadow: 0 2px 5px var(--shadow-color);
+  box-shadow: 0 2px 10px var(--shadow-color);
+  transition: all 0.3s ease;
+  padding: 1rem;
 }
+
 .navbar.dark-mode {
   background-color: #343a40;
 }
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.nav-link {
+  position: relative;
+  margin: 0 0.5rem;
+}
+
+.nav-link:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  transition: width 0.3s;
+}
+
+.nav-link:hover:after {
+  width: 100%;
+}
+
 .card {
   background-color: var(--card-bg);
-  box-shadow: 0 2px 4px var(--shadow-color);
-  border: none;
-  transition: background-color 0.3s, box-shadow 0.3s;
-}
-.card:hover {
   box-shadow: 0 4px 8px var(--shadow-color);
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
 }
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+.custom-card {
+  position: relative;
+  z-index: 1;
+}
+
+.card-title {
+  font-weight: 500;
+  color: var(--header-color);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.custom-divider {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0,0,0,0), var(--border-color), rgba(0,0,0,0));
+  margin: 2rem 0;
+}
+
 .timeline {
   position: relative;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 40px auto;
   padding: 20px 0;
 }
+
 .timeline::before {
   content: "";
   position: absolute;
@@ -65,98 +170,687 @@ body {
   bottom: 0;
   left: 50%;
   width: 4px;
-  background: #6c757d;
+  background: var(--accent-color);
   transform: translateX(-50%);
+  border-radius: 20px;
 }
+
 .timeline-item {
   position: relative;
   width: 50%;
-  padding: 20px;
+  padding: 20px 40px;
   box-sizing: border-box;
   margin-bottom: 30px;
 }
+
 .timeline-item.left {
   left: 0;
   text-align: right;
 }
+
 .timeline-item.right {
   left: 50%;
   text-align: left;
 }
+
 .timeline-content {
-  padding: 15px;
+  padding: 20px;
   background: var(--timeline-bg);
-  border-radius: 6px;
-  box-shadow: 0 2px 4px var(--shadow-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--shadow-color);
   position: relative;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
+
+.timeline-content:hover {
+  transform: scale(1.02);
+}
+
 .timeline-item.left .timeline-content::after {
   content: "";
   position: absolute;
-  top: 50%;
+  top: 20px;
   right: -20px;
   width: 20px;
-  height: 2px;
-  background: #6c757d;
+  height: 4px;
+  background: var(--accent-color);
 }
+
 .timeline-item.right .timeline-content::after {
   content: "";
   position: absolute;
-  top: 50%;
+  top: 20px;
   left: -20px;
   width: 20px;
-  height: 2px;
-  background: #6c757d;
+  height: 4px;
+  background: var(--accent-color);
 }
+
 .timeline-date {
-  font-weight: bold;
-  margin-bottom: 6px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--accent-color);
+  font-size: 1.1rem;
 }
+
 .scroll-animate {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
+
 .animate__fadeInUp {
   opacity: 1 !important;
   transform: translateY(0) !important;
 }
+
 .theme-blockquote {
-  border-left: 4px solid var(--blockquote-color);
-  padding-left: 1rem;
+  border-left: 5px solid var(--accent-color);
+  padding: 1rem 1.5rem;
   color: var(--blockquote-color);
-  transition: border-left-color 0.3s, color 0.3s;
+  background-color: rgba(0,0,0,0.03);
+  border-radius: 0 8px 8px 0;
+  margin: 1.5rem 0;
+  transition: all 0.3s ease;
 }
+
+.theme-blockquote p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.theme-blockquote footer {
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+.enhanced-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.enhanced-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px var(--shadow-color);
+}
+
 figure {
   display: block;
-  clear: both;
-  margin: 10px 0;
-  transition: box-shadow 0.3s;
+  margin: 1.5rem 0;
+  transition: all 0.3s ease;
 }
+
 figcaption {
-  margin-top: 4px;
-  font-size: 0.85em;
+  margin-top: 10px;
+  font-size: 0.9rem;
   font-style: italic;
   text-align: center;
-  color: var(--text-color);
-  opacity: 0.8;
-  transition: color 0.3s;
+  color: var(--blockquote-color);
 }
+
 pre {
   background-color: var(--card-bg);
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 15px;
-  box-shadow: 0 2px 4px var(--shadow-color);
-  transition: background-color 0.3s;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  margin: 1.5rem 0;
+  overflow-x: auto;
 }
+
+code {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+}
+
+.code-block {
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
 .btn {
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 500;
 }
+
 .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px var(--shadow-color);
+}
+
+.btn-icon {
+  margin-right: 8px;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.75rem 1.5rem;
+}
+
+.download-icon {
+  font-size: 1.2rem;
+}
+
+.custom-jumbotron {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 3rem 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.custom-jumbotron::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: var(--accent-color);
+}
+
+.custom-jumbotron .display-4 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.custom-jumbotron .lead {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.action-btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+}
+
+.custom-carousel {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  margin: 2rem 0;
+}
+
+.custom-carousel .carousel-control-prev,
+.custom-carousel .carousel-control-next {
+  width: 10%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.custom-carousel:hover .carousel-control-prev,
+.custom-carousel:hover .carousel-control-next {
+  opacity: 0.8;
+}
+
+.spacer {
+  width: 100%;
+}
+
+.widget-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 540px;
+  margin: 0 auto 1.5rem;
+}
+
+.widget-card:hover {
+  transform: translateY(-5px);
+}
+
+.widget-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.gallery-grid {
+  margin: 1.5rem -15px;
+}
+
+.gallery-item {
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: scale(1.03);
+}
+
+.gallery-image {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.rotating-gallery-container {
+  position: relative;
+  overflow: hidden;
+  margin: 2rem auto;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px var(--shadow-color);
+}
+
+.gallery-slide {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+}
+
+.gallery-slide.active {
+  opacity: 1;
+}
+
+.gallery-slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.gallery-caption {
+  text-align: center;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 10px;
+  color: var(--blockquote-color);
+}
+
+.custom-tabs {
+  border-bottom: 2px solid var(--border-color);
+}
+
+.custom-tabs .nav-link {
+  border: none;
+  color: var(--text-color);
+  font-weight: 500;
+  border-bottom: 3px solid transparent;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: -2px;
+}
+
+.custom-tabs .nav-link.active {
+  color: var(--accent-color);
+  background: transparent;
+  border-bottom: 3px solid var(--accent-color);
+}
+
+.custom-tab-content {
+  padding: 1.5rem 0;
+}
+
+.custom-tooltip {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+
+.map-container {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  margin: 1.5rem 0;
+}
+
+.map-container iframe {
+  width: 100%;
+  border: none;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  margin: 1.5rem 0;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.email-link, .site-link {
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.email-link:hover, .site-link:hover {
+  text-decoration: none;
+  color: #0056b3;
+}
+
+.project-intro {
+  margin-bottom: 2rem;
+}
+
+.code-viewer-container {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.file-list {
+  max-height: 300px;
+  overflow: auto;
+  padding: 15px;
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.code-viewer {
+  height: 600px;
+  overflow: auto;
+}
+
+.CodeMirror {
+  height: 100%;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 14px;
+}
+
+.paper-widgets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.paper-widget-container {
+  flex: 1 1 300px;
+  max-width: 500px;
+}
+
+.paper-card {
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.paper-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.paper-img-container {
+  padding: 0;
+  overflow: hidden;
+}
+
+.paper-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.paper-card:hover .paper-img-container img {
+  transform: scale(1.05);
+}
+
+.paper-card-body {
+  padding: 1rem;
+}
+
+.paper-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.paper-desc {
+  font-size: 0.9rem;
+  color: var(--blockquote-color);
+}
+
+.project-technologies {
+  margin: 2rem 0;
+}
+
+.tech-badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tech-badge {
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 400;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: all 0.2s ease;
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.tech-badge:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px var(--shadow-color);
 }
+
+.blog-date, .blog-author, .read-time {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--blockquote-color);
+}
+
+.footer {
+  background-color: var(--footer-bg);
+  padding: 2rem 0;
+  transition: all 0.3s ease;
+}
+
+.footer .text-muted {
+  color: var(--footer-text) !important;
+}
+
+.custom-accordion {
+  margin: 1.5rem 0;
+}
+
+.accordion-card {
+  margin-bottom: 0.5rem;
+  background-color: var(--card-bg);
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.accordion-card:last-child {
+  margin-bottom: 0;
+}
+
+.accordion-btn {
+  color: var(--text-color);
+  font-weight: 500;
+  text-align: left;
+  width: 100%;
+  text-decoration: none;
+  position: relative;
+  padding: 1rem;
+}
+
+.accordion-btn:hover {
+  text-decoration: none;
+  color: var(--accent-color);
+}
+
+.accordion-content {
+  padding: 1rem;
+}
+
+.progress {
+  margin: 1rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--timeline-bg);
+}
+
+.social-share {
+  display: flex;
+  gap: 10px;
+  margin: 1.5rem 0;
+}
+
+.social-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: white;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.facebook-btn { background-color: #3b5998; }
+.twitter-btn { background-color: #1da1f2; }
+.linkedin-btn { background-color: #0e76a8; }
+.email-btn { background-color: #ea4335; }
+
+.social-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  color: white;
+  text-decoration: none;
+}
+
+.masonry-grid {
+  column-gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+.breadcrumb {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.feature-box {
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  margin: 1.5rem 0;
+  transition: all 0.3s ease;
+}
+
+.feature-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--accent-color);
+}
+
+.feature-title {
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.pricing-container {
+  margin: 2rem -15px;
+}
+
+.pricing-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.pricing-card.featured {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px var(--shadow-color);
+  position: relative;
+  z-index: 2;
+}
+
+.pricing-card:hover {
+  transform: translateY(-10px);
+}
+
+.pricing-header {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.pricing-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.pricing-price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 1rem 0;
+}
+
+.pricing-period {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 1.5rem;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.pricing-feature {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pricing-feature:last-child {
+  border-bottom: none;
+}
+
+.pricing-footer {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.pricing-button {
+  width: 100%;
+  padding: 0.75rem;
+}
+
 @media (max-width: 768px) {
   .timeline::before {
     left: 10px;
@@ -164,6 +858,7 @@ pre {
   .timeline-item {
     width: 100%;
     text-align: left;
+    padding-left: 30px;
   }
   .timeline-item.left, .timeline-item.right {
     left: 0;
@@ -173,31 +868,6 @@ pre {
     left: -20px;
     right: auto;
   }
-}
-.CodeMirror {
-  height: 100%;
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-  font-size: 14px;
-}
-html.dark-mode .CodeMirror {
-  border-color: var(--border-color);
-}
-html.dark-mode .btn-light {
-  background-color: #555;
-  color: #dcdcdc;
-  border-color: #666;
-}
-html.dark-mode .alert {
-  color: #f8f9fa;
-}
-html.dark-mode .alert-info {
-  background-color: #17a2b8;
-}
-html.dark-mode .alert-danger {
-  background-color: #dc3545;
-}
-html.dark-mode .jumbotron {
-  background-color: #343a40;
 }
 body { padding-bottom: 50px; }
 </style>
@@ -221,7 +891,7 @@ body { padding-bottom: 50px; }
   </div>
 </nav>
 <div class="container mt-5">
-<ul class="nav nav-tabs" id="tabsExample" role="tablist"><li class="nav-item"><a class="nav-link active" id="tab0" data-toggle="tab" href="#content0" role="tab">Introduction</a></li><li class="nav-item"><a class="nav-link " id="tab1" data-toggle="tab" href="#content1" role="tab">Timeline</a></li><li class="nav-item"><a class="nav-link " id="tab2" data-toggle="tab" href="#content2" role="tab">Technologies</a></li><li class="nav-item"><a class="nav-link " id="tab3" data-toggle="tab" href="#content3" role="tab">Code</a></li><li class="nav-item"><a class="nav-link " id="tab4" data-toggle="tab" href="#content4" role="tab">Papers</a></li></ul><div class="tab-content mt-3" id="tabsExampleContent"><div class="tab-pane fade show active" id="content0" role="tabpanel"><div style="height:10px;"></div><p><center></p>
+<ul class="nav nav-tabs custom-tabs" id="tabsExample" role="tablist"><li class="nav-item"><a class="nav-link active" id="tab0" data-toggle="tab" href="#content0" role="tab">Introduction</a></li><li class="nav-item"><a class="nav-link " id="tab1" data-toggle="tab" href="#content1" role="tab">Timeline</a></li><li class="nav-item"><a class="nav-link " id="tab2" data-toggle="tab" href="#content2" role="tab">Technologies</a></li><li class="nav-item"><a class="nav-link " id="tab3" data-toggle="tab" href="#content3" role="tab">Code</a></li><li class="nav-item"><a class="nav-link " id="tab4" data-toggle="tab" href="#content4" role="tab">Papers</a></li></ul><div class="tab-content custom-tab-content mt-3" id="tabsExampleContent"><div class="tab-pane fade show active" id="content0" role="tabpanel"><div class="project-intro"><p><center></p>
 <h2>StockPred - AI-Powered Stock Prediction</h2>
 <p></center></p>
 <h3>The Challenge of Stock Market Volatility</h3>
@@ -279,7 +949,7 @@ body { padding-bottom: 50px; }
 <li>Multi-Source Data Fusion: Merges stock history, macroeconomic data, and sentiment analysis for a broader market perspective.</li>
 </ol>
 <h3>Conclusion</h3>
-<p>StockPred serves as a research-driven proof of concept, not a financial advisory tool. It provides a testing ground for integrating AI models into stock prediction, assessing their strengths and limitations. The ultimate goal is to refine these methods and explore their potential applications in real-world financial analysis.</p></div><div class="tab-pane fade show " id="content1" role="tabpanel"><div class="timeline">
+<p>StockPred serves as a research-driven proof of concept, not a financial advisory tool. It provides a testing ground for integrating AI models into stock prediction, assessing their strengths and limitations. The ultimate goal is to refine these methods and explore their potential applications in real-world financial analysis.</p></div></div><div class="tab-pane fade show " id="content1" role="tabpanel"><div class="timeline project-timeline">
                 <div class="timeline-item left scroll-animate">
                 <div class="timeline-date">2024-11-10</div>
                 <div class="timeline-content">Completed the second beta version of Polystock AI with full functionality and partially trained models</div>
@@ -304,14 +974,10 @@ body { padding-bottom: 50px; }
                 <div class="timeline-date">2023-06-11</div>
                 <div class="timeline-content">Began project Polystock AI</div>
                 </div>
-                </div></div><div class="tab-pane fade show " id="content2" role="tabpanel"><div class='project-technologies'><h5>Technologies Used</h5><div class='d-flex flex-wrap'><a href='https://www.python.org/downloads/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Python'>Python 3.x for backend processing</a><a href='https://fred.stlouisfed.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='FRED'>FRED API for data</a><a href='https://streamlit.io/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Streamlit'>Streamlit for hosting</a><a href='https://pypi.org/project/requests/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Requests'>Requests for HTTP requests</a><a href='https://pypi.org/project/yfinance/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Yfinance'>Yfinance for stock data</a><a href='https://pandas.pydata.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Pandas'>Pandas for data manipulation</a><a href='https://numpy.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Numpy'>Numpy for numerical operations</a><a href='https://matplotlib.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Matplotlib'>Matplotlib for plotting</a><a href='https://pytorch.org/' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='PyTorch'>PyTorch for ML development</a><a href='https://github.com' target='_blank' class='badge badge-primary badge-pill mr-2 mb-2' style='font-size:1.2em; padding:10px 15px;' title='Github'>Github for development</a></div></div></div><div class="tab-pane fade show " id="content3" role="tabpanel">
-                <style>
-                .tab-content .tab-pane { overflow:visible !important; }
-                #codeViewer { height:800px; overflow:auto; width:100%; }
-                </style>
-                <div id="codeViewerContainer" class="mb-3">
-                <div id="fileList" style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
-                <div id="codeViewer" style="border:1px solid #ccc;"></div>
+                </div></div><div class="tab-pane fade show " id="content2" role="tabpanel"><div class='project-technologies'><h5>Technologies Used</h5><div class='tech-badge-container'><a href='https://www.python.org/downloads/' target='_blank' class='badge badge-primary tech-badge' title='Python'>Python 3.x for backend processing</a><a href='https://fred.stlouisfed.org/' target='_blank' class='badge badge-primary tech-badge' title='FRED'>FRED API for data</a><a href='https://streamlit.io/' target='_blank' class='badge badge-primary tech-badge' title='Streamlit'>Streamlit for hosting</a><a href='https://pypi.org/project/requests/' target='_blank' class='badge badge-primary tech-badge' title='Requests'>Requests for HTTP requests</a><a href='https://pypi.org/project/yfinance/' target='_blank' class='badge badge-primary tech-badge' title='Yfinance'>Yfinance for stock data</a><a href='https://pandas.pydata.org/' target='_blank' class='badge badge-primary tech-badge' title='Pandas'>Pandas for data manipulation</a><a href='https://numpy.org/' target='_blank' class='badge badge-primary tech-badge' title='Numpy'>Numpy for numerical operations</a><a href='https://matplotlib.org/' target='_blank' class='badge badge-primary tech-badge' title='Matplotlib'>Matplotlib for plotting</a><a href='https://pytorch.org/' target='_blank' class='badge badge-primary tech-badge' title='PyTorch'>PyTorch for ML development</a><a href='https://github.com' target='_blank' class='badge badge-primary tech-badge' title='Github'>Github for development</a></div></div></div><div class="tab-pane fade show " id="content3" role="tabpanel">
+                <div id="codeViewerContainer" class="code-viewer-container mb-3">
+                <div id="fileList" class="file-list"></div>
+                <div id="codeViewer" class="code-viewer"></div>
                 <a href="https://github.com/Xild076/StockPred" target="_blank" class="btn btn-secondary mt-2">
                     Star on GitHub
                 </a>
@@ -319,6 +985,9 @@ body { padding-bottom: 50px; }
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
                 <script>
                 const repoOwner = "Xild076";
                 const repoName = "StockPred";
@@ -334,6 +1003,20 @@ body { padding-bottom: 50px; }
                 
                 editor.setSize("100%", "100%");
                 let currentPath = "";
+                
+                function getLanguageFromFilename(filename) {
+                    const ext = filename.split('.').pop().toLowerCase();
+                    const mapping = {
+                        'js': 'javascript',
+                        'py': 'python',
+                        'html': 'htmlmixed',
+                        'css': 'css',
+                        'json': 'application/json',
+                        'md': 'markdown',
+                        'txt': 'text'
+                    };
+                    return mapping[ext] || 'text';
+                }
 
                 function loadFileContent(path) {
                     fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`)
@@ -342,10 +1025,14 @@ body { padding-bottom: 50px; }
                             if (data.encoding && data.encoding === 'base64') {
                                 const content = atob(data.content);
                                 editor.setValue(content);
+                                editor.setOption('mode', getLanguageFromFilename(path));
                             } else {
                                 fetch(data.download_url)
                                     .then(r => r.text())
-                                    .then(text => editor.setValue(text));
+                                    .then(text => {
+                                        editor.setValue(text);
+                                        editor.setOption('mode', getLanguageFromFilename(path));
+                                    });
                             }
                             editor.refresh();
                         })
@@ -412,17 +1099,17 @@ body { padding-bottom: 50px; }
 
                 fetchDirectory(currentPath);
                 </script>
-                </div><div class="tab-pane fade show " id="content4" role="tabpanel"><div class="paper-widgets"><div style="margin-bottom:15px;">
-                <div class="card mb-3" style="max-width:500px;">
-                <a href="papers/RL_for_Stocks.pdf" style="text-decoration:none; color:inherit;">
+                </div><div class="tab-pane fade show " id="content4" role="tabpanel"><div class="paper-widgets"><div class="paper-widget-container">
+                <div class="card paper-card mb-3">
+                <a href="papers/RL_for_Stocks.pdf" class="paper-link">
                     <div class="row no-gutters">
-                    <div class="col-5" style="padding:0;">
-                        <img src="images/placeholder.png" class="card-img" alt="Beta Paper" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+                    <div class="col-5 paper-img-container">
+                        <img src="images/placeholder.png" class="card-img" alt="Beta Paper">
                     </div>
                     <div class="col-7">
-                        <div class="card-body" style="padding:0.5rem;">
-                        <h5 class="card-title" style="font-size:1.2rem;">Beta Paper</h5>
-                        <p class="card-text" style="font-size:1rem;">This is the first paper written upon release of the first beta version of Polystock AI. Please note that it is very outdated.</p>
+                        <div class="card-body paper-card-body">
+                        <h5 class="card-title paper-title">Beta Paper</h5>
+                        <p class="card-text paper-desc">This is the first paper written upon release of the first beta version of Polystock AI. Please note that it is very outdated.</p>
                         </div>
                     </div>
                     </div>
@@ -431,7 +1118,7 @@ body { padding-bottom: 50px; }
                 </div></div></div></div>
 <div style="text-align:center; margin:20px;"><a href="#top" class="btn btn-secondary">Back to top</a></div>
 </div>
-<footer class="footer mt-5 py-3 bg-light text-center">
+<footer class="footer mt-5 py-3 text-center">
   <div class="container">
     <span class="text-muted">&copy; 2025 Harry Yin. All rights reserved.</span>
   </div>
@@ -457,7 +1144,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.documentElement.classList.toggle("dark-mode");
     localStorage.setItem('theme', document.documentElement.classList.contains("dark-mode") ? 'dark' : 'light');
     
-    // Update footer class based on theme
     const footer = document.querySelector('footer');
     if (document.documentElement.classList.contains("dark-mode")) {
       footer.classList.replace('bg-light', 'bg-dark');
@@ -466,7 +1152,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
   
-  // Setup correct footer class on load
   if (document.documentElement.classList.contains('dark-mode')) {
     document.querySelector('footer').classList.replace('bg-light', 'bg-dark');
   }
