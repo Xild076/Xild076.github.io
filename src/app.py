@@ -19,4 +19,4 @@ about.add(Text("This demo uses a simple evolutionary algorithm to illustrate sel
 about.add(SiteLink("index.html", "← Back to Demo"))
 site.add_page(about)
 
-site.build("output")
+site.build("docs")
