@@ -1,16 +1,12 @@
 from py2web import Site, Page, Heading, Text, Slider, Button, BrythonSimulation, SiteLink
 
-site = Site("EvolutionDemo")
+site = Site("Harry Yin")
 
-home = Page("index", "Evolution ML Demo", theme="dark")
-home.add(Heading("Evolutionary Simulation", level=1, align="center"))
-home.add(Text("Watch organisms evolve toward the center line.", align="center"))
-home.add(BrythonSimulation("evoCanvas", "evolution_sim.py", "100%", "300px"))
-home.add(SiteLink("about.html", "Learn More"))
+home = Page("index", "...", theme="dark")
+home.add(Heading("Harry Yin", level=1, align="center"))
 site.add_page(home)
 
 about = Page("about", "About", theme="light")
-about.add(Text("This demo uses a simple evolutionary algorithm to illustrate selection and mutation."))
 about.add(SiteLink("index.html", "← Back to Demo"))
 site.add_page(about)
 
