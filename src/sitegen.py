@@ -9,7 +9,7 @@ import markdown2
 import sass
 from urllib.parse import quote_plus, urljoin, urlparse
 
-from .enums import (
+from enums import (
     Alignment, Spacing, ButtonType, AnimationType, ObjectFit, ColorTheme,
     InputType, FlexDirection, FlexWrap
 )
