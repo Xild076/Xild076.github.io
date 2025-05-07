@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from enum import Enum
 
 class Alignment(Enum):
@@ -6,11 +5,11 @@ class Alignment(Enum):
     CENTER = "center"
     RIGHT = "right"
     JUSTIFY = "justify"
-    START = "start" # For flex alignment
-    END = "end"     # For flex alignment
-    BETWEEN = "between" # For justify-content
-    AROUND = "around"   # For justify-content
-    EVENLY = "evenly"   # For justify-content
+    START = "start"
+    END = "end"
+    BETWEEN = "between"
+    AROUND = "around"
+    EVENLY = "evenly"
 
 class Spacing(Enum):
     NONE = "none"

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import shutil
 import datetime
@@ -39,6 +38,8 @@ class ContextWrapper:
         if self.component._context_stack:
             popped_context_wrapper = self.component._context_stack.pop()
             if popped_context_wrapper is not self:
+                # This case should ideally not happen if contexts are managed correctly.
+                # Consider logging a warning or raising an error for debugging.
                 pass
             html_content_map = {
                 "Card": "</div></div>",
@@ -48,6 +49,7 @@ class ContextWrapper:
             }
             html_content = html_content_map.get(self.context_type, "")
             if html_content:
+                # Append to the current context on the stack, or to the base if stack is empty
                 if self.component._context_stack:
                     self.component._context_stack[-1].component._html_elements.append(html_content)
                 else:
@@ -71,9 +73,10 @@ class BaseComponent:
         if isinstance(value, Spacing): return _DEFAULT_SPACING_MAP.get(value, _DEFAULT_SPACING_MAP[Spacing.DEFAULT])
         if isinstance(value, (int, float)): return f"{value}px"
         if isinstance(value, str): return value
-        return _DEFAULT_SPACING_MAP[Spacing.DEFAULT]
+        return _DEFAULT_SPACING_MAP[Spacing.DEFAULT] # Default fallback
 
     def _get_style_attr(self, styles):
+        if not styles: return ""
         style_str = "; ".join(f"{k.strip()}: {str(v).strip()}" for k, v in styles.items() if v is not None and str(v).strip())
         return f' style="{style_str}"' if style_str else ""
 
@@ -81,11 +84,12 @@ class BaseComponent:
         styles = {}
         if spacing_before != Spacing.DEFAULT: styles['margin-top'] = self._format_size(spacing_before)
         if spacing_after != Spacing.DEFAULT: styles['margin-bottom'] = self._format_size(spacing_after)
-        elif spacing_after == Spacing.DEFAULT: styles['margin-bottom'] = _DEFAULT_SPACING_MAP[Spacing.DEFAULT]
+        elif spacing_after == Spacing.DEFAULT and spacing_before == Spacing.DEFAULT : # Only add default bottom margin if no top margin is specified
+             styles['margin-bottom'] = _DEFAULT_SPACING_MAP[Spacing.DEFAULT]
         return styles
 
     def _get_animation_class(self, animation):
-        return f" animate-{animation.value}" if animation != AnimationType.NONE else ""
+        return f" animate-{animation.value}" if animation and animation != AnimationType.NONE else ""
 
     def _get_alignment_class(self, align):
         if align in [Alignment.LEFT, Alignment.CENTER, Alignment.RIGHT, Alignment.JUSTIFY]: return f" text-{align.value}"
@@ -94,29 +98,43 @@ class BaseComponent:
     def _build_attributes_string(self, classes_str, styles_dict, data_attrs_dict, other_attrs=None):
         attrs_list = []
         if classes_str and classes_str.strip(): attrs_list.append(f'class="{classes_str.strip()}"')
+        
         style_attribute = self._get_style_attr(styles_dict)
         if style_attribute: attrs_list.append(style_attribute)
-        for k, v in data_attrs_dict.items():
-            if v is not None: attrs_list.append(f'{k}="{html.escape(str(v))}"')
+        
+        if data_attrs_dict:
+            for k, v in data_attrs_dict.items():
+                if v is not None: attrs_list.append(f'{k}="{html.escape(str(v))}"')
+        
         if other_attrs:
             for k_orig,v_orig in other_attrs.items():
-                k = k_orig.replace('_', '-')
+                k = k_orig.replace('_', '-') # Convert pythonic names to html attributes
                 v = v_orig
-                if v is True: attrs_list.append(k)
-                elif v is False: pass
+                if v is True: attrs_list.append(k) # Boolean attribute
+                elif v is False: pass # Skip false boolean attributes
                 elif v is not None: attrs_list.append(f'{k}="{html.escape(str(v))}"')
         return " ".join(attrs_list)
 
     def _get_combined_attributes(self, spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, css_class, specific_styles=None, other_attrs=None):
-        final_classes = css_class
+        final_classes_list = []
+        if css_class:
+            final_classes_list.extend(css_class.split())
+
         current_styles = self._apply_spacing_styles(spacing_before, spacing_after)
         data_attrs = {}
-        if scroll_animation and animation != AnimationType.NONE:
+
+        if scroll_animation and animation and animation != AnimationType.NONE:
             data_attrs['data-scroll-animation'] = animation.value
             if scroll_animation_delay > 0: data_attrs['data-scroll-animation-delay'] = f"{scroll_animation_delay}s"
-        elif animation != AnimationType.NONE: final_classes += self._get_animation_class(animation)
+        elif animation and animation != AnimationType.NONE:
+            final_classes_list.append(self._get_animation_class(animation).strip())
+        
         if specific_styles: current_styles.update(specific_styles)
-        return self._build_attributes_string(final_classes, current_styles, data_attrs, other_attrs)
+        
+        # Remove empty strings and duplicates, then join
+        final_classes_str = " ".join(sorted(list(set(filter(None, final_classes_list)))))
+        
+        return self._build_attributes_string(final_classes_str, current_styles, data_attrs, other_attrs)
 
     def Header(self, spacing_before=Spacing.NONE, spacing_after=Spacing.LG, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="site-header", **kwargs):
         attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, css_class, None, kwargs)
@@ -138,7 +156,7 @@ class BaseComponent:
         return self
 
     def Container(self, fluid=False, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"container{'-fluid' if fluid else ''} {css_class}", None, kwargs)
+        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"container{'-fluid' if fluid else ''} {css_class}".strip(), None, kwargs)
         self._append_html(f'<div {attrs_str}>')
         return ContextWrapper(self, "Container")
 
@@ -150,7 +168,7 @@ class BaseComponent:
 
     def Columns(self, n=2, gap=Spacing.DEFAULT, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
         specific_styles = {'--column-count': str(n), '--column-gap': self._format_size(gap)}
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"columns {css_class}", specific_styles, kwargs)
+        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"columns {css_class}".strip(), specific_styles, kwargs)
         self._append_html(f'<div {attrs_str}>')
         return ContextWrapper(self, "Columns")
 
@@ -158,7 +176,7 @@ class BaseComponent:
         grid_classes = "grid"
         if cols: grid_classes += f" grid-cols-{cols}"
         grid_classes += f" gap-{gap.value if isinstance(gap, Spacing) else 'md'}"
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"{grid_classes} {css_class}", None, kwargs)
+        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"{grid_classes} {css_class}".strip(), None, kwargs)
         self._append_html(f'<div {attrs_str}>')
         return ContextWrapper(self, "Grid")
 
@@ -166,37 +184,34 @@ class BaseComponent:
         specific_styles = {'padding': self._format_size(padding)}
         if color: specific_styles['background-color'] = color
         if image: specific_styles.update({'background-image': f"url('{image}')", 'background-size': 'cover', 'background-position': 'center'})
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"background-section {css_class}", specific_styles, kwargs)
+        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"background-section {css_class}".strip(), specific_styles, kwargs)
         self._append_html(f'<div {attrs_str}>')
         return ContextWrapper(self, "Background")
 
     def Card(self, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"card {css_class}", None, kwargs)
+        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"card {css_class}".strip(), None, kwargs)
         self._append_html(f'<div {attrs_str}><div class="card-body">')
         return ContextWrapper(self, "Card")
 
-    def Divider(self, spacing_before=Spacing.LG, spacing_after=Spacing.LG, css_class="", **kwargs):
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, f"divider {css_class}", None, kwargs)
-        self._append_html(f'<hr {attrs_str}>')
-
-    def Write(self, text, align=Alignment.LEFT, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
+    def Write(self, text, align=Alignment.LEFT, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", text_size=None, **kwargs):
         alignment_class = self._get_alignment_class(align)
         combined_css_class = f"{alignment_class} {css_class}".strip()
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, combined_css_class, None, kwargs)
+        style = {"font-size": text_size} if text_size else None
+        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, combined_css_class, style, kwargs)
         self._append_html(f'<p {attrs_str}>{html.escape(text)}</p>')
 
     def Markdown(self, md_text, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"markdown-content {css_class}", None, kwargs)
+        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"markdown-content {css_class}".strip(), None, kwargs)
         html_content = markdown2.markdown(md_text, extras=["fenced-code-blocks", "tables", "footnotes", "cuddled-lists", "nofollow", "spoiler", "strike", "target-blank-links", "task_list"])
         self._append_html(f'<div {attrs_str}>{html_content}</div>')
 
     def BlockQuote(self, quote, author=None, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"blockquote {css_class}", None, kwargs)
+        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"blockquote {css_class}".strip(), None, kwargs)
         footer = f'<footer><cite title="Source Title">{html.escape(author)}</cite></footer>' if author else ''
         self._append_html(f'<blockquote {attrs_str}><p>{html.escape(quote)}</p>{footer}</blockquote>')
 
     def CodeBlock(self, code, language=None, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"code-block {css_class}", None, kwargs)
+        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"code-block {css_class}".strip(), None, kwargs)
         lang_class = f"language-{language}" if language else ""
         escaped_code = html.escape(code)
         self._append_html(f'<div {attrs_str}><pre><code class="{lang_class}">{escaped_code}</code></pre></div>')
@@ -213,7 +228,7 @@ class BaseComponent:
         self._append_html(f'<figure {attrs_wrapper}>{img_tag}{caption_tag}</figure>')
 
     def Gallery(self, images: list[dict], columns=3, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.FADE_IN_UP, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
-        attrs_container = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"gallery {css_class}", None, kwargs.pop("container_kwargs", {}))
+        attrs_container = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"gallery {css_class}".strip(), None, kwargs.pop("container_kwargs", {}))
         style_attr_inner = self._get_style_attr({'--gallery-columns': str(columns)})
         items_html = ""
         for i, img in enumerate(images):
@@ -223,7 +238,7 @@ class BaseComponent:
         self._append_html(f'<div {attrs_container}><div class="gallery-grid"{style_attr_inner}>{items_html}</div></div>')
 
     def Carousel(self, slides: list[dict], autoplay=True, interval=5000, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
-        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"carousel slide {css_class}", None, kwargs)
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"carousel slide {css_class}".strip(), None, kwargs)
         carousel_id = f"carousel-{id(self)}"
         slides_html, indicators_html = "", ""
         for i, slide in enumerate(slides):
@@ -249,7 +264,7 @@ class BaseComponent:
         self._append_html(f'<a href="{url}" {attrs}>{display_text}</a>')
 
     def Tabs(self, items: list[dict], spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, css_class="", animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, **kwargs):
-        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"tabs-container {css_class}", None, kwargs)
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"tabs-container {css_class}".strip(), None, kwargs)
         tabs_id = f"tabs-{id(self)}"
         nav_html, content_html = '<ul class="nav nav-tabs" role="tablist">', '<div class="tab-content">'
         active_found = any(item.get('active', False) for item in items)
@@ -264,7 +279,7 @@ class BaseComponent:
         self._append_html(f'<div {attrs}>{nav_html}{content_html}</div>')
 
     def Accordion(self, items: list[dict], spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", always_open=False, **kwargs):
-        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"accordion {css_class}", None, kwargs)
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"accordion {css_class}".strip(), None, kwargs)
         accordion_id = f"accordion-{id(self)}"
         items_html, parent_attr = "", f' data-bs-parent="#{accordion_id}"' if not always_open else ''
         for i, item in enumerate(items):
@@ -291,7 +306,7 @@ class BaseComponent:
         self._append_html(f'<div {attrs}>{links_html.strip()}</div>')
 
     def Breadcrumbs(self, items: list[dict], spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, css_class="", **kwargs):
-        attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, f"breadcrumbs-nav {css_class}", None, kwargs)
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, f"breadcrumbs-nav {css_class}".strip(), None, kwargs)
         items_html = ""
         if not items: return
         for i, item in enumerate(items):
@@ -303,7 +318,7 @@ class BaseComponent:
 
     def Table(self, headers, rows, striped=True, hover=True, bordered=False, small=False, responsive=True, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
         tbl_classes = ["table"] + [cls for cond, cls in [(striped, "table-striped"), (hover, "table-hover"), (bordered, "table-bordered"), (small, "table-sm")] if cond]
-        wrapper_attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"{'table-responsive' if responsive else ''} {css_class}", None, kwargs)
+        wrapper_attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"{'table-responsive' if responsive else ''} {css_class}".strip(), None, kwargs)
         thead = "<thead><tr>" + "".join(f'<th scope="col">{html.escape(str(h))}</th>' for h in headers) + "</tr></thead>"
         tbody = "<tbody>" + "".join("<tr>" + "".join(f"<td>{html.escape(str(cell))}</td>" for cell in row) + "</tr>" for row in rows) + "</tbody>"
         table_html = f'<table class="{" ".join(tbl_classes)}">{thead}{tbody}</table>'
@@ -314,13 +329,13 @@ class BaseComponent:
 
     def ProgressBar(self, percent, label=None, style_type=ColorTheme.PRIMARY, striped=False, animated=False, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, css_class="", height=None, **kwargs):
         specific_styles = {'height': self._format_size(height)} if height else {}
-        attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, f"progress {css_class}", specific_styles, kwargs)
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, f"progress {css_class}".strip(), specific_styles, kwargs)
         bar_classes = ["progress-bar", f"bg-{style_type.value}"] + [cls for cond, cls in [(striped, "progress-bar-striped"), (animated, "progress-bar-animated")] if cond]
         label_text = f"{percent}%" if label is True else (html.escape(label) if isinstance(label, str) else "")
         self._append_html(f'<div {attrs}><div class="{" ".join(bar_classes)}" role="progressbar" style="width: {percent}%" aria-valuenow="{percent}" aria-valuemin="0" aria-valuemax="100">{label_text}</div></div>')
 
     def Timeline(self, events: list[dict], spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
-        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"timeline {css_class}", None, kwargs)
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"timeline {css_class}".strip(), None, kwargs)
         items_html = ""
         if not events: return
         for i, event in enumerate(events):
@@ -331,11 +346,45 @@ class BaseComponent:
             items_html += f'<div {item_attrs}><div class="timeline-marker"></div><div class="timeline-content">{time_html}{title_html}{desc_html}</div></div>'
         self._append_html(f'<div {attrs}>{items_html}</div>')
 
-    def Widget(self, title, description, link="#", link_text="Learn More", image_url=None, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.FADE_IN_UP, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
-        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"widget card {css_class}", None, kwargs)
-        img_html = f'<img src="{image_url}" class="card-img-top" alt="{html.escape(title)}">' if image_url else ""
-        link_html = f'<a href="{link}" class="btn btn-sm btn-outline-primary mt-auto">{html.escape(link_text)}</a>' if link else ""
-        self._append_html(f'<div {attrs}>{img_html}<div class="card-body d-flex flex-column"><h5 class="card-title">{html.escape(title)}</h5><p class="card-text">{html.escape(description)}</p>{link_html}</div></div>')
+    def Widget(self, title, description, link="#", link_text="Learn More", image_url=None,
+                 image_width=None, image_height=None, image_object_fit=ObjectFit.COVER,
+                 spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT,
+                 animation=AnimationType.FADE_IN_UP, scroll_animation=False, scroll_animation_delay=0.0,
+                 css_class="", **kwargs):
+        base_widget_class = "widget-horizontal-layout"
+        combined_css_class = f"{base_widget_class} {css_class}".strip()
+        attrs = self._get_combined_attributes(
+            spacing_before, spacing_after, animation, scroll_animation,
+            scroll_animation_delay, combined_css_class, None, kwargs
+        )
+        img_html = ""
+        if image_url:
+            img_tag_styles = {
+                'object-fit': image_object_fit.value,
+                'display': 'block',
+                'width': '100%',
+                'height': '100%',
+            }
+            img_tag_style_attr = self._get_style_attr(img_tag_styles)
+            img_container_styles = {}
+            if image_width:
+                img_container_styles['flex-basis'] = self._format_size(image_width)
+                img_container_styles['width'] = self._format_size(image_width)
+            if image_height:
+                img_container_styles['height'] = self._format_size(image_height)
+            
+            img_container_style_attr = self._get_style_attr(img_container_styles)
+            img_html = f'<div class="widget-image-container"{img_container_style_attr}><img src="{image_url}" alt="{html.escape(title)}"{img_tag_style_attr}></div>'
+
+        link_html = f'<a href="{link}" class="btn btn-sm btn-outline-primary mt-auto widget-link">{html.escape(link_text)}</a>' if link else ""
+        content_html = f"""
+            <div class="widget-content-container d-flex flex-column">
+                <h5 class="widget-title">{html.escape(title)}</h5>
+                <p class="widget-description flex-grow-1">{html.escape(description)}</p>
+                {link_html}
+            </div>
+        """
+        self._append_html(f'<div {attrs}>{img_html}{content_html}</div>')
 
     def Icon(self, icon_name, size=Spacing.MD, color=None, spacing_before=Spacing.NONE, spacing_after=Spacing.NONE, css_class="", **kwargs):
         size_map = { Spacing.XS: 'fa-xs', Spacing.SM: 'fa-sm', Spacing.MD: '', Spacing.LG: 'fa-lg', Spacing.XL: 'fa-2x' }
@@ -343,9 +392,33 @@ class BaseComponent:
         size_class = size_map.get(size, '') if isinstance(size, Spacing) else ''
         specific_styles = {'color': color} if color else {}
         if not isinstance(size, Spacing) or not size_class:
-             specific_styles.update({'font-size': size_val, 'line-height': '1', 'vertical-align': 'middle'})
+             specific_styles.update({'font-size': size_val if size_val else '1em', 'line-height': '1', 'vertical-align': 'middle'})
         attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, f"{icon_name} {size_class} {css_class}".strip(), specific_styles, kwargs)
         self._append_html(f'<i {attrs} aria-hidden="true"></i>')
+
+    def Divider(self, spacing_before=Spacing.LG, spacing_after=Spacing.LG, thickness=1, color="var(--bs-border-color)", css_class="", **kwargs):
+        styles = self._apply_spacing_styles(spacing_before, spacing_after)
+        styles['border'] = '0'
+        styles['border-top-width'] = self._format_size(thickness)
+        styles['border-top-style'] = 'solid'
+        styles['border-top-color'] = color
+        styles['height'] = '0'
+        styles['opacity'] = kwargs.pop('opacity', '0.25')
+        if 'style' in kwargs and isinstance(kwargs['style'], dict):
+            kwarg_styles = kwargs.pop('style')
+            styles.update(kwarg_styles)
+        style_attr = self._get_style_attr(styles)
+        final_classes = ["divider"]
+        if css_class: final_classes.append(css_class)
+        if 'class' in kwargs:
+            kwarg_class_val = kwargs.pop('class')
+            if isinstance(kwarg_class_val, str): final_classes.extend(kwarg_class_val.split())
+            elif isinstance(kwarg_class_val, list): final_classes.extend(kwarg_class_val)
+        unique_classes_list = list(dict.fromkeys(filter(None, final_classes)))
+        class_attr_str = f' class="{" ".join(unique_classes_list)}"' if unique_classes_list else ""
+        other_attrs_list = [f'{html.escape(str(k_attr))}="{html.escape(str(v_attr))}"' for k_attr, v_attr in kwargs.items()]
+        other_attrs_str = " " + " ".join(other_attrs_list) if other_attrs_list else ""
+        self._append_html(f'<hr{class_attr_str}{style_attr}{other_attrs_str}>')
 
     def Badge(self, text, style_type=ColorTheme.SECONDARY, pill=False, css_class="", spacing_before=Spacing.NONE, spacing_after=Spacing.NONE, **kwargs):
         badge_classes = ["badge", f"bg-{style_type.value}"] + (["rounded-pill"] if pill else [])
@@ -377,19 +450,15 @@ class BaseComponent:
 
     def Input(self, input_type=InputType.TEXT, name="", value=None, placeholder=None, label=None, input_id=None, required=False, checked=None, css_class=None, spacing_before=Spacing.NONE, spacing_after=Spacing.NONE, **kwargs):
         if not input_id and label: input_id = f"input-{name}-{id(self)}"
-        
         final_css_class = css_class
         if final_css_class is None:
              final_css_class = "form-check-input" if input_type in [InputType.CHECKBOX, InputType.RADIO] else "form-control"
-        
         input_attrs = {'type': input_type.value, 'name': name, 'id': input_id, 'placeholder': placeholder, 'value': value}
         if required: input_attrs['required'] = True
         if input_type in [InputType.CHECKBOX, InputType.RADIO] and checked is not None:
             if checked: input_attrs['checked'] = True
         input_attrs.update(kwargs)
-
         attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, final_css_class, None, input_attrs)
-
         if input_type in [InputType.CHECKBOX, InputType.RADIO] and label:
             self._append_html(f'<div class="form-check">')
             self._append_html(f'<input {attrs}>')
@@ -402,12 +471,10 @@ class BaseComponent:
     def Textarea(self, name="", value=None, placeholder=None, label=None, input_id=None, required=False, rows=3, css_class="form-control", spacing_before=Spacing.NONE, spacing_after=Spacing.NONE, **kwargs):
         if not input_id and label: input_id = f"textarea-{name}-{id(self)}"
         if label: self.Label(label, for_id=input_id)
-        
         textarea_attrs = {'name': name, 'id': input_id, 'placeholder': placeholder, 'rows': rows}
         if required: textarea_attrs['required'] = True
         textarea_attrs.update(kwargs)
         attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, css_class, None, textarea_attrs)
-        
         content = html.escape(value) if value else ""
         self._append_html(f'<textarea {attrs}>{content}</textarea>')
 
@@ -415,12 +482,10 @@ class BaseComponent:
         if options is None: options = []
         if not input_id and label: input_id = f"select-{name}-{id(self)}"
         if label: self.Label(label, for_id=input_id)
-
         select_attrs = {'name': name, 'id': input_id}
         if required: select_attrs['required'] = True
         select_attrs.update(kwargs)
         attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, css_class, None, select_attrs)
-        
         options_html = ""
         for opt in options:
             opt_value = opt.get('value', opt.get('text', ''))
@@ -428,7 +493,6 @@ class BaseComponent:
             is_selected = ' selected' if str(opt_value) == str(selected_value) else ''
             opt_disabled = ' disabled' if opt.get('disabled') else ''
             options_html += f'<option value="{html.escape(str(opt_value))}"{is_selected}{opt_disabled}>{opt_text}</option>'
-            
         self._append_html(f'<select {attrs}>{options_html}</select>')
 
 class Page(BaseComponent):
@@ -440,7 +504,6 @@ class Page(BaseComponent):
         self.meta = {}
         self.site_header_content = None
         self.site_footer_content = None
-
 
     def render(self, output_dir):
         env = self.site.jinja_env
@@ -454,7 +517,7 @@ class Page(BaseComponent):
         full_url = urljoin(base_url_abs, page_url_part)
         context_meta.setdefault('url', full_url)
         context_meta.setdefault('image', self.site.meta.get('default_og_image', ''))
-        title_tag_content = self.title + (f" | {context_meta['site_title']}" if self.slug != "index" else "")
+        title_tag_content = self.title + (f" | {context_meta['site_title']}" if self.slug != "index" and context_meta.get('site_title') else "")
         output_path = os.path.join(output_dir, "index.html" if self.slug == "index" else f"{self.slug}.html")
         try:
             html_output = template.render(content=page_content, title=title_tag_content, meta=context_meta, current_year=datetime.datetime.now().year, page=self, site=self.site)
@@ -470,7 +533,7 @@ class Site:
         self.scss_file = os.path.join(source_dir, "style.scss")
         self.pages, self.meta = {}, {'site_title': 'My Awesome Site', 'description': 'A site generated by sitegen.py', 'author': 'SiteGen User', 'keywords': 'static site generator, python', 'base_url': '', 'default_og_image': ''}
         self.jinja_env = Environment(loader=FileSystemLoader(self.template_dir), autoescape=select_autoescape(['html', 'xml', 'j2']), trim_blocks=True, lstrip_blocks=True)
-        self.jinja_env.globals.update({'static_url': self._get_static_url, 'urljoin': urljoin, 'urlparse': urlparse, 'Alignment': Alignment, 'Spacing': Spacing, 'ButtonType': ButtonType, 'AnimationType': AnimationType, 'ObjectFit': ObjectFit, 'ColorTheme': ColorTheme, 'InputType': InputType, 'FlexDirection': FlexDirection, 'FlexWrap': FlexWrap})
+        self.jinja_env.globals.update({'static_url': self._get_static_url, 'urljoin': urljoin, 'urlparse': urlparse, 'Alignment': Alignment, 'Spacing': Spacing, 'ButtonType': ButtonType, 'AnimationType': AnimationType, 'ObjectFit': ObjectFit, 'ColorTheme': ColorTheme, 'InputType': InputType, 'FlexDirection': FlexDirection, 'FlexWrap': FlexWrap, 'datetime': datetime})
 
     def set_meta(self, **kwargs): self.meta.update(kwargs)
     def add_page(self, slug, title="") -> Page:
@@ -478,19 +541,27 @@ class Site:
         if slug in self.pages: print(f"Warning: Page with slug '{slug}' already exists. Overwriting.")
         self.pages[slug] = Page(self, slug, title); return self.pages[slug]
     def get_page(self, slug): return self.pages.get(slug.strip('/'))
+
     def _get_static_url(self, path, default=None):
-        relative_path = os.path.join('static', path).replace("\\", "/")
-        if not os.path.exists(os.path.join(self.static_dir, path)) and default:
-            if os.path.exists(self.static_dir): print(f"Warning: Static file not found: {os.path.join(self.static_dir, path)}, using default {default}")
-            return os.path.join('static', default).replace("\\", "/")
-        return relative_path
+        clean_path = path.lstrip('/')
+        source_file_check_path = os.path.join(self.static_dir, clean_path)
+        final_path_segment = clean_path
+        if not os.path.exists(source_file_check_path):
+            if default:
+                default_clean_path = default.lstrip('/')
+                print(f"Warning: Static file '{source_file_check_path}' not found, using default '{default_clean_path}'")
+                final_path_segment = default_clean_path
+            else:
+                print(f"Warning: Static file '{source_file_check_path}' not found. Using original path: '{clean_path}'")
+        web_path = f"/static/{final_path_segment}".replace("\\", "/")
+        return web_path
+
     def _compile_scss(self):
         out_css_dir, out_css_path = os.path.join(self.output_dir, "static", "css"), os.path.join(self.output_dir, "static", "css", "style.css")
         os.makedirs(out_css_dir, exist_ok=True)
         if not os.path.exists(self.scss_file): raise FileNotFoundError(f"SCSS file not found: {self.scss_file}")
         try:
             print(f"Compiling {self.scss_file}...")
-            import sass
             css = sass.compile(filename=self.scss_file, output_style='compressed')
             with open(out_css_path, 'w', encoding='utf-8') as f: f.write(css)
             print(f"Successfully compiled SCSS to {out_css_path}")
@@ -498,6 +569,7 @@ class Site:
         except ImportError: print("Error: 'libsass' package not found. Install with: pip install libsass\nOr manually compile."); raise
         except sass.CompileError as e: print(f"Error compiling SCSS: {e}"); raise RuntimeError(f"SCSS compilation failed: {e}")
         except Exception as e: print(f"Unexpected SCSS compilation error: {e}"); raise RuntimeError(f"SCSS compilation failed unexpectedly: {e}")
+
     def _copy_static_files(self):
         out_static_dir = os.path.join(self.output_dir, "static")
         if os.path.exists(self.static_dir):
@@ -507,11 +579,12 @@ class Site:
             try: shutil.copytree(self.static_dir, out_static_dir); print(f"Copied static files from {self.static_dir} to {out_static_dir}")
             except Exception as e: print(f"Error copying static files: {e}")
         else:
-            print(f"Static source '{self.static_dir}' not found. Creating empty static subdirs.")
+            print(f"Static source '{self.static_dir}' not found. Creating empty static subdirs in output.")
             for sub in ['css', 'js', 'img']: os.makedirs(os.path.join(out_static_dir, sub), exist_ok=True)
+
     def _generate_sitemap(self):
         base_url = self.meta.get('base_url')
-        if not base_url or urlparse(base_url).hostname in ('localhost', '127.0.0.1', None): print("Warning: 'base_url' not set or local. Skipping sitemap."); return
+        if not base_url or urlparse(base_url).hostname in ('localhost', '127.0.0.1', None) or not urlparse(base_url).scheme : print("Warning: 'base_url' not set to a valid absolute URL. Skipping sitemap."); return
         if not base_url.endswith('/'): base_url += '/'
         print("Generating sitemap.xml...")
         root = ET.Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
@@ -519,12 +592,15 @@ class Site:
         for slug, page in self.pages.items():
             doc = ET.SubElement(root, "url")
             loc = urljoin(base_url, f"{slug}.html" if slug != "index" else "")
-            ET.SubElement(doc, "loc").text = loc; ET.SubElement(doc, "lastmod").text = today
-            ET.SubElement(doc, "changefreq").text = "weekly"; ET.SubElement(doc, "priority").text = "1.0" if slug == 'index' else "0.8"
+            ET.SubElement(doc, "loc").text = loc
+            ET.SubElement(doc, "lastmod").text = page.meta.get('lastmod', today)
+            ET.SubElement(doc, "changefreq").text = page.meta.get('changefreq', 'weekly')
+            ET.SubElement(doc, "priority").text = page.meta.get('priority', '1.0' if slug == 'index' else '0.8')
         try:
             tree = ET.ElementTree(root); ET.indent(tree, space="  ", level=0)
             tree.write(os.path.join(self.output_dir, "sitemap.xml"), encoding='utf-8', xml_declaration=True); print("Generated sitemap.xml")
         except Exception as e: print(f"Error generating sitemap: {e}")
+
     def build(self):
         print(f"Starting build process. Output directory: {self.output_dir}"); os.makedirs(self.output_dir, exist_ok=True)
         try:
@@ -546,22 +622,19 @@ class Site:
         page_slug = f"blog/{slug.strip('/')}"
         blog_page = self.add_page(page_slug, title)
         if meta_info: blog_page.meta.update(meta_info)
-
         with blog_page.Container(css_class="py-lg"):
             blog_page.Write(title, css_class="h1 text-center mb-lg", scroll_animation=True, animation=AnimationType.FADE_IN_DOWN)
             if blog_page.meta.get('date'):
                 blog_page.Write(f"Published on: {blog_page.meta['date']}", css_class="text-muted text-center mb-md", spacing_before=Spacing.NONE)
             if blog_page.meta.get('author'):
                 blog_page.Write(f"By: {blog_page.meta['author']}", css_class="text-muted text-center mb-md", spacing_before=Spacing.NONE)
-
-
             if content_md_filename:
                 md_path = os.path.join(self.content_dir, content_md_filename)
                 try:
                     with open(md_path, 'r', encoding='utf-8') as f: md_content = f.read()
                     blog_page.Markdown(md_content, scroll_animation=True, animation=AnimationType.FADE_IN_UP)
-                except FileNotFoundError: blog_page.Alert(f"Markdown file '{content_md_filename}' not found.", style_type=ColorTheme.DANGER)
-                except Exception as e: blog_page.Alert(f"Error reading markdown: {e}", style_type=ColorTheme.DANGER)
+                except FileNotFoundError: blog_page.Alert(f"Markdown file '{content_md_filename}' not found in '{self.content_dir}'.", style_type=ColorTheme.DANGER)
+                except Exception as e: blog_page.Alert(f"Error reading markdown from '{md_path}': {e}", style_type=ColorTheme.DANGER)
             else:
                 blog_page.Write("No content provided for this blog post.", css_class="text-center")
         return blog_page
@@ -570,26 +643,21 @@ class Site:
         if timeline_events is None: timeline_events = []
         if technologies_used is None: technologies_used = []
         if project_documents is None: project_documents = []
-        
         page_slug = f"projects/{slug.strip('/')}"
         project_page = self.add_page(page_slug, title)
         if meta_info: project_page.meta.update(meta_info)
-        
         tab_items = []
         has_active_tab = False
-
         if project_readme_file:
             readme_path = os.path.join(self.content_dir, project_readme_file)
             try:
                 with open(readme_path, 'r', encoding='utf-8') as f: readme_md = f.read()
                 readme_html = self._build_html_for_content(lambda p: p.Markdown(readme_md))
                 tab_items.append({"title": "Overview", "content": readme_html, "active": True}); has_active_tab = True
-            except Exception as e: tab_items.append({"title": "Overview", "content": f"<p>Error loading README: {e}</p>", "active": True}); has_active_tab = True
-        
+            except Exception as e: tab_items.append({"title": "Overview", "content": f"<p>Error loading README from '{readme_path}': {e}</p>", "active": True}); has_active_tab = True
         if timeline_events:
             timeline_html = self._build_html_for_content(lambda p: p.Timeline(events=timeline_events))
             tab_items.append({"title": "Timeline", "content": timeline_html, "active": not has_active_tab}); has_active_tab = True
-
         tech_docs_parts = []
         if technologies_used:
             tech_html = "<p class='mb-sm'><strong>Technologies Used:</strong> " + "".join([f'<span class="badge bg-secondary me-xs mb-xs">{html.escape(tech)}</span>' for tech in technologies_used]) + "</p>"
@@ -599,26 +667,20 @@ class Site:
             for doc in project_documents:
                 doc_title = html.escape(doc.get("title", "Document"))
                 doc_url = doc.get("url", "#")
-                if not (doc_url.startswith(("http://", "https://", "./", "../", "/"))):
+                if not (doc_url.startswith(("http://", "https://", "./", "../", "/")) or urlparse(doc_url).scheme):
                     doc_url = self._get_static_url(doc_url)
                 docs_html += f'<a href="{doc_url}" class="list-group-item list-group-item-action" target="_blank" rel="noopener noreferrer">{doc_title}</a>'
             docs_html += "</div>"
             tech_docs_parts.append(docs_html)
-        
         if tech_docs_parts:
             tab_items.append({"title": "Tech & Docs", "content": "".join(tech_docs_parts), "active": not has_active_tab}); has_active_tab = True
-        
-        if not tab_items: # Default content if all sections are empty
+        if not tab_items:
              tab_items.append({"title": "Project Details", "content": "<p>No specific details provided for this project yet.</p>", "active": True})
-        elif not any(t.get("active") for t in tab_items) and tab_items: # Ensure one tab is active
+        elif not any(t.get("active") for t in tab_items) and tab_items:
             tab_items[0]["active"] = True
-
-
         with project_page.Container(css_class="py-lg"):
-            project_page.Write(title, css_class="h1 aext-center mb-lg", scroll_animation=True, animation=AnimationType.FADE_IN_DOWN)
+            project_page.Write(title, css_class="h1 text-center mb-lg", scroll_animation=True, animation=AnimationType.FADE_IN_DOWN)
             if project_page.meta.get('subtitle'):
                  project_page.Write(project_page.meta['subtitle'], css_class="text-muted text-center mb-md", spacing_before=Spacing.NONE)
-            
             project_page.Tabs(items=tab_items, spacing_before=Spacing.LG, scroll_animation=True, animation=AnimationType.FADE_IN_UP)
-
         return project_page
