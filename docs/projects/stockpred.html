@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Polystock AI (Stock Prediction) | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Xild076">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/projects/stockpred.html">
+    <meta property="og:title" content="Polystock AI (Stock Prediction) | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/projects/stockpred.html">
+    <meta property="twitter:title" content="Polystock AI (Stock Prediction) | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="">
+
+    <link rel="icon" href="/static/img/favicon.ico" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-down">Polystock AI (Stock Prediction)</p><div class="tabs-container"  style="margin-top: var(--spacing-lg)" data-scroll-animation="fade-in-up"><ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tabs-4343021200-tab-0" data-bs-toggle="tab" data-bs-target="#tabs-4343021200-pane-0" type="button" role="tab" aria-controls="tabs-4343021200-pane-0" aria-selected="true">Overview</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4343021200-tab-1" data-bs-toggle="tab" data-bs-target="#tabs-4343021200-pane-1" type="button" role="tab" aria-controls="tabs-4343021200-pane-1" aria-selected="false">Timeline</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4343021200-tab-2" data-bs-toggle="tab" data-bs-target="#tabs-4343021200-pane-2" type="button" role="tab" aria-controls="tabs-4343021200-pane-2" aria-selected="false">Tech &amp; Docs</button></li></ul><div class="tab-content"><div class="tab-pane fade show active" id="tabs-4343021200-pane-0" role="tabpanel" aria-labelledby="tabs-4343021200-tab-0"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p><center></p>
+
+<h2>StockPred - AI-Powered Stock Prediction</h2>
+
+<p></center></p>
+
+<h3>The Challenge of Stock Market Volatility</h3>
+
+<p>Stock market prediction is an inherently complex problem, influenced by countless factors such as macroeconomic trends, corporate performance, investor sentiment, and global events. While traditional models attempt to capture these relationships, they often struggle with overfitting, data limitations, and an inability to adapt to real-time market fluctuations.</p>
+
+<p><center> </p>
+
+<p><img src="/static/imgs/market_volatility.png" alt="Stock market volatility visualization" width="600"> </p>
+
+<p></center></p>
+
+<p>Many existing prediction models focus solely on historical stock prices, ignoring crucial economic indicators and sentiment data that significantly impact market behavior. StockPred aims to explore how a hybrid AI-driven approach can enhance market forecasting by integrating deep learning, reinforcement learning, and sentiment analysis.</p>
+
+<h3>StockPred and Its Structure</h3>
+
+<p>StockPred is a proof-of-concept project that experiments with AI techniques for stock prediction, testing their effectiveness in a realistic market setting. While not intended for direct financial decision-making, it provides a framework for exploring how AI can synthesize financial data, news sentiment, and technical indicators to generate stock trend predictions.</p>
+
+<p>The pipeline consists of several experimental components:</p>
+
+<ol>
+<li><p>Data Collection &amp; Preprocessing:</p>
+
+<ul>
+<li>Gathers historical stock prices, financial statements, and macroeconomic indicators from sources like Yahoo Finance, FRED, and other financial APIs.</li>
+<li>Extracts and analyzes news sentiment to assess how media coverage influences stock movements.</li>
+</ul></li>
+<li><p>Feature Engineering &amp; Clustering:</p>
+
+<ul>
+<li>Structures stock data into feature sets, including price history, trading volume, economic indicators, and sentiment scores.</li>
+<li>Uses clustering techniques to identify similar market patterns for better generalization.</li>
+</ul></li>
+<li><p>Hybrid Deep Learning Model (LSTM + Transformer):</p>
+
+<ul>
+<li>Combines LSTMs for sequential trend detection and Transformer models for enhanced pattern recognition.</li>
+<li>Implements a custom loss function that prioritizes directional accuracy over raw price prediction.</li>
+</ul></li>
+<li><p>Sentiment &amp; News Analysis:</p>
+
+<ul>
+<li>NLP sentiment model for analyzing financial news sentiment.</li>
+<li>Weighs sentiment data alongside quantitative stock indicators to adjust predictions dynamically.</li>
+</ul></li>
+<li><p>Calculated Stock Values:</p>
+
+<ul>
+<li>Instead of providing binary "buy/sell" recommendations, StockPred generates actual stock values.</li>
+<li>This provides the user with more agency, as it predicts future prices instead of given assumptions for buying and selling.</li>
+</ul></li>
+</ol>
+
+<p>You can try this program out here: <a rel="nofollow noopener" target="_blank" href="https://xild-stockpred.streamlit.app/">https://xild-stockpred.streamlit.app/</a></p>
+
+<h3>Innovations</h3>
+
+<p>StockPred introduces several experimental ideas in stock market forecasting:</p>
+
+<ol>
+<li>Hybrid AI Approach: Tests the effectiveness of combining LSTMs and Transformers</li>
+<li>Sentiment-Driven Adjustments: Evaluates how real-time financial news and investor sentiment influence market trends.</li>
+<li>Multi-Source Data Fusion: Merges stock history, macroeconomic data, and sentiment analysis for a broader market perspective.</li>
+</ol>
+
+<h3>Conclusion</h3>
+
+<p>StockPred serves as a research-driven proof of concept, not a financial advisory tool. It provides a testing ground for integrating AI models into stock prediction, assessing their strengths and limitations. The ultimate goal is to refine these methods and explore their potential applications in real-world financial analysis.</p>
+</div></div><div class="tab-pane fade" id="tabs-4343021200-pane-1" role="tabpanel" aria-labelledby="tabs-4343021200-tab-1"><div class="timeline"  style="margin-bottom: var(--spacing-md)"><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2023-06-11</div><p>Began project Polystock AI</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.15s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2023-10-15</div><p>Completed the first beta version of Polystock AI</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.3s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2023-11-20</div><p>Wrote the first paper on Polystock AI</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.44999999999999996s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-09-03</div><p>Began to rework the project to use more advanced techniques</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.6s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-11-10</div><p>Completed the second beta version of Polystock AI with full functionality and partially trained models</p></div></div></div></div><div class="tab-pane fade" id="tabs-4343021200-pane-2" role="tabpanel" aria-labelledby="tabs-4343021200-tab-2"><p class='mb-sm'><strong>Technologies Used:</strong> <span class="badge bg-secondary me-xs mb-xs">Python 3.x for backend processing</span><span class="badge bg-secondary me-xs mb-xs">FRED API for data</span><span class="badge bg-secondary me-xs mb-xs">Streamlit for hosting</span><span class="badge bg-secondary me-xs mb-xs">Requests for HTTP requests</span><span class="badge bg-secondary me-xs mb-xs">Yfinance for stock data</span><span class="badge bg-secondary me-xs mb-xs">Pandas for data manipulation</span><span class="badge bg-secondary me-xs mb-xs">Numpy for numerical operations</span><span class="badge bg-secondary me-xs mb-xs">Matplotlib for plotting</span><span class="badge bg-secondary me-xs mb-xs">PyTorch for ML development</span><span class="badge bg-secondary me-xs mb-xs">Github for development</span></p><h5 class='mt-md mb-sm'>Documents & Links:</h5><div class="gap-md grid grid-cols-1 project-document-widgets"  style="margin-bottom: var(--spacing-md)"><div class="animate-fade-in-up widget-horizontal-layout"  style="margin-bottom: var(--spacing-md)" object-fit="ObjectFit.CONTAIN"><div class="widget-image-container" style="flex-basis: 100px; width: 100px; height: 100px"><img src="/static/imgs/document_placeholder.png" alt="Beta Paper" style="object-fit: cover; display: block; width: 100%; height: 100%"></div>
+            <div class="widget-content-container d-flex flex-column">
+                <h5 class="widget-title">Beta Paper</h5>
+                <p class="widget-description flex-grow-1">View Beta Paper.</p>
+                <a href="RL_for_Stocks.pdf" class="btn btn-sm btn-outline-primary mt-auto widget-link">View Document</a>
+            </div>
+        </div></div></div></div></div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Xild076. All rights reserved.
+            <p class="text-muted mt-xs">Powered by SiteGen</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

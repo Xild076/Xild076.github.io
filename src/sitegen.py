@@ -6,7 +6,8 @@ import xml.etree.ElementTree as ET
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import markdown2
 import sass
-from urllib.parse import quote_plus, urljoin, urlparse
+import re
+from urllib.parse import quote_plus, urljoin, urlparse, quote
 
 from enums import (
     Alignment, Spacing, ButtonType, AnimationType, ObjectFit, ColorTheme,
@@ -38,8 +39,6 @@ class ContextWrapper:
         if self.component._context_stack:
             popped_context_wrapper = self.component._context_stack.pop()
             if popped_context_wrapper is not self:
-                # This case should ideally not happen if contexts are managed correctly.
-                # Consider logging a warning or raising an error for debugging.
                 pass
             html_content_map = {
                 "Card": "</div></div>",
@@ -49,7 +48,6 @@ class ContextWrapper:
             }
             html_content = html_content_map.get(self.context_type, "")
             if html_content:
-                # Append to the current context on the stack, or to the base if stack is empty
                 if self.component._context_stack:
                     self.component._context_stack[-1].component._html_elements.append(html_content)
                 else:
@@ -59,6 +57,7 @@ class BaseComponent:
     def __init__(self):
         self._html_elements = []
         self._context_stack = []
+        self.site = None 
 
     def _append_html(self, html_content):
         if self._context_stack:
@@ -73,7 +72,7 @@ class BaseComponent:
         if isinstance(value, Spacing): return _DEFAULT_SPACING_MAP.get(value, _DEFAULT_SPACING_MAP[Spacing.DEFAULT])
         if isinstance(value, (int, float)): return f"{value}px"
         if isinstance(value, str): return value
-        return _DEFAULT_SPACING_MAP[Spacing.DEFAULT] # Default fallback
+        return _DEFAULT_SPACING_MAP[Spacing.DEFAULT]
 
     def _get_style_attr(self, styles):
         if not styles: return ""
@@ -84,7 +83,7 @@ class BaseComponent:
         styles = {}
         if spacing_before != Spacing.DEFAULT: styles['margin-top'] = self._format_size(spacing_before)
         if spacing_after != Spacing.DEFAULT: styles['margin-bottom'] = self._format_size(spacing_after)
-        elif spacing_after == Spacing.DEFAULT and spacing_before == Spacing.DEFAULT : # Only add default bottom margin if no top margin is specified
+        elif spacing_after == Spacing.DEFAULT and spacing_before == Spacing.DEFAULT :
              styles['margin-bottom'] = _DEFAULT_SPACING_MAP[Spacing.DEFAULT]
         return styles
 
@@ -108,10 +107,10 @@ class BaseComponent:
         
         if other_attrs:
             for k_orig,v_orig in other_attrs.items():
-                k = k_orig.replace('_', '-') # Convert pythonic names to html attributes
+                k = k_orig.replace('_', '-')
                 v = v_orig
-                if v is True: attrs_list.append(k) # Boolean attribute
-                elif v is False: pass # Skip false boolean attributes
+                if v is True: attrs_list.append(k)
+                elif v is False: pass
                 elif v is not None: attrs_list.append(f'{k}="{html.escape(str(v))}"')
         return " ".join(attrs_list)
 
@@ -131,7 +130,6 @@ class BaseComponent:
         
         if specific_styles: current_styles.update(specific_styles)
         
-        # Remove empty strings and duplicates, then join
         final_classes_str = " ".join(sorted(list(set(filter(None, final_classes_list)))))
         
         return self._build_attributes_string(final_classes_str, current_styles, data_attrs, other_attrs)
@@ -193,17 +191,36 @@ class BaseComponent:
         self._append_html(f'<div {attrs_str}><div class="card-body">')
         return ContextWrapper(self, "Card")
 
-    def Write(self, text, align=Alignment.LEFT, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", text_size=None, **kwargs):
+    def Write(self, text, align=Alignment.LEFT, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", text_size=None, text_color=None, **kwargs):
         alignment_class = self._get_alignment_class(align)
         combined_css_class = f"{alignment_class} {css_class}".strip()
-        style = {"font-size": text_size} if text_size else None
-        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, combined_css_class, style, kwargs)
+        specific_styles = {}
+        if text_size: specific_styles["font-size"] = text_size
+        if text_color: specific_styles["color"] = text_color
+        attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, combined_css_class, specific_styles if specific_styles else None, kwargs)
         self._append_html(f'<p {attrs_str}>{html.escape(text)}</p>')
 
     def Markdown(self, md_text, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
+        processed_md_text = md_text
+        if hasattr(self, 'site') and self.site:
+            processed_md_text = re.sub(
+                r'(src|href)=(["\'])((?:\.\/|\/)?static\/)([^"\']+)\2',
+                lambda m: f'{m.group(1)}={m.group(2)}{self.site._get_static_url(m.group(4))}{m.group(2)}',
+                md_text,
+                flags=re.IGNORECASE
+            )
+        
+        html_content = ""
+        try:
+            html_content = markdown2.markdown(processed_md_text, extras=["fenced-code-blocks", "tables", "footnotes", "cuddled-lists", "nofollow", "spoiler", "strike", "target-blank-links", "task_list"])
+        except Exception as e_md:
+            error_message = f"ERROR converting Markdown to HTML. Input MD snippet: {html.escape(processed_md_text[:200])}... Error: {html.escape(str(e_md))}"
+            print(error_message)
+            html_content = f'<div class="alert alert-danger" role="alert">{error_message}</div>'
+
         attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"markdown-content {css_class}".strip(), None, kwargs)
-        html_content = markdown2.markdown(md_text, extras=["fenced-code-blocks", "tables", "footnotes", "cuddled-lists", "nofollow", "spoiler", "strike", "target-blank-links", "task_list"])
         self._append_html(f'<div {attrs_str}>{html_content}</div>')
+
 
     def BlockQuote(self, quote, author=None, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
         attrs_str = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"blockquote {css_class}".strip(), None, kwargs)
@@ -338,12 +355,26 @@ class BaseComponent:
         attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"timeline {css_class}".strip(), None, kwargs)
         items_html = ""
         if not events: return
-        for i, event in enumerate(events):
-            time_html = f'<div class="timeline-time">{html.escape(event["time"])}</div>' if "time" in event else ""
-            title_html = f'<h5 class="timeline-title">{html.escape(event["title"])}</h5>' if "title" in event else ""
-            desc_html = f'<p>{html.escape(event["description"])}</p>' if "description" in event else ""
-            item_attrs = self._get_combined_attributes(Spacing.NONE, Spacing.LG, AnimationType.FADE_IN_LEFT, True, i * 0.15, "timeline-item", None, event.get("item_kwargs", {}))
+
+        for i, event_item in enumerate(events):
+            time_val, title_val, description_val = "", "", ""
+            item_specific_kwargs = {}
+
+            if isinstance(event_item, dict):
+                time_val = event_item.get("time", "")
+                title_val = event_item.get("title", "")
+                description_val = event_item.get("description", "")
+                item_specific_kwargs = event_item.get("item_kwargs", {})
+            else:
+                print(f"Warning: Timeline event at index {i} is not a dictionary: {event_item}. Rendering with default/empty values.")
+
+            time_html = f'<div class="timeline-time">{html.escape(time_val)}</div>' if time_val else ""
+            title_html = f'<h5 class="timeline-title">{html.escape(title_val)}</h5>' if title_val else ""
+            desc_html = f'<p>{html.escape(description_val)}</p>' if description_val else ""
+            
+            item_attrs = self._get_combined_attributes(Spacing.NONE, Spacing.LG, AnimationType.FADE_IN_LEFT, True, i * 0.15, "timeline-item", None, item_specific_kwargs)
             items_html += f'<div {item_attrs}><div class="timeline-marker"></div><div class="timeline-content">{time_html}{title_html}{desc_html}</div></div>'
+        
         self._append_html(f'<div {attrs}>{items_html}</div>')
 
     def Widget(self, title, description, link="#", link_text="Learn More", image_url=None,
@@ -376,7 +407,7 @@ class BaseComponent:
             img_container_style_attr = self._get_style_attr(img_container_styles)
             img_html = f'<div class="widget-image-container"{img_container_style_attr}><img src="{image_url}" alt="{html.escape(title)}"{img_tag_style_attr}></div>'
 
-        link_html = f'<a href="{link}" class="btn btn-sm btn-outline-primary mt-auto widget-link">{html.escape(link_text)}</a>' if link else ""
+        link_html = f'<a href="{link}" class="btn btn-sm btn-outline-primary mt-auto widget-link">{html.escape(link_text)}</a>' if link and link_text else ""
         content_html = f"""
             <div class="widget-content-container d-flex flex-column">
                 <h5 class="widget-title">{html.escape(title)}</h5>
@@ -508,6 +539,103 @@ class Page(BaseComponent):
     def render(self, output_dir):
         env = self.site.jinja_env
         template = env.get_template("layout.j2")
+        
+        if self.site.meta.get('main_nav_items'):
+            site_title_text = self.site.meta.get('site_title', 'My Site')
+            
+            site_title_link_href_orig = self.site.meta.get('site_header_title_link', './index.html')
+            site_title_link_href = site_title_link_href_orig
+            
+            base_path_component_for_links = ""
+            if self.site.meta.get('base_url'):
+                parsed_base_url = urlparse(self.site.meta['base_url'])
+                if parsed_base_url.path and parsed_base_url.path != "/":
+                    base_path_component_for_links = parsed_base_url.path.rstrip('/')
+
+            if site_title_link_href_orig.startswith('./'):
+                cleaned_href = site_title_link_href_orig[2:]
+                site_title_link_href = f"{base_path_component_for_links}/{cleaned_href}".replace('//','/')
+            elif site_title_link_href_orig.startswith('/'):
+                 site_title_link_href = f"{base_path_component_for_links}{site_title_link_href_orig}".replace('//','/')
+            elif not urlparse(site_title_link_href_orig).scheme: 
+                 site_title_link_href = f"{base_path_component_for_links}/{site_title_link_href_orig}".replace('//','/')
+            
+            if not site_title_link_href.startswith('/') and not urlparse(site_title_link_href).scheme:
+                site_title_link_href = '/' + site_title_link_href
+            if site_title_link_href == '/': site_title_link_href = base_path_component_for_links + '/' if base_path_component_for_links else '/'
+
+
+            site_title_css_class = self.site.meta.get('site_header_title_css_class', 'site-title')
+            site_title_html = f'<div class="{site_title_css_class.strip()}"><a href="{site_title_link_href}">{html.escape(site_title_text)}</a></div>'
+
+            nav_items_list_original = self.site.meta['main_nav_items']
+            nav_items_list_processed = []
+            
+            current_page_full_slug = self.slug 
+            if current_page_full_slug == 'index': current_page_full_slug = '' 
+                
+            for item_orig in nav_items_list_original:
+                item = item_orig.copy()
+                item_url_parsed = urlparse(item.get("url", "#"))
+                item_url_path_original = item_url_parsed.path 
+                
+                item_path_relative_to_base = item_url_path_original
+                if base_path_component_for_links and item_url_path_original.startswith(base_path_component_for_links):
+                    item_path_relative_to_base = item_url_path_original[len(base_path_component_for_links):]
+                
+                item_normalized_slug = item_path_relative_to_base.replace('.html', '').strip('/')
+                if item_normalized_slug == 'index': item_normalized_slug = ''
+                
+                if item_normalized_slug == current_page_full_slug:
+                    item['active'] = True
+                else:
+                    item['active'] = False
+                nav_items_list_processed.append(item)
+
+            nav_component_align = self.site.meta.get('main_nav_align', Alignment.CENTER) 
+            nav_component_css_class = self.site.meta.get('main_nav_css_class', 'nav-main')
+
+            nav_builder = BaseComponent()
+            nav_builder.site = self.site 
+            nav_builder.Navigation(
+                items=nav_items_list_processed,
+                align=nav_component_align,
+                css_class=nav_component_css_class,
+                spacing_before=Spacing.NONE, 
+                spacing_after=Spacing.NONE
+            )
+            navigation_html_content = nav_builder.get_html()
+
+            theme_toggle_button_html = ""
+            if self.site.meta.get('site_header_theme_toggle_enabled', True):
+                theme_toggle_icon_text = self.site.meta.get('site_header_theme_toggle_icon', '🌓')
+                theme_toggle_css_class = self.site.meta.get('site_header_theme_toggle_css_class', '')
+                theme_toggle_button_html = f'<button id="theme-toggle" title="Toggle theme" class="{theme_toggle_css_class.strip()}">{html.escape(theme_toggle_icon_text)}</button>'
+            
+            layout_container_base_class = 'container'
+            if self.site.meta.get('site_header_layout_container_fluid', False):
+                layout_container_base_class = 'container-fluid'
+            
+            default_layout_classes = "d-flex justify-content-between align-items-center"
+            user_defined_layout_classes = self.site.meta.get('site_header_layout_container_css_class', default_layout_classes)
+            
+            if layout_container_base_class not in user_defined_layout_classes:
+                 layout_container_css = f"{layout_container_base_class} {user_defined_layout_classes}".strip()
+            else:
+                layout_container_css = user_defined_layout_classes.strip()
+
+            header_tag_main_css = self.site.meta.get('site_header_css_class', 'site-header')
+
+            self.site_header_content = (
+                f'<header class="{header_tag_main_css.strip()}">\n'
+                f'  <div class="{layout_container_css}">\n'
+                f'    {site_title_html}\n'
+                f'    {navigation_html_content}\n'
+                f'    {theme_toggle_button_html}\n'
+                f'  </div>\n'
+                f'</header>'
+            )
+
         page_content = self.get_html()
         context_meta = {**self.site.meta, **self.meta}
         context_meta.setdefault('site_title', self.site.meta.get('site_title', 'My Site'))
@@ -539,21 +667,34 @@ class Site:
     def add_page(self, slug, title="") -> Page:
         slug = slug.strip('/') or "index"
         if slug in self.pages: print(f"Warning: Page with slug '{slug}' already exists. Overwriting.")
-        self.pages[slug] = Page(self, slug, title); return self.pages[slug]
+        page_instance = Page(self, slug, title)
+        self.pages[slug] = page_instance
+        return page_instance
+        
     def get_page(self, slug): return self.pages.get(slug.strip('/'))
 
-    def _get_static_url(self, path, default=None):
-        clean_path = path.lstrip('/')
+    def _get_static_url(self, path_relative_to_static_dir, default=None):
+        clean_path = path_relative_to_static_dir.lstrip('/')
         source_file_check_path = os.path.join(self.static_dir, clean_path)
-        final_path_segment = clean_path
+        final_path_segment_after_static = clean_path
+        
         if not os.path.exists(source_file_check_path):
             if default:
                 default_clean_path = default.lstrip('/')
                 print(f"Warning: Static file '{source_file_check_path}' not found, using default '{default_clean_path}'")
-                final_path_segment = default_clean_path
+                final_path_segment_after_static = default_clean_path
             else:
                 print(f"Warning: Static file '{source_file_check_path}' not found. Using original path: '{clean_path}'")
-        web_path = f"/static/{final_path_segment}".replace("\\", "/")
+        
+        base_path_component = ""
+        if self.meta.get('base_url'):
+            parsed_base_url = urlparse(self.meta['base_url'])
+            if parsed_base_url.path and parsed_base_url.path != "/":
+                base_path_component = parsed_base_url.path.rstrip('/')
+        
+        web_path = f"{base_path_component}/static/{final_path_segment_after_static}".replace("//", "/")
+        if not web_path.startswith('/') and not urlparse(web_path).scheme: 
+            web_path = '/' + web_path
         return web_path
 
     def _compile_scss(self):
@@ -615,72 +756,251 @@ class Site:
     def _build_html_for_content(self, content_func, *args, **kwargs):
         unique_slug = "_temp_content_page_" + str(id(content_func))
         temp_page = Page(self, slug=unique_slug)
+        temp_page.site = self 
         content_func(temp_page, *args, **kwargs)
         return temp_page.get_html()
+    
+    def _create_markdown_document_sub_page(self, project_main_page_slug, doc_content_filepath_relative_to_content_dir, doc_title, meta_info=None):
+        md_source_path = os.path.join(self.content_dir, doc_content_filepath_relative_to_content_dir)
+        if not os.path.exists(md_source_path):
+            print(f"Warning: Markdown source for document page not found: {md_source_path}")
+            return None
 
-    def add_blog_post(self, slug, title="", content_md_filename=None, meta_info=None):
+        doc_filename_stem = os.path.splitext(os.path.basename(doc_content_filepath_relative_to_content_dir))[0]
+        doc_page_slug = f"{project_main_page_slug}/{doc_filename_stem}" 
+
+        doc_page = self.add_page(doc_page_slug, doc_title)
+        doc_page.site = self
+        if meta_info:
+            doc_page.meta.update(meta_info)
+        doc_page.meta['is_subpage'] = True 
+        
+        try:
+            with open(md_source_path, 'r', encoding='utf-8') as f:
+                md_content = f.read()
+            
+            with doc_page.Container(css_class="py-lg document-page-container"):
+                doc_page.Write(doc_title, align=Alignment.CENTER, css_class="h1 mb-lg", text_size="2.5rem")
+                doc_page.Divider()
+                doc_page.Markdown(md_content)
+            return f"{doc_filename_stem}.html" 
+        except Exception as e:
+            print(f"Error creating markdown document page for {doc_content_filepath_relative_to_content_dir}: {e}")
+            doc_page.Alert(f"Error loading content for {doc_title}: {e}", style_type=ColorTheme.DANGER)
+            return f"{doc_filename_stem}.html"
+
+
+    def add_blog_post(self, slug, title="", content_md_filename=None, author=None, date=None, meta_info=None):
         page_slug = f"blog/{slug.strip('/')}"
         blog_page = self.add_page(page_slug, title)
-        if meta_info: blog_page.meta.update(meta_info)
+        blog_page.site = self
+        
+        effective_meta = meta_info.copy() if meta_info else {}
+        if author: effective_meta['author'] = author
+        if date: effective_meta['date'] = date
+        blog_page.meta.update(effective_meta)
+
+        md_content_to_render = None
+        has_content_file_error = False
+
+        if content_md_filename:
+            md_path = os.path.join(self.content_dir, content_md_filename)
+            try:
+                with open(md_path, 'r', encoding='utf-8') as f: md_content_to_render = f.read()
+            except FileNotFoundError:
+                print(f"Warning: Markdown file '{content_md_filename}' not found for blog post '{title}'.")
+                has_content_file_error = True
+            except Exception as e:
+                print(f"Warning: Could not read markdown file '{content_md_filename}' for blog post '{title}': {e}")
+                has_content_file_error = True
+        
         with blog_page.Container(css_class="py-lg"):
-            blog_page.Write(title, css_class="h1 text-center mb-lg", scroll_animation=True, animation=AnimationType.FADE_IN_DOWN)
-            if blog_page.meta.get('date'):
-                blog_page.Write(f"Published on: {blog_page.meta['date']}", css_class="text-muted text-center mb-md", spacing_before=Spacing.NONE)
-            if blog_page.meta.get('author'):
-                blog_page.Write(f"By: {blog_page.meta['author']}", css_class="text-muted text-center mb-md", spacing_before=Spacing.NONE)
-            if content_md_filename:
-                md_path = os.path.join(self.content_dir, content_md_filename)
+            blog_page.Write(title, css_class="h1 text-center mb-lg", text_size="3.5rem", scroll_animation=True, animation=AnimationType.FADE_IN_DOWN)
+            
+            meta_display_parts = []
+            post_author = blog_page.meta.get('author')
+            post_date = blog_page.meta.get('date')
+            
+            if post_author:
+                meta_display_parts.append(f"By {post_author}")
+            if post_date:
+                meta_display_parts.append(f"Published on {post_date}")
+
+            if md_content_to_render:
                 try:
-                    with open(md_path, 'r', encoding='utf-8') as f: md_content = f.read()
-                    blog_page.Markdown(md_content, scroll_animation=True, animation=AnimationType.FADE_IN_UP)
-                except FileNotFoundError: blog_page.Alert(f"Markdown file '{content_md_filename}' not found in '{self.content_dir}'.", style_type=ColorTheme.DANGER)
-                except Exception as e: blog_page.Alert(f"Error reading markdown from '{md_path}': {e}", style_type=ColorTheme.DANGER)
-            else:
-                blog_page.Write("No content provided for this blog post.", css_class="text-center")
+                    html_for_word_count = markdown2.markdown(md_content_to_render)
+                    temp_et_root = ET.fromstring(f"<div>{html_for_word_count}</div>")
+                    plain_text_for_word_count = "".join(temp_et_root.itertext())
+                    word_count = len(plain_text_for_word_count.split())
+                    WPM = 238 
+                    reading_time_minutes = round(word_count / WPM)
+                    if reading_time_minutes == 0 and word_count > 0: reading_time_minutes = 1 
+                    if word_count > 0 : meta_display_parts.append(f"{reading_time_minutes} min read")
+                except ET.ParseError:
+                     plain_text_for_word_count = md_content_to_render
+                     word_count = len(plain_text_for_word_count.split())
+                     WPM = 238 
+                     reading_time_minutes = round(word_count / WPM)
+                     if reading_time_minutes == 0 and word_count > 0: reading_time_minutes = 1 
+                     if word_count > 0 : meta_display_parts.append(f"{reading_time_minutes} min read")
+                except Exception as e:
+                    print(f"Warning: Could not calculate reading time for blog post '{title}': {e}")
+
+            if meta_display_parts:
+                with blog_page.FlexContainer(direction=FlexDirection.ROW, justify_content=Alignment.CENTER, wrap=FlexWrap.WRAP, css_class="text-muted blog-post-meta mb-md", spacing_before=Spacing.SM, spacing_after=Spacing.NONE):
+                    for i, part_text in enumerate(meta_display_parts):
+                        blog_page.Write(part_text, css_class="meta-item", spacing_before=Spacing.NONE, spacing_after=Spacing.NONE, text_color="var(--bs-gray-600)")
+                        if i < len(meta_display_parts) - 1:
+                            blog_page.Write("•", css_class="meta-separator mx-sm", spacing_before=Spacing.NONE, spacing_after=Spacing.NONE, text_color="var(--bs-gray-600)")
+            
+            if meta_display_parts or md_content_to_render or has_content_file_error:
+                 blog_page.Divider(spacing_before=Spacing.LG, spacing_after=Spacing.LG)
+
+            if has_content_file_error:
+                 blog_page.Alert(f"Content file '{content_md_filename}' could not be loaded for this post.", style_type=ColorTheme.DANGER, spacing_before=Spacing.MD)
+            elif md_content_to_render:
+                blog_page.Markdown(md_content_to_render)
+            elif not content_md_filename: 
+                blog_page.Write("No content provided for this blog post.", css_class="text-center", spacing_before=Spacing.MD)
         return blog_page
 
     def add_project_page(self, slug, title="", project_readme_file=None, timeline_events=None, technologies_used=None, project_documents=None, meta_info=None):
         if timeline_events is None: timeline_events = []
         if technologies_used is None: technologies_used = []
         if project_documents is None: project_documents = []
-        page_slug = f"projects/{slug.strip('/')}"
-        project_page = self.add_page(page_slug, title)
+        
+        project_slug_base_name = slug.strip('/') 
+        page_slug_for_project = f"projects/{project_slug_base_name}"
+        project_page = self.add_page(page_slug_for_project, title)
+        project_page.site = self 
         if meta_info: project_page.meta.update(meta_info)
+        
         tab_items = []
         has_active_tab = False
+
         if project_readme_file:
             readme_path = os.path.join(self.content_dir, project_readme_file)
             try:
                 with open(readme_path, 'r', encoding='utf-8') as f: readme_md = f.read()
                 readme_html = self._build_html_for_content(lambda p: p.Markdown(readme_md))
                 tab_items.append({"title": "Overview", "content": readme_html, "active": True}); has_active_tab = True
-            except Exception as e: tab_items.append({"title": "Overview", "content": f"<p>Error loading README from '{readme_path}': {e}</p>", "active": True}); has_active_tab = True
+            except Exception as e: 
+                print(f"Error loading README {readme_path} for project {title}: {e}")
+                tab_items.append({"title": "Overview", "content": f"<p>Error loading README: {html.escape(project_readme_file)}</p>", "active": True}); has_active_tab = True
+        
         if timeline_events:
             timeline_html = self._build_html_for_content(lambda p: p.Timeline(events=timeline_events))
             tab_items.append({"title": "Timeline", "content": timeline_html, "active": not has_active_tab}); has_active_tab = True
-        tech_docs_parts = []
+        
+        tech_docs_content_builder = BaseComponent()
+        tech_docs_content_builder.site = self
+        has_tech_docs_content = False
+
         if technologies_used:
             tech_html = "<p class='mb-sm'><strong>Technologies Used:</strong> " + "".join([f'<span class="badge bg-secondary me-xs mb-xs">{html.escape(tech)}</span>' for tech in technologies_used]) + "</p>"
-            tech_docs_parts.append(tech_html)
+            tech_docs_content_builder._append_html(tech_html)
+            has_tech_docs_content = True
+
         if project_documents:
-            docs_html = "<h5 class='mt-md mb-sm'>Documents & Links:</h5><div class='list-group'>"
-            for doc in project_documents:
-                doc_title = html.escape(doc.get("title", "Document"))
-                doc_url = doc.get("url", "#")
-                if not (doc_url.startswith(("http://", "https://", "./", "../", "/")) or urlparse(doc_url).scheme):
-                    doc_url = self._get_static_url(doc_url)
-                docs_html += f'<a href="{doc_url}" class="list-group-item list-group-item-action" target="_blank" rel="noopener noreferrer">{doc_title}</a>'
-            docs_html += "</div>"
-            tech_docs_parts.append(docs_html)
-        if tech_docs_parts:
-            tab_items.append({"title": "Tech & Docs", "content": "".join(tech_docs_parts), "active": not has_active_tab}); has_active_tab = True
+            tech_docs_content_builder._append_html("<h5 class='mt-md mb-sm'>Documents & Links:</h5>")
+            doc_widgets_container = BaseComponent()
+            doc_widgets_container.site = self
+
+            with doc_widgets_container.Grid(cols=1, gap=Spacing.MD, css_class="project-document-widgets"):
+                for doc_item in project_documents:
+                    doc_title_text = doc_item.get("title", "Document")
+                    doc_content_file_path = doc_item.get("url", "#") 
+                    doc_description_text = doc_item.get("description", f"View {doc_title_text}.")
+                    doc_image = doc_item.get("image_url", self._get_static_url("imgs/document_placeholder.png"))
+                    
+                    final_doc_link = "#"
+                    
+                    if doc_content_file_path.endswith(".md"):
+                        relative_page_url_from_project_dir = self._create_markdown_document_sub_page(
+                            page_slug_for_project, 
+                            doc_content_file_path, 
+                            doc_title_text,
+                            meta_info={'project_parent_slug': page_slug_for_project}
+                        )
+                        if relative_page_url_from_project_dir:
+                            final_doc_link = relative_page_url_from_project_dir 
+                        else:
+                            doc_description_text = f"Could not create page for {doc_title_text}"
+                    elif not (doc_content_file_path.startswith(("http://", "https://")) or urlparse(doc_content_file_path).scheme):
+                        source_doc_path = os.path.join(self.content_dir, doc_content_file_path)
+                        target_doc_dir = os.path.join(self.output_dir, page_slug_for_project)
+                        target_doc_filename = os.path.basename(doc_content_file_path)
+                        target_doc_path = os.path.join(target_doc_dir, target_doc_filename)
+                        
+                        try:
+                            os.makedirs(target_doc_dir, exist_ok=True)
+                            if os.path.exists(source_doc_path):
+                                shutil.copy2(source_doc_path, target_doc_path)
+                                final_doc_link = quote(target_doc_filename) 
+                            else:
+                                print(f"Warning: Project document source file not found: {source_doc_path}")
+                                doc_description_text = f"File not found: {doc_content_file_path}"
+                        except Exception as e:
+                            print(f"Error copying project document {source_doc_path} to {target_doc_path}: {e}")
+                            doc_description_text = f"Error accessing file: {doc_content_file_path}"
+                    else: 
+                        final_doc_link = doc_content_file_path
+                    
+                    doc_widgets_container.Widget(
+                        title=doc_title_text,
+                        description=doc_description_text,
+                        link=final_doc_link,
+                        link_text="View Document" if final_doc_link != "#" else "N/A",
+                        image_url=doc_image,
+                        image_height="100px", 
+                        image_width="100px",
+                        object_fit=ObjectFit.CONTAIN
+                    )
+            tech_docs_content_builder._append_html(doc_widgets_container.get_html())
+            has_tech_docs_content = True
+
+        if has_tech_docs_content:
+            tab_items.append({"title": "Tech & Docs", "content": tech_docs_content_builder.get_html(), "active": not has_active_tab}); has_active_tab = True
+        
         if not tab_items:
              tab_items.append({"title": "Project Details", "content": "<p>No specific details provided for this project yet.</p>", "active": True})
         elif not any(t.get("active") for t in tab_items) and tab_items:
             tab_items[0]["active"] = True
+            
         with project_page.Container(css_class="py-lg"):
             project_page.Write(title, css_class="h1 text-center mb-lg", scroll_animation=True, animation=AnimationType.FADE_IN_DOWN)
             if project_page.meta.get('subtitle'):
                  project_page.Write(project_page.meta['subtitle'], css_class="text-muted text-center mb-md", spacing_before=Spacing.NONE)
             project_page.Tabs(items=tab_items, spacing_before=Spacing.LG, scroll_animation=True, animation=AnimationType.FADE_IN_UP)
         return project_page
+
+    def add_html_file_page(self, slug, title="", html_content_filepath=None, meta_info=None):
+        page = self.add_page(slug, title)
+        page.site = self
+        if meta_info:
+            page.meta.update(meta_info)
+
+        if html_content_filepath:
+            source_html_path = os.path.join(self.content_dir, html_content_filepath)
+            try:
+                with open(source_html_path, 'r', encoding='utf-8') as f:
+                    raw_html_content = f.read()
+                
+                processed_html_content = raw_html_content
+                if hasattr(page, 'site') and page.site:
+                    processed_html_content = re.sub(
+                        r'(src|href)=(["\'])((?:\.\/|\/)?static\/)([^"\']+)\2',
+                        lambda m: f'{m.group(1)}={m.group(2)}{page.site._get_static_url(m.group(4))}{m.group(2)}',
+                        raw_html_content,
+                        flags=re.IGNORECASE
+                    )
+                page._append_html(processed_html_content)
+            except FileNotFoundError:
+                print(f"Warning: HTML content file not found: {source_html_path} for page '{slug}'")
+                page.Alert(f"HTML content file '{html_content_filepath}' not found.", style_type=ColorTheme.DANGER)
+            except Exception as e:
+                print(f"Error reading HTML content file {source_html_path} for page '{slug}': {e}")
+                page.Alert(f"Error reading HTML content file: {e}", style_type=ColorTheme.DANGER)
+        else:
+            page.Write("No HTML content file specified for this page.")
+        return page

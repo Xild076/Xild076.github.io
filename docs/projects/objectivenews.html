@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Alitheia AI (Objective News) | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Xild076">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/projects/objectivenews.html">
+    <meta property="og:title" content="Alitheia AI (Objective News) | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/projects/objectivenews.html">
+    <meta property="twitter:title" content="Alitheia AI (Objective News) | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="">
+
+    <link rel="icon" href="/static/img/favicon.ico" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-down">Alitheia AI (Objective News)</p><div class="tabs-container"  style="margin-top: var(--spacing-lg)" data-scroll-animation="fade-in-up"><ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tabs-4341999344-tab-0" data-bs-toggle="tab" data-bs-target="#tabs-4341999344-pane-0" type="button" role="tab" aria-controls="tabs-4341999344-pane-0" aria-selected="true">Overview</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4341999344-tab-1" data-bs-toggle="tab" data-bs-target="#tabs-4341999344-pane-1" type="button" role="tab" aria-controls="tabs-4341999344-pane-1" aria-selected="false">Timeline</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4341999344-tab-2" data-bs-toggle="tab" data-bs-target="#tabs-4341999344-pane-2" type="button" role="tab" aria-controls="tabs-4341999344-pane-2" aria-selected="false">Tech &amp; Docs</button></li></ul><div class="tab-content"><div class="tab-pane fade show active" id="tabs-4341999344-pane-0" role="tabpanel" aria-labelledby="tabs-4341999344-tab-0"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p><center></p>
+
+<h2>Alitheia AI - Objectifying News</h2>
+
+<p></center></p>
+
+<h3>The status quo of misinformation</h3>
+
+<p>Misinformation has always been a historical issue, whether it be in the era of the Greeks or the Dark ages. However, with growing access to technology and information, access to misinformation has also been amplified. This issue is worsened by the fact technology has made it much harder to distinguish between fact and fiction, resulting in even more confusion.</p>
+
+<p><center></p>
+
+<p><img src="/static/imgs/misinformation.png" alt="41% of Americans state that they see misinformation at least once a week." width="600"></p>
+
+<p></center></p>
+
+<p>According to a survey done by Citizen Data in 2024, at least 83% of individuals have reported seeing some form of misinformation, with another 10% being unsure whether they've seen misinformation.</p>
+
+<p>Furthermore, misinformation can have devastating consequences, both on a societal and individual level. It can fuel distrust in institutions, manipulate public opinion, and lead to harmful decision-making. On a societal scale, it can undermine democracy, incite violence, and exacerbate divisions by spreading false narratives that polarize communities.</p>
+
+<h3>Alitheia AI and its solution</h3>
+
+<p>Alitheia AI presents a novel solution to providing unbiased and reliable news by implementing a full pipeline with AI elements to find, categorize, and objectify news.</p>
+
+<p><center></p>
+
+<p><img src="/static/imgs/objective_news_pipeline.png" alt="Pipeline for Alitheia AI." width="600"></p>
+
+<p></center></p>
+
+<p>The process begins by collecting news articles and opinion pieces from various sources using information retrieval techniques. The system employs a combination of web scraping and API-based retrieval (e.g., Google News API, Bing News API, and NewsAPI) to ensure a diverse range of perspectives. Additionally, sources are filtered and ranked based on reliability metrics, ensuring that high-quality sources are prioritized.</p>
+
+<p>Once the articles are collected, textual clustering is applied. This step groups articles based on their core arguments rather than just keywords. Using sentence embeddings and unsupervised clustering methods like HDBSCAN, the system ensures that similar articles are categorized together, allowing for an organized and comparative analysis of different perspectives on the same topic.</p>
+
+<p>Next, the fake news detection module is applied. This is powered by a CNN-LSTM model trained on datasets such as LIAR, ISOT, and other benchmarked fake news datasets. By leveraging deep learning architectures, the system assigns a confidence score to each article, indicating the probability of misinformation.</p>
+
+<p>To further enhance objectivity, the system incorporates an objectification and bias removal step. This involves rule-based NLP processing to eliminate highly emotive language and biased phrasing without altering the core meaning of the text. Additionally, a fine-tuned BART-based summarization model is tested to further refine objectivity by rephrasing articles in a neutral tone.</p>
+
+<p>Once bias is mitigated, the reliability calculation module assesses the trustworthiness of each article based on source credibility, objectivity scores, and historical accuracy of the outlet. A weighted scoring system ensures that highly reliable articles receive higher prominence.</p>
+
+<p>Simultaneously, the opinion extraction step identifies editorialized content and logical fallacies in opinion articles. A zero-shot classification model (BART-based) is used to distinguish news, opinions, and facts, while a fallacy detection model flags arguments containing logical inconsistencies.</p>
+
+<p>Finally, all processed information is presented through an interactive user interface. Users can explore articles categorized by topic clusters, compare different perspectives, and examine reliability breakdowns for each piece of news. Transparency features, such as an explanation panel for AI-generated scores, enhance trust in the system.</p>
+
+<p>Through this multi-stage pipeline, Alitheia AI aims to empower users with factual, unbiased, and objective news, ensuring that misinformation and bias no longer distort the truth.</p>
+
+<p>You can try this program out here: <a rel="nofollow noopener" target="_blank" href="https://objectivenews.streamlit.app/">https://objectivenews.streamlit.app/</a></p>
+
+<h3>Innovations</h3>
+
+<p>Alitheia AI includes some novel key improvements when compared to previous methods of objectifying news:</p>
+
+<ol>
+<li>It collects news from diverse sources to ensure a comprehensive perspective  </li>
+<li>It groups similar points of information within articles together for easy reading using innovative techniques like context and untrained self-attention  </li>
+<li>It uses a novel rule-based method to objectify text with NLP  </li>
+<li>It creates a dynamic reliability score to avoid the binary choice of "fact" and "fiction"  </li>
+</ol>
+
+<h3>Conclusion</h3>
+
+<p>Alitheia AI is dedicated to improving the way we consume information. By leveraging AI to remove bias, detect misinformation, and provide transparency, my final goal is to give users the tools needed to navigate today's world of misinformation with a little more trust. Cheers!</p>
+</div></div><div class="tab-pane fade" id="tabs-4341999344-pane-1" role="tabpanel" aria-labelledby="tabs-4341999344-tab-1"><div class="timeline"  style="margin-bottom: var(--spacing-md)"><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-10-01</div><p>Began project Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.15s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-12-15</div><p>Completed the first beta version of Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.3s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-01-02</div><p>Completed the second beta version of Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.44999999999999996s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-02-09</div><p>Completed official proposal paper for full version of Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.6s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-03-06</div><p>Renamed project to Alitheia AI (Greek for &#x27;truth&#x27;)</p></div></div></div></div><div class="tab-pane fade" id="tabs-4341999344-pane-2" role="tabpanel" aria-labelledby="tabs-4341999344-tab-2"><p class='mb-sm'><strong>Technologies Used:</strong> <span class="badge bg-secondary me-xs mb-xs">Python 3.x for backend processing</span><span class="badge bg-secondary me-xs mb-xs">Streamlit for hosting</span><span class="badge bg-secondary me-xs mb-xs">Stanza for NLP</span><span class="badge bg-secondary me-xs mb-xs">Hugging Face Transformers for state-of-the-art models</span><span class="badge bg-secondary me-xs mb-xs">Scikit-learn for clustering</span><span class="badge bg-secondary me-xs mb-xs">BeautifulSoup for web scraping</span><span class="badge bg-secondary me-xs mb-xs">Requests for HTTP requests</span><span class="badge bg-secondary me-xs mb-xs">Github for development</span></p><h5 class='mt-md mb-sm'>Documents & Links:</h5><div class="gap-md grid grid-cols-1 project-document-widgets"  style="margin-bottom: var(--spacing-md)"><div class="animate-fade-in-up widget-horizontal-layout"  style="margin-bottom: var(--spacing-md)" object-fit="ObjectFit.CONTAIN"><div class="widget-image-container" style="flex-basis: 100px; width: 100px; height: 100px"><img src="/static/imgs/document_placeholder.png" alt="Beta Paper" style="object-fit: cover; display: block; width: 100%; height: 100%"></div>
+            <div class="widget-content-container d-flex flex-column">
+                <h5 class="widget-title">Beta Paper</h5>
+                <p class="widget-description flex-grow-1">View Beta Paper.</p>
+                <a href="paper_vbeta.html" class="btn btn-sm btn-outline-primary mt-auto widget-link">View Document</a>
+            </div>
+        </div><div class="animate-fade-in-up widget-horizontal-layout"  style="margin-bottom: var(--spacing-md)" object-fit="ObjectFit.CONTAIN"><div class="widget-image-container" style="flex-basis: 100px; width: 100px; height: 100px"><img src="/static/imgs/document_placeholder.png" alt="Official Proposal" style="object-fit: cover; display: block; width: 100%; height: 100%"></div>
+            <div class="widget-content-container d-flex flex-column">
+                <h5 class="widget-title">Official Proposal</h5>
+                <p class="widget-description flex-grow-1">View Official Proposal.</p>
+                <a href="Proposal%E2%80%94Objective%20News.pdf" class="btn btn-sm btn-outline-primary mt-auto widget-link">View Document</a>
+            </div>
+        </div></div></div></div></div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Xild076. All rights reserved.
+            <p class="text-muted mt-xs">Powered by SiteGen</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

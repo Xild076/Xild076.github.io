@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Test post | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Harry Yin (Xild076)">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/blog/first_blog.html">
+    <meta property="og:title" content="Test post | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="https://xild076.github.io/static/img/social.png">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/blog/first_blog.html">
+    <meta property="twitter:title" content="Test post | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="https://xild076.github.io/static/img/social.png">
+
+    <link rel="icon" href="/static/img/favicon.ico" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="./index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="./index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="./projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="./blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="./cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="./about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md); font-size: 3.5rem" data-scroll-animation="fade-in-down">Test post</p><div class="align-items-start blog-post-meta d-flex flex-row flex-wrap justify-content-center mb-md text-muted"  style="margin-top: var(--spacing-sm); margin-bottom: 0"><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">1 min read</p></div><hr class="divider" style="margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 0; border-top-width: 1px; border-top-style: solid; border-top-color: var(--bs-border-color); height: 0; opacity: 0.25"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-up"><h1>Markdown Demo Page</h1>
+
+<p>This content comes from a Markdown file in the <code>content/</code> directory.</p>
+
+<h2>Features Supported</h2>
+
+<p>The <code>Markdown</code> component uses <code>markdown2</code> which supports various extensions:</p>
+
+<ul>
+<li>Lists (like this one)</li>
+<li><strong>Bold</strong> and <em>italic</em> text</li>
+<li><code>Inline code</code></li>
+<li><a rel="nofollow noopener" target="_blank" href="https://example.com">Links</a> with <code>target-blank-links</code> option.</li>
+<li>Tables:</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+  <th style="text-align:left;">Header 1</th>
+  <th style="text-align:center;">Header 2</th>
+  <th style="text-align:right;">Header 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:left;">Left</td>
+  <td style="text-align:center;">Center</td>
+  <td style="text-align:right;">Right</td>
+</tr>
+<tr>
+  <td style="text-align:left;">Cell</td>
+  <td style="text-align:center;">Cell</td>
+  <td style="text-align:right;">Cell</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>Fenced Code Blocks:</li>
+</ul>
+
+<div class="codehilite">
+<pre><span></span><code><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+
+<span class="n">hello</span><span class="p">(</span><span class="s2">&quot;Markdown&quot;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<div class="codehilite">
+<pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Hello from JavaScript!&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<ul>
+<li>Blockquotes:</li>
+</ul>
+
+<blockquote>
+  <p>This is a blockquote within Markdown.
+  It can span multiple lines.</p>
+</blockquote>
+
+<ul>
+<li>Horizontal Rules:</li>
+</ul>
+
+<hr />
+
+<ul>
+<li>Footnotes<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup></li>
+</ul>
+
+<p>And more! Check the <code>markdown2</code> documentation for all supported extras.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>This is the footnote definition.&#160;<a href="#fnref-1" class="footnoteBackLink" title="Jump back to footnote 1 in the text.">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Harry Yin (Xild076). All rights reserved.
+            <p class="text-muted mt-xs">Powered by SiteGen</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LSDAI README | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Harry Yin (Xild076)">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/projects/lsdai/lsd_ai_readme.html">
+    <meta property="og:title" content="LSDAI README | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/projects/lsdai/lsd_ai_readme.html">
+    <meta property="twitter:title" content="LSDAI README | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="">
+
+    <link rel="icon" href="/static/img/favicon.ico" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container document-page-container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center"  style="margin-bottom: var(--spacing-md); font-size: 2.5rem">LSDAI README</p><hr class="divider" style="margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 0; border-top-width: 1px; border-top-style: solid; border-top-color: var(--bs-border-color); height: 0; opacity: 0.25"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><h2>Overview</h2>
+
+<p>The LSDAI serves as the main entry point for a Streamlit application designed to perform advanced audio analysis tasks, including emphasis detection, tone analysis, and speech speed evaluation. This application leverages multiple Python modules and files to deliver a comprehensive analysis of audio files.</p>
+
+<h2>Warnings</h2>
+
+<p>Currently, the application is running off of a personal API key. The usage of external API keys will be implemented in the future.</p>
+
+<h2>Dependencies</h2>
+
+<p>The application requires several Python libraries and external modules, which should be installed before running the app:</p>
+
+<ul>
+<li><code>streamlit</code>: For building the web interface.</li>
+<li><code>emphasis.py</code>: Handles the detection of emphasized words or phrases in the audio.</li>
+<li><code>tone.py</code>: Manages the tone analysis functionality, providing insights into the emotional content of speech.</li>
+<li><code>util.py</code>: Contains utility functions that support the main analysis, such as file handling and formatting.</li>
+<li><code>content.py</code>: Facilitates content extraction and organization for analysis.</li>
+<li><code>speech.py</code>: Implements speech analysis, particularly focusing on the quality and clarity of spoken words.</li>
+<li><code>speed.py</code>: Provides functionality for calculating and analyzing the speed of speech.</li>
+<li><code>api_key.encrypted</code>: A text file containing the necessary API keys for accessing external services (Paid OpenAI Key)</li>
+</ul>
+
+<h2>Key Features</h2>
+
+<ul>
+<li><p><strong>Audio File Upload</strong>: Users can upload audio files of various formats. The app processes these files and conducts multiple forms of analysis.</p></li>
+<li><p><strong>Emphasis Detection</strong>: The <code>emphasis.py</code> module is used to detect and highlight emphasized words or phrases within the audio, making it easier to identify key points or stressed content.</p></li>
+<li><p><strong>Tone Analysis</strong>: The <code>tone.py</code> module provides a detailed analysis of the tone used in the speech, helping to discern emotional undertones or intentions.</p></li>
+<li><p><strong>Speech Speed Analysis</strong>: The <code>speed.py</code> module measures the speed of speech, which can be an indicator of various factors such as nervousness or excitement.</p></li>
+<li><p><strong>Speech Clarity</strong>: The <code>speech.py</code> module assesses the clarity of the speech, ensuring that the spoken words are easily understood.</p></li>
+<li><p><strong>User Authentication</strong>: The app includes user authentication functionality, which uses the API key from <code>api_key.encrypted</code> to manage access and usage.</p></li>
+<li><p><strong>Persistent Data</strong>: Data and analysis results are saved and can be revisited or updated as needed. This includes maintaining previous analysis for each user.</p></li>
+</ul>
+
+<h2>Usage</h2>
+
+<ol>
+<li><p><strong>Running the App</strong>: To run the app, use the Streamlit command:</p>
+
+<div class="codehilite">
+<pre><span></span><code>streamlit<span class="w"> </span>run<span class="w"> </span>app.py
+</code></pre>
+</div></li>
+<li><p><strong>Uploading Audio Files</strong>: Users can upload audio files directly through the app's interface. The app will automatically process these files and display results.</p></li>
+<li><p><strong>Analysis</strong>: Once an audio file is uploaded, the app will conduct emphasis detection, tone analysis, and speed analysis. Results are displayed in an organized manner, with the option to save or revisit previous analyses.</p></li>
+<li><p><strong>API Key Management</strong>: Ensure that the <code>api_key.encrypted</code> file contains a valid API key. This key is crucial for accessing the external services used in the analysis.</p></li>
+</ol>
+
+<h4>Notes</h4>
+
+<ul>
+<li><p><strong>File Size Limitations</strong>: There may be size limitations on the audio files that can be uploaded, depending on the configuration of the Streamlit server and the underlying infrastructure.</p></li>
+<li><p><strong>Customizations</strong>: The app is modular, allowing for easy customization. Developers can add additional analysis modules or modify existing ones by editing the corresponding <code>.py</code> files.</p></li>
+<li><p><strong>Error Handling</strong>: Basic error handling is implemented, but users should ensure that the audio files are properly formatted and that all dependencies are installed correctly.</p></li>
+</ul>
+
+<h2>Future Enhancements</h2>
+
+<ul>
+<li><p><strong>Improved GUI</strong>: Plans to enhance the graphical interface, including animations and dynamic updates, are under consideration.</p></li>
+<li><p><strong>Expanded Analysis</strong>: Additional forms of analysis, such as sentiment analysis or linguistic complexity, may be integrated into future versions.</p></li>
+<li><p><strong>Multi-User Support</strong>: Expanding the app's capabilities to support multiple users with separate accounts and analysis histories.</p></li>
+</ul>
+</div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Harry Yin (Xild076). All rights reserved.
+            <p class="text-muted mt-xs">Powered by SiteGen</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

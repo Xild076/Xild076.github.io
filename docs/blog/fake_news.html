@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Programming - Methods to Detect Fake News | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Harry Yin">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/blog/fake_news.html">
+    <meta property="og:title" content="Programming - Methods to Detect Fake News | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/blog/fake_news.html">
+    <meta property="twitter:title" content="Programming - Methods to Detect Fake News | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="">
+
+    <link rel="icon" href="/static/img/favicon.ico" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md); font-size: 3.5rem" data-scroll-animation="fade-in-down">Programming - Methods to Detect Fake News</p><div class="align-items-start blog-post-meta d-flex flex-row flex-wrap justify-content-center mb-md text-muted"  style="margin-top: var(--spacing-sm); margin-bottom: 0"><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">By Harry Yin</p><p class="meta-separator mx-sm text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">•</p><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">Published on 2025-03-09</p><p class="meta-separator mx-sm text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">•</p><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">3 min read</p></div><hr class="divider" style="margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 0; border-top-width: 1px; border-top-style: solid; border-top-color: var(--bs-border-color); height: 0; opacity: 0.25"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p>While looking into stuff I could add to Alitheia AI to improve it, I came across the idea of using ML to detect fake news, so I did some research into it. </p>
+
+<p>It turns out, there are much more ways to detect fake news using ML than I thought. In this blog post, I thought I'd look at a couple of these methods and give my own input on possible directions that this can be taken.</p>
+
+<p>A paper, <a rel="nofollow noopener" target="_blank" href="https://www.sciencedirect.com/science/article/pii/S2665917424000047"><em>Detection of fake news from social media using support vector machine learning algorithms</em> by Sudhakar and Kaliyamurthie</a>, included a comprehensive list of the most mainstream methods, of which included:</p>
+
+<ul>
+<li><p>Naive Bayes</p></li>
+<li><p>Logistic Regression</p></li>
+<li><p>Support Vector Machine</p></li>
+<li><p>Decision Tree</p></li>
+<li><p>Random Forest and K-Nearest Neighbor</p></li>
+<li><p>Convolutional Neural Networks</p></li>
+<li><p>Long Short-Term Memory</p></li>
+</ul>
+
+<p>The results of the paper indicated that the best method was SVM, which sat at an accuracy of about 98%, while the worst was LSTM, which sat at an accuracy of about 54%. Logistic Regression also provided surprising accuracy at a rate of around 95%. SVM and Logistic Regression's success is consistent with the findings in other papers—<a rel="nofollow noopener" target="_blank" href="https://www.scitepress.org/PublishedPapers/2021/105620/105620.pdf"><em>Fake News Detection using Support Vector Machine</em> by Patel et al</a> found that out of NB, Decision Tree, Random Forest, Multinomial NB, Logistic Regression, and SVM, Logistic Regression and SVM were the most accurate at 94.92% and 94.93% accuracy respectively.</p>
+
+<p>In fact, the highest accuracy I found for SVM was in <a rel="nofollow noopener" target="_blank" href="https://arxiv.org/html/2411.12703v1"><em>Strengthening Fake News Detection: Leveraging SVM and Sophisticated Text Vectorization Techniques. Defying BERT?</em> by Karim et al</a>, where an optimized SVM method produced a 99.81% accuracy, which is remarkably high, especially since it was being compared to BERT, a transformer model.</p>
+
+<p>However, I also came across another very interesting technique—a CNN-LSTM hybrid model approach discussed in <a rel="nofollow noopener" target="_blank" href="https://www.sciencedirect.com/science/article/pii/S2405844024012751"><em>LSTMCNN: A hybrid machine learning model to unmask fake news by</em> Dev et al</a>. While the accuracy presented was only 98% compared to an optimized and intensively-trained SVM's 99.81%, the interesting thing was that within the paper, the CNN-LSTM hybrid model is compared to a Logistic Regression model with an accuracy of 95%. That would make it closer to the accuracy found in Patel et al's paper, meaning that relatively, SVM should be much less accurate compared to a CNN-LSTM hybrid model.</p>
+
+<p>However, since there is no direct comparison with both models trained to the max, we can't be sure which one is the better one, although transformer models will likely still remain king.</p>
+
+<p>From reading all those papers, the key takeaway I got was:</p>
+
+<ol>
+<li>For the greatest cost-performance ratio, SVM is the best fake news detection method.</li>
+<li>For a more intensive but more widely applicable and flexible method, CNN-LSTM hybrid models are the best.</li>
+<li>For the most intensive but most accurate model, BERT is the best.</li>
+</ol>
+
+<p>However, I do have a few thoughts and gripes about the current methodologies.</p>
+
+<p>First, I believe that it is worth looking into more hybrid model options. I have a few random ideas for those: CNN-BiLSTM, CNN-SVM, and (Bi)LSTM-SVM. Since I'm only familiar with LSTM, I'm not sure I can explain the merit of the hybrid models, but I do think given patterns and trends I've seen within the models, these models could be worth a try. </p>
+
+<p>The second issue I have with current methodologies is the binary approach. Personally, I think that a binary approach is not accurate to what is necessary in the modern age. I believe that fake news and misinformation are more commonly half-lies or half-truths instead of full lies. For instance, while a piece of news may provide correct information on one part of the issue, it may provide incorrect information or just not provide information on another important part of the information. This presents a bit of an issue because, with a binary system for classifying news, a lot of nuance is lost within the sauce. </p>
+
+<p>I found a pretty effective solution in <a rel="nofollow noopener" target="_blank" href="https://scholarspace.manoa.hawaii.edu/server/api/core/bitstreams/2eb9a917-e4dc-4371-bb5a-dd894001bf57/content"><em>Toward Automatic Fake News Classification</em> by Souvick Ghosh and Chirag Shah</a>, which proposes a ternary classification system, introducing a "suspicious" category. This method provides a more realistic representation of misinformation, allowing models to distinguish between entirely false news and content that contains partial truths. Similarly, <a rel="nofollow noopener" target="_blank" href="https://www.kaggle.com/datasets/doanquanvietnamca/liar-dataset"><em>"Liar, Liar Pants on Fire": A New Benchmark Dataset for Fake News Detection</em> by William Wang</a> presents a dataset that labels degrees of truthfulness, offering another step toward more nuanced classification.</p>
+
+<p>All in all, I do believe that more research needs to be done and better methodologies need to be created, as misinformation is a growing and massively pressing issue. I'll also continue to do my own research into making more nuanced fake news classification, and I'd love to hear thoughts from anyone more knowledgeable than me on this topic.</p>
+
+<p>Cheers!</p>
+</div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Harry Yin. All rights reserved.
+            <p class="text-muted mt-xs">Powered by SiteGen</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

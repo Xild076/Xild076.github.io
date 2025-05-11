@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Programming - Self Attention in Textual Clustering | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Harry Yin">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/blog/self_atten_blog.html">
+    <meta property="og:title" content="Programming - Self Attention in Textual Clustering | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/blog/self_atten_blog.html">
+    <meta property="twitter:title" content="Programming - Self Attention in Textual Clustering | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="">
+
+    <link rel="icon" href="/static/img/favicon.ico" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md); font-size: 3.5rem" data-scroll-animation="fade-in-down">Programming - Self Attention in Textual Clustering</p><div class="align-items-start blog-post-meta d-flex flex-row flex-wrap justify-content-center mb-md text-muted"  style="margin-top: var(--spacing-sm); margin-bottom: 0"><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">By Harry Yin</p><p class="meta-separator mx-sm text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">•</p><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">Published on 2025-03-08</p><p class="meta-separator mx-sm text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">•</p><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">2 min read</p></div><hr class="divider" style="margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 0; border-top-width: 1px; border-top-style: solid; border-top-color: var(--bs-border-color); height: 0; opacity: 0.25"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p>A while back, while working on Alitheia AI, I had the idea to apply self-attention to textual clustering after learning about what self-attention was. Unfortunately, I didn't know how to train the self-attention model then, so I left it untrained.</p>
+
+<p>Surprisingly, however, the self-attention often somewhat improved the textual clarity of the clustering while also massively improving the cluster's scoring on a series of metrics. </p>
+
+<p>Thus, in this blog, I wanted to explore some possibilities as to why this may have occurred.</p>
+
+<p>First and foremost, it turned out that my idea was not as novel as I thought it was as. There is an excellent paper about this topic that I will be using as reference for the rest of the blog: Lovedeep Singh's <a rel="nofollow noopener" target="_blank" href="https://arxiv.org/pdf/2201.02816">Clustering Text Using Attention</a>.</p>
+
+<p>Taking a look at Singh's results the average improvement of about 174.65% from baseline clustering to clustering after applying AP2 (attention clustering w/pre-trained embeddings and using 20% of data for training), which is certainly impressive. Furthermore, applying AP9 saw even more improvement, although variable.</p>
+
+<p>However, the issue lies with the fact that when doing my own tests with an untrained self-attention model, I saw a consistent improvement of about 161.22%, which isn't too far off from Singh's result with trained models. </p>
+
+<p>That was surprising since theoretically, the untrained model should have seen, on average, no improvement in clustering, yet it showed consistent improvements. This got me thinking that maybe given how silhouette scores were calculated, any sort of self-attention, if consistent, could improve clustering.</p>
+
+<p>The idea behind this depends on the fact that silhouette scores are calculated purely on a numerical basis and determined through relative similarity between clusters. Self-attention, meanwhile applies both amplifying and dampening weights, meaning that if applied consistently, certain similar sets of values will be decreased or increased. My belief is that given such effects, a sort of artificial dimensional reduction is applied. Due to some values being dampened into irrelevance, an effect similar to that of UMAP of PCA reduction might have occurred, resulting in greater cluster separability due to the algorithm having less nuance to worry about.</p>
+
+<p>The issue with this is that such clustering doesn't actually guarantee better clustering since random words or phrases will be amplified. Thus, I can only chalk up the improved perceived clustering to luck, but I still need to do more tests on the perceived clustering improvements to be sure. Furthermore, I think it is necessary to find a better and more universal scoring metric for textual clustering in particular, as, otherwise, there won't be a consistent method to determine the validity of textual clusters.</p>
+
+<p>All in all, the conclusion I came to was that self-attention is indeed a useful tool for improving textual clustering and that using silhouette scores as a scoring metric is not such a good idea. Overall, this was a very interesting topic to look into, and I think it is an area that needs a lot more research. </p>
+
+<p>Cheers!</p>
+</div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Harry Yin. All rights reserved.
+            <p class="text-muted mt-xs">Powered by SiteGen</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

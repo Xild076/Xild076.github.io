@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Beta Paper | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Harry Yin (Xild076)">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/projects/objectivenews/paper_vbeta.html">
+    <meta property="og:title" content="Beta Paper | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/projects/objectivenews/paper_vbeta.html">
+    <meta property="twitter:title" content="Beta Paper | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="">
+
+    <link rel="icon" href="/static/img/favicon.ico" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container document-page-container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center"  style="margin-bottom: var(--spacing-md); font-size: 2.5rem">Beta Paper</p><hr class="divider" style="margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 0; border-top-width: 1px; border-top-style: solid; border-top-color: var(--bs-border-color); height: 0; opacity: 0.25"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><h1>Objective News - The Process</h1>
+
+<p>By: Xild076 (Harry Yin)\
+harry.d.yin.gpc@gmail.com</p>
+
+<h3>Table of Contents</h3>
+
+<ol>
+<li><a href="#1-abstract">Abstract</a></li>
+<li><a href="#2-introduction">Introduction</a></li>
+<li><a href="#3-thought-process">Thought Process</a>
+<ol>
+<li><a href="#31-grouping">Grouping</a></li>
+<li><a href="#32-objectifying-text">Objectifying Text</a></li>
+<li><a href="#33-article-scraping-and-relability">Article Scraping</a></li>
+</ol></li>
+<li><a href="#4-implementation">Implementation</a>
+<ol>
+<li><a href="#41-grouping">Grouping</a></li>
+<li><a href="#42-objectifying-text">Objectifying Text</a></li>
+<li><a href="#43-article-scraping-and-relability">Article Scraping</a></li>
+</ol></li>
+<li><a href="#5-results">Result</a>
+<ol>
+<li><a href="#51-grouping">Grouping</a></li>
+<li><a href="#52-objectifying-text">Objectifying Text</a></li>
+<li><a href="#53-article-scraping-and-relability">Article Scraping</a></li>
+</ol></li>
+<li><a href="#6-future-plans">Future Plans</a></li>
+<li><a href="#7-conclusion">Conclusion</a></li>
+<li><a href="#8-references">References</a></li>
+</ol>
+
+<h2>1. Abstract</h2>
+
+<p>In an era where misinformation and bias increasingly shape public opinion, ObjectiveNews aims to deliver a scalable, lightweight solution for generating objective news insights. This project integrates hierarchical text clustering, sentiment analysis, and web scraping to identify topics, neutralize emotive language, and assess reliability across diverse news sources. Using an innovative double-level clustering approach enhanced with silhouette scores, it efficiently groups related sentences into coherent topics. Text objectification employs rule-based techniques to minimize subjective language while preserving grammatical accuracy. Reliability is evaluated through a combination of source credibility metrics and sentiment analysis. This paper presents the methodology, challenges, and results of ObjectiveNews, showcasing its potential to combat misinformation by providing accessible, unbiased news analysis.</p>
+
+<h2>2. Introduction</h2>
+
+<p>Misinformation has become one of the defining challenges of the digital age. With the rise of advanced algorithms and the constant stream of information, it’s increasingly difficult to separate fact from fiction. This erosion of trust in the media and the polarization of society are not just abstract issues — they’re personal to me. As someone involved in High School Policy Debate and who closely follows politics, watching the effects of misinformation is both frustrating and alarming. Research shows how harmful misinformation can be, influencing not just public opinion but also mental health and behavior<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>.</p>
+
+<p>That’s why I started ObjectiveNews — a project aimed to provide news in its most objective form. The ultimate goal is to locate, group, and deliver news objectively, while ensuring the system is lightweight enough to run on most devices without any fancy setups or extra costs. While the project is still in its beta phase, with optimizations in progress, it’s already functional on most devices. The current focus is on improving speed and refining processes, but the core concept will always remain the same: making objective news more accessible in a world that desperately needs it.</p>
+
+<h2>3. Thought Process</h2>
+
+<p>When I first began the project, I identified three main things I needed to do: Grouping the text, making the text objective, and gathering all that information up, summarizing it, and determining its reliability.</p>
+
+<h3>3.1 Grouping</h3>
+
+<p>For grouping, the source I used was Korbinian Kosh's <em>A Friendly Introduction to Text Clustering</em><sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>. The key takeaways I recieved from this articles were to: 1. embed sentences, and 2. to use hierarchical clustering. Thus, I got to work with the basic implementation of textual clustering.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
+
+<span class="n">sentences</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="c1"># Put sentences here.</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;all-MiniLM-L6-v2&#39;</span><span class="p">)</span>
+<span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span>
+
+<span class="n">clustering_model</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span>
+    <span class="n">distance_threshold</span><span class="o">=</span><span class="mf">12.5</span>
+<span class="p">)</span>
+
+<span class="n">clusters</span> <span class="o">=</span> <span class="n">clustering_model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>For my first attempt, I used <code>distance_threshold</code> because I didn't want to input the number of topics or clusters; I wanted the code to determine what the clusters were. For the inputs, I scraped the web for all the text I needed, put them all into one big list, and then clustered to get the main ideas.</p>
+
+<p>It was good enough for a first attempt, and I tested it out. The results were lackluster. The issue was that <code>distance_threshold</code> was too sensitive and strict. Thus, if a sentence with the same topic but slightly too different of a wording was used, there would be issues. The second issue was how slow the process was. To begin with, Agglomerative Clustering was already a slow clustering method that would take exponentially longer the more inputs there were. In my case, I gave it over a thousand sentences to cluster too, which was made it ridiculously slow. Thus, I began to look for better solutions.</p>
+
+<p>First, I needed to solve the issue about the clustering itself. However, I was stuck at a bottleneck here. The reason I stuck to Agglomerative Clustering was because of its <code>distance_threshold</code>. All other clustering methods only had <code>n_clusters</code>, which didn't suit my project because I needed to know how many topics there were, not give the model that information. However, that was when I came across silhouette scores<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup>. The usage of silhouette scores allowed me to determine the performance of a clustering with multiple different <code>n_clusters</code>, effectively giving me a way to determing the number of topics without using an arbritrary <code>distance_threshold</code>. With this, the methodology for clustering was settled.</p>
+
+<p>Second, I needed to solve the issue of the long clustering times. The solution came with silhouette score solution from above. I was testing it when I realized that I could do double level clustering. Essentially, I would cluster the text in each individual article, find their representative sentences, and cluster all the representative sentences. This would find the main idea of each cluster and see if the main idea was matched among all the other texts to form higher level groups. This would lower the amount of clustering needed to be done from something akin to $2^{1000}<em>1000$ to $(2^{100}</em>10)<em>100+2^{150}$ *(assuming that the clustering time is doubled per extra input, that there are 10 total texts with 100 sentences each, and a total of 15 representative sentences are retrieved per individual grouping)</em>. This is a massive increase in calculating efficiency, achieving my goal. With this, the methodology for improving the efficiency of the clustering was done.</p>
+
+<p>In the end, the basic framework was something like this:</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">silhouette_score</span>
+
+<span class="n">sentences_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="o">...</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">...</span><span class="p">],</span>
+    <span class="o">...</span>
+<span class="p">]</span> <span class="c1"># Put sentences here.</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;all-MiniLM-L6-v2&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">find_representative_sentences</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="n">representative_sentences</span>
+
+<span class="k">def</span> <span class="nf">cluster</span><span class="p">(</span><span class="n">sentences</span><span class="p">):</span>
+    <span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span>
+    <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span>
+        <span class="n">distance_threshold</span><span class="o">=</span><span class="mf">12.5</span>
+    <span class="p">)</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">clustering_model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">clusters</span>
+
+<span class="n">representative_sentences</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">sentences</span> <span class="ow">in</span> <span class="n">sentences_list</span><span class="p">:</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span>
+    <span class="n">representative_sentences</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+        <span class="n">find_representative_sentences</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="n">rep_cluster</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">(</span><span class="n">representative_sentences</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Thus, I have the basic methodology for grouping done. <em>(Improvements are currently being made. Please reference <a href="#6-future-plans">Future Plans</a> to see.)</em></p>
+
+<h3>3.2 Objectifying Text</h3>
+
+<p>For objectifying texts, I had two primary ideas. The first idea was to fine-tune an existing model to make it produce objective texts. The plan was to have something like Textblob's textual objective scores to serve as the metric for the model, thus I began to implement. It did not go well. First, I wasn't sure how to fine-tune models. I looked for online resources, but the results were not what I needed. As a general beginner to LLMs and as someone who has only worked with the fundemental level of regression, supervised learning, and a bit of time-series models, I didn't have the knowledge necessary to implement anything. The closest I got was with a HuggingFace Blog on RLHF<sup class="footnote-ref" id="fnref-4"><a href="#fn-4">4</a></sup> which gave me the theory behind it, but I was still stuck on implementation. Furthermore, while attempting another implementation of a similar fine-tuning method I found online, I realized that my device had many computational limitations. Thus, I dropped this method. <em>(For now. Recently, I Have delved into LLM and fine-tuning much more and believe that I will be able to implement this method soon.)</em></p>
+
+<p>The next idea I had was to brute force the objectifying, as in, go through every word and find which words need to be removed/altered to make the text more objective. In the english language, there are three main things that strongly convey emotion: adjectives, adverbs, and verbs. Each of them can be extremely emotive, thus those are the targets in this code. In a nutshell, if an adjective is below a certain threshold of objectivity and if the adjective is not structurally important to the text, it is removed. However, if the word is structurally important to the sentence, then a more objective synonym will be found. Similar things are done to verbs and adverbs. Given that, the most fundemental idea for objectifying text was done.</p>
+
+<h3>3.3 Article Scraping and Relability</h3>
+
+<p>The final biggest issues for me were webscraping and finding the reliability of information. First, webscraping was complicated. I had the limitation of being unable to use APIs due to their cost. I am attempting to keep the app entirely free and accessible, meaning anything that is priced is no good. Thus, I used a method I used in a previous project for retrieving website information: finding links using the Google search url an bs4 and using trafilatura and newspaper3k for text retrieval.</p>
+
+<p>For the Google search url, I used a method I found on DEV<sup class="footnote-ref" id="fnref-5"><a href="#fn-5">5</a></sup>:</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="n">base_url</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;https://www.google.com/search?q=</span><span class="si">{</span><span class="n">search_query</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="sa">f</span><span class="s2">&quot;&amp;gl=us&amp;tbm=nws&amp;num=</span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="sa">f</span><span class="s2">&quot;&amp;tbs=cdr:1,cd_min:</span><span class="si">{</span><span class="n">formatted_start</span><span class="si">}</span><span class="s2">,cd_max:</span><span class="si">{</span><span class="n">formatted_end</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+</code></pre>
+</div>
+
+<p>This method allowed me to find links from a certain topic in a certain range <em>(supposedly, the date range currently isn't working, see <a href="#6-future-plans">Future Plans</a>)</em>. The <code>seach_query</code> is derived from gathering the keywords of the title of the inputted article or keywords of the text. Thus, I have a list of links.</p>
+
+<p>The next part is pretty simple, using tralifutura and then newspaper3k for backup for text retrieval and adding a rate limiter to comply with the usage policies of Google <em>(politely)</em> and to avoid being blocked <em>(truthfully)</em>.</p>
+
+<p>The next issue was to find reliability. For this, my initial idea was to find reliability determined off of the sources. After looking into it, I found a great resource from nsfyn55 with a fully scrubbed media bias chart<sup class="footnote-ref" id="fnref-6"><a href="#fn-6">6</a></sup>. This solved the preliminary measure for reliability, but later on, I also decided to use Textblob's subjective sentiment analysis to determine whether or not the individual text seems to be emotive or not. More emotion and subjectivity within a text usually indicates less reliability, thus I used it as a multiplier to determine the final reliability. Thus, the basic methodology for article scraping and finding reliability was established.</p>
+
+<h2>4. Implementation</h2>
+
+<p>However, thoughts and concepts only remain thoughts, thus I sill needed to implement of each of the three parts.</p>
+
+<h3>4.1 Grouping</h3>
+
+<p>First, grouping was relatively simple. Ultimately, the original <a href="#3-thought-process">throught process</a> was very close to the output. However, there were two main new additions.</p>
+
+<p>First was the implementation of context. An issue I noticed was that important single sentences can often be lacking in understanding of what the text truly means. Thus, to remedy this, I implemented context by gathering the sentences around the single sentence to form a paragraph with three sentences, combining the two embeddings with weights, and then inputting that into the cluster. Whiel I'm only making assumptions that this works, and I'm not sure why or how it works, from testing it, it seems to produce good results.</p>
+
+<p>Second was the usage of more scoring metrics. At the beginning, I only used silhouette scoring, which measure the closeness of points in the same cluster and the distance of points of different clusters. However, I found out about two other cluster metrics: davies-bouldin, which measures the average similarity ratio of clusters, and calinski-harabasz, which measures ratio of the sum of between-cluster dispersion to within-cluster dispersion. Each of these metrics are important in their own way as text clustering can also be evaluated on different clusters. Since my goals are to create distinct but general clusters, silhouette and davies-bouldin scores ended up being the most important for evaluation, however, I still made the weights changable. Due to each score having a different range, I needed to play around with the score to make the final caculation work, meaning that any change in the weights could cause extremely volitile reactions due to the inverse calculations done. I got lucky with <code>{'sil': 0.4, 'db': 0.55, 'ch': 0.05}</code> being a good series of weights, however, work still needs to be done to find a better calculation for scoring <em>(Please reference <a href="#6-future-plans">Future Plans</a>)</em></p>
+
+<h3>4.2 Objectifying</h3>
+
+<p>Next, objectifying was silghtly more complicated due to something we all love/hate/feel indifferent to: Grammar Rules (and NLP).</p>
+
+<p>To begin, the implementation of the removal of adjectives was simple. For NLP, I primarily used Stanford Stanza since it does part-of-speech analysis the best, which is the most important for my purposes. Next, I needed to split the text into segments based on quotes. Even if I was trying to make the text more objective, quotes needed to be preserved, thus the text was split using <code>re</code>.</p>
+
+<p>Now, with the segments, I began to iterate through all the words and analyse each one of the words, done through three metrics: the part of speech, the objectivity of the word, and the position of the word. The adjectives, adverbs, and verbs were handled as mentioned in the <a href="#3-thought-process">thought process</a>: they were either removed, left along, or replaced with a synonym depending on how objective they were and their location in the text.</p>
+
+<p>The issue came after the adjectives were removed. After the words were removed, there would be hanging punctuation, determiners, and conjunctions. These needed to be removed, which resulted in a long and arduous journey figuring out the grammatical rules that would necessitate the removal of any of the hanging texts. Ultimately, the code came together with this:</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="n">add</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># add is 0, remove is 1, synonym is 2</span>
+<span class="n">word_text</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">text</span>
+<span class="n">word_pos</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">upos</span>
+<span class="n">word_objectivity</span> <span class="o">=</span> <span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">word_text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">word_pos</span><span class="p">))</span>
+<span class="k">if</span> <span class="n">word_pos</span> <span class="o">==</span> <span class="s2">&quot;ADJ&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">word_objectivity</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">:</span> <span class="c1"># If it is above the threshold, add normally, no need to change</span>
+        <span class="k">if</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span> <span class="o">==</span> <span class="s2">&quot;AUX&quot;</span><span class="p">:</span> <span class="c1"># If preceding is AUX (is, was, etc. -&gt; They were ____), add synonym</span>
+            <span class="n">add</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;NOUN&quot;</span><span class="p">,</span> <span class="s2">&quot;PROPN&quot;</span><span class="p">}:</span> <span class="c1"># If subsequent word is Noun/Proper Noun, remove it</span>
+                    <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">break</span>
+                <span class="k">if</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;CCONJ&quot;</span><span class="p">,</span> <span class="s2">&quot;CONJ&quot;</span><span class="p">,</span> <span class="s2">&quot;PUNCT&quot;</span><span class="p">,</span> <span class="s2">&quot;ADJ&quot;</span><span class="p">}:</span> <span class="c1"># If subsequent word is not connecting (conj, punct) or adjective, remove it</span>
+                    <span class="k">break</span>
+                <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">elif</span> <span class="n">word_pos</span> <span class="o">==</span> <span class="s2">&quot;VERB&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">word_objectivity</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">:</span><span class="c1"># If it is above the threshold, add normally, no need to change</span>
+        <span class="n">add</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="k">elif</span> <span class="n">word_pos</span> <span class="o">==</span> <span class="s2">&quot;ADV&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">prev_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
+        <span class="n">next_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
+        <span class="k">if</span> <span class="n">prev_token</span> <span class="o">!=</span> <span class="s2">&quot;AUX&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">next_token</span> <span class="o">==</span> <span class="s2">&quot;ADJ&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">next_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">:</span>
+                    <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">word_objectivity</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">:</span>
+                <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">elif</span> <span class="n">word_pos</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;CONJ&quot;</span><span class="p">,</span> <span class="s2">&quot;CCONJ&quot;</span><span class="p">}:</span>
+    <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">prev_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
+        <span class="n">next_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
+        <span class="k">if</span> <span class="n">prev_token</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ADJ&quot;</span><span class="p">,</span> <span class="s2">&quot;PUNCT&quot;</span><span class="p">}</span> <span class="ow">and</span> <span class="n">next_token</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ADJ&quot;</span><span class="p">}:</span> <span class="c1"># If it is surrounded by lists of adjectives</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">prev_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span> <span class="ow">or</span> 
+                <span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">prev_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">):</span> <span class="c1"># Either or: Conj is less important in grammatical fluency</span>
+                <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">elif</span> <span class="n">word_pos</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;PUNCT&quot;</span><span class="p">}:</span>
+    <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">prev_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
+        <span class="n">next_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
+        <span class="k">if</span> <span class="n">prev_token</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ADJ&quot;</span><span class="p">,</span> <span class="s2">&quot;PUNCT&quot;</span><span class="p">}</span> <span class="ow">and</span> <span class="n">next_token</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ADJ&quot;</span><span class="p">}:</span> <span class="c1"># If it is surrounded by lists of adjectives</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">prev_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span> <span class="ow">and</span> 
+                <span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">prev_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">):</span> <span class="c1"># And: Conj is less important in grammatical fluency</span>
+                <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">prev_token</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ADV&quot;</span><span class="p">}:</span> <span class="c1"># If an adverb is before it</span>
+            <span class="k">if</span> <span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">prev_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">:</span>
+                <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="k">if</span> <span class="n">add</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">processed_sentence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word_text</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">add</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="n">processed_sentence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_objective_synonym</span><span class="p">(</span><span class="n">word_text</span><span class="p">,</span> <span class="n">sentence</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+</code></pre>
+</div>
+
+<p>The issue is, it is still incomplete. Despite running many test cases, I still continously find new errors. Furthermore, the text post-processing of combining the text back into a legible sentence still needs improvements. There are often random spaces or not enough spaces due to the weird format of characters. I plan to rework this in the future too <em>(See <a href="#6-future-plans">Future Plans</a>)</em>.</p>
+
+<h4>4.2.1 Word Objectivity</h4>
+
+<p>For word objectivity, I was at first going to use Textblob's subjective score. The issue was that the subjective score didn't work for individual words. The ultimate implementation of word objectivity came with nltk's wordnet. It was relatively simple code to implement, although it is inconsistent and doesn't work for all words. However, it is good enough as of right now.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="k">def</span> <span class="nf">calc_objectivity_word</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">obj_scores</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">synsets</span> <span class="o">=</span> <span class="n">wn</span><span class="o">.</span><span class="n">synsets</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">synsets</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">swn_syn</span> <span class="o">=</span> <span class="n">swn</span><span class="o">.</span><span class="n">senti_synset</span><span class="p">(</span><span class="n">syn</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+            <span class="n">obj_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">swn_syn</span><span class="o">.</span><span class="n">obj_score</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">if</span> <span class="n">obj_scores</span><span class="p">:</span>
+        <span class="n">obj_swn</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">obj_scores</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">obj_scores</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">obj_swn</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="k">return</span> <span class="n">obj_swn</span>
+</code></pre>
+</div>
+
+<h4>4.2.2 Synonyms</h4>
+
+<p>Finding appropriate synonyms for a word in context was slightly harder. First, I used wordnet to find synonyms, however, the synonyms, being honest, were not that good. They often failed to find objective version, having similarily exaggerated words as the original sentence. Second, I used a encoder-decoder model, namely roberta-large, to try to find synonyms. However, once again, the synonyms found were only in the context of the sentence, not with the same meaning. Finally, I used gpt2 to find synonyms, and it worked decently. The issue was that gpt2 is massive, meaning there are computational errors. Ultimately, I used a combination of all three to find synonyns, however, I still plan to focuse on encoder-decoder models for the solution as I believe if I give it a proper 1 or 2-shot inference, it might work better <em>(See <a href="#6-future-plans">Future Plans</a>)</em>.</p>
+
+<h3>4.3 Article Scraping and Relability</h3>
+
+<p>There isn't much to say for article scraping. The implementation was the exact same as the <a href="#33-article-scraping-and-relability">thought process</a>, however, there were some small alterations to the reliability calculation. The issue was the reliability calculation. At first, I thought that just averaging out the reliability scores of all the sources would work, however, that is not the case. The problem is, many sources sometimes report about the same thing, some reliable, some not. Most people would consider that information reliable, however, the code, finding the average, would not. Thus, the ultimate equation formed was $\frac{\min(R) * 5 + \sum R}{\text{len}(R) + 5}$ where R is a list of the reliability scores. However, I still think it could be improved <em>(See <a href="#6-future-plans">Future Plans</a>)</em>.</p>
+
+<h2>5. Results</h2>
+
+<p>After implementing everything, the finale comes: testing and results.</p>
+
+<h3>5.1 Grouping</h3>
+
+<p>Grouping works pretty well. In a vacuum, it is the fastest of all the processes. In terms of pure textual clustering, it does a good job in dividing text into many ideas. However, there are still issues with grouping overlaps, which is something that needs to be improved on. The usage of context is still questionable and any changes to the metric weights can result in the entire code being broken. This is an issue that needs to be fixed, however, using the correct weights, the results are pretty consistant.</p>
+
+<h3>5.2 Objectifying</h3>
+
+<p>Objectifying generally does its job. There is a consistent 5-10% increase in Textblob objectivity, which is a pretty big improvement. However, it takes too long and is also sometimes grammatically inconsistent with broken outputs. First, for the time length, the issue lies in the fact that big models are used to find synonyms and that each and every word is iterated through. This takes too long and improvements can be made, along with the rejoining of the text.</p>
+
+<h3>5.3 Overall</h3>
+
+<p>Overall, the outputs are good but leave a lot to be desired. The clustering is inconsistent, the summarizations are , and the processes are still not resource/time efficient enough. As of right now, a single analysis can take upwards of 2 minutes, which is too slow. The majority of the issue comes with the objectifying process. The issue is that between the two large models used, one for summarization and one for finding synonyms. Other than that, there are just overall quality changes and maybe revampts that can be made to improve the methodology of the clustering. However, as a beta, it is good enough.</p>
+
+<h2>6. Future Plans</h2>
+
+<p>This project, as seen with the results, still has many things that need to be improved on.</p>
+
+<ol>
+<li>For grouping, the embedding method could definitely be improved. The current method still lacks vectorization, reference: <a rel="nofollow noopener" target="_blank" href="https://medium.com/@danielafrimi/text-clustering-using-nlp-techniques-c2e6b08b6e95">Text Clustering Using NLP</a>, and after doing research on LLMs, attention could be a possible addition.</li>
+<li>For objectifying, clean up the text post-processing. Right now, there are inconsistancies with quote placement and missing/extra spaces. I plan to move to a purely algorithmic method for fixing inconsistancies instead of using <code>re</code> more, as <code>re</code> fails to consider many of same-character differences in formatting.</li>
+<li>For synonyms, use a more lightweight way to implement it and maybe use methods like 1 or 2-shot inferences or some other methods with a smaller model.</li>
+<li>Also for objectifying and summarizations, fine-tune a lightweight model instead of using rule-based objectivity.</li>
+<li>For article retrieval, fix issues with the scraper time-frame and the keyword selection.</li>
+<li>Create a better way to calculate relability from current methods
+a. Author credentials
+b. Domain Authority and SEO Metrics
+c. Technical Indicators of Fake News Sites
+d. ML-based fake news detection</li>
+<li>Temporal analysis to find the recency of the news?</li>
+<li>Fix the entire <code>text_fixer.py</code> file since </li>
+<li>Just clean up the code overall and add proper documentation.</li>
+<li>Improve the Streamlit UI with cooler/cleaner visuals</li>
+<li>Multilingual support</li>
+</ol>
+
+<h2>7. Conclusion</h2>
+
+<p>Overall, the project is in its early stages. There are many issues, however, I believe that there is a solid foundation in place. As I learn more, I will continue to update and improve this project. I hope one day, this tool will serve as a method to help people avoid falling into the trap of misinformation.</p>
+
+<h2>8. References</h2>
+
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>“Infodemics and Misinformation Negatively Affect People’s Health Behaviours, New Who Review Finds.” World Health Organization, World Health Organization, who.int/europe/news/item/01-09-2022-infodemics-and-misinformation-negatively-affect-people-s-health-behaviours--new-who-review-finds.&#160;<a href="#fnref-1" class="footnoteBackLink" title="Jump back to footnote 1 in the text.">&#8617;</a></p>
+</li>
+
+<li id="fn-2">
+<p>Koch, Korbinian. “A Friendly Introduction to Text Clustering.” Medium, Towards Data Science, 27 Oct. 2022, towardsdatascience.com/a-friendly-introduction-to-text-clustering-fa996bcefd04.&#160;<a href="#fnref-2" class="footnoteBackLink" title="Jump back to footnote 2 in the text.">&#8617;</a></p>
+</li>
+
+<li id="fn-3">
+<p>Koli, Shubham. “How to Evaluate the Performance of Clustering Algorithms Using Silhouette Coefficient.” Medium, Medium, 2 Mar. 2023, medium.com/@MrBam44/how-to-evaluate-the-performance-of-clustering-algorithms-3ba29cad8c03.&#160;<a href="#fnref-3" class="footnoteBackLink" title="Jump back to footnote 3 in the text.">&#8617;</a></p>
+</li>
+
+<li id="fn-4">
+<p>Lambert, Nathan et al, “Illustrating Reinforcement Learning From Human Feedback (RLHF).” HuggingFace, HuggingFace, 9 Dec. 2022, huggingface.co/blog/rlhf.&#160;<a href="#fnref-4" class="footnoteBackLink" title="Jump back to footnote 4 in the text.">&#8617;</a></p>
+</li>
+
+<li id="fn-5">
+<p>Serpdog. “Web Scraping Google News Using Python.” DEV Community, DEV, 18 Oct. 2024, dev.to/serpdogapi/web-scraping-google-news-using-python-5f86.&#160;<a href="#fnref-5" class="footnoteBackLink" title="Jump back to footnote 5 in the text.">&#8617;</a></p>
+</li>
+
+<li id="fn-6">
+<p>“A Fully Scrubbed CSV of All of Media Bias Fact Check’s Primary Categories(Note on Bias Negative(-) Connotes Liberal Bias, Positive(+) Connotes Conservative Bias).” Gist, gist.github.com/nsfyn55/605783ac8de36f361fb10ef187272113.&#160;<a href="#fnref-6" class="footnoteBackLink" title="Jump back to footnote 6 in the text.">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Harry Yin (Xild076). All rights reserved.
+            <p class="text-muted mt-xs">Powered by SiteGen</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
