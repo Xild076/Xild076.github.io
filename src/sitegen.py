@@ -949,9 +949,9 @@ class Site:
                     doc_widgets_container.Widget(
                         title=doc_title_text,
                         description=doc_description_text,
-                        link=final_doc_link,
+                        link= slug + "/" + final_doc_link,
                         link_text="View Document" if final_doc_link != "#" else "N/A",
-                        image_url=doc_image,
+                        image_url="/static/imgs/placeholder.png",
                         image_height="100px", 
                         image_width="100px",
                         object_fit=ObjectFit.CONTAIN
