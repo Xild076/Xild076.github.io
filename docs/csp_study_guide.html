@@ -44,7 +44,985 @@
 </header>
 
     <main id="main-content" role="main">
-<div class="alert alert-danger"  style="margin-bottom: var(--spacing-md)" role="alert">HTML content file &#x27;csp.html&#x27; not found.</div>    </main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP CSP Interactive Study Guide - Enhanced</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .key-term {
+            cursor: pointer;
+            background-color: #e0e7ff; /* Light indigo background for terms */
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-weight: 600; /* Made key terms bolder */
+            color: #4338ca; /* Darker indigo for text */
+        }
+        .key-term:hover {
+            background-color: #c7d2fe; /* Darker indigo on hover */
+            text-decoration: underline;
+        }
+        .definition {
+            display: none;
+            margin-top: 8px;
+            padding: 12px; /* Increased padding */
+            background-color: #ffffff;
+            border-left: 4px solid #6366f1; /* Indigo border */
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            font-size: 0.95em; /* Slightly smaller font for definition */
+        }
+        .nav-item {
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex; /* For icon alignment */
+            align-items: center; /* For icon alignment */
+        }
+        .nav-item svg {
+            margin-right: 10px; /* Space between icon and text */
+        }
+        .nav-item:hover, .nav-item.active {
+            background-color: #4f46e5; /* Indigo-700 */
+            color: white;
+        }
+        .quiz-question {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .quiz-option {
+            display: block;
+            background-color: #f0f0f0;
+            padding: 10px 15px; /* Adjusted padding */
+            margin-top: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: 1px solid transparent; /* For smoother transition */
+        }
+        .quiz-option:hover {
+            background-color: #e0e0e0;
+            border-color: #c7d2fe;
+        }
+        .quiz-option.selected {
+            background-color: #a5b4fc; /* Indigo-300 */
+            color: #3730a3; /* Indigo-800 */
+            border-color: #6366f1;
+        }
+        .quiz-option.correct {
+            background-color: #86efac; /* Green-300 */
+            color: #15803d; /* Green-700 */
+            border-color: #22c55e;
+        }
+        .quiz-option.incorrect {
+            background-color: #fca5a5; /* Red-300 */
+            color: #b91c1c; /* Red-700 */
+            border-color: #ef4444;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: 500;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .accordion-header {
+            cursor: pointer;
+            padding: 12px 15px; /* Adjusted padding */
+            background-color: #eef2ff; /* Indigo-50 */
+            border: 1px solid #e0e7ff; /* Indigo-200 */
+            border-radius: 6px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .accordion-header:hover {
+            background-color: #e0e7ff; /* Indigo-200 */
+        }
+        .accordion-content {
+            display: none;
+            padding: 15px; /* Increased padding */
+            border: 1px solid #e0e7ff;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            background-color: white;
+        }
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        .accordion-header.open .accordion-icon {
+            transform: rotate(90deg);
+        }
+        .content-block { /* New class for consistent content styling */
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .content-block h3 { /* Styling for subheadings within content blocks */
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 0.75rem; /* mb-3 */
+            color: #4f46e5; /* Indigo-600 */
+            border-bottom: 2px solid #e0e7ff; /* Light underline */
+            padding-bottom: 0.5rem; /* Space for underline */
+        }
+        .content-block p, .content-block ul, .content-block li {
+            color: #374151; /* gray-700 */
+            line-height: 1.6;
+        }
+        .content-block ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 0.5rem;
+        }
+        /* SVG Packet Animation Styles */
+        .packet {
+            transition: all 0.5s ease-in-out; /* Smooth movement for packets */
+        }
+        .link-failed {
+            stroke: red !important;
+            stroke-dasharray: 5,5 !important;
+        }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row min-h-screen">
+
+    <nav class="md:w-72 bg-gray-800 text-white p-6 space-y-2 overflow-y-auto">
+        <h1 class="text-2xl font-bold mb-6 text-center">AP CSP Guide</h1>
+        <div class="nav-item active" data-target="home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
+            Home
+        </div>
+        <div class="nav-item" data-target="bigIdea1">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7H17a1 1 0 01.967 1.256l-1.071 4.285A1 1 0 0116 13h-1.362a1 1 0 01-.904-.57l-1.238-2.475-1.238 2.475A1 1 0 0110.362 13H9a1 1 0 01-.967-1.256l-1.071-4.285A1 1 0 018 7h2.854L11.033 2.744A1 1 0 0112 2zm0 10a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+            1. Creativity
+        </div>
+        <div class="nav-item" data-target="bigIdea2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2V7a1 1 0 00-1-1H8a1 1 0 00-1 1v5H5V5z" /></svg>
+            2. Abstraction
+        </div>
+        <div class="nav-item" data-target="bigIdea3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM4 8h5v2H4V8z" clip-rule="evenodd" /></svg>
+            3. Data & Info
+        </div>
+        <div class="nav-item" data-target="bigIdea4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 01-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            4. Algorithms
+        </div>
+        <div class="nav-item" data-target="bigIdea5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            5. Programming
+        </div>
+        <div class="nav-item" data-target="bigIdea6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>
+            6. The Internet
+        </div>
+        <div class="nav-item" data-target="bigIdea7">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM2 10a8 8 0 1116 0 8 8 0 01-16 0z" /><path d="M12.732 10.001a2.001 2.001 0 01-1.998 1.998A2.001 2.001 0 018.736 10c0-.39.11-.754.298-1.072A5.002 5.002 0 005.001 10a5 5 0 005 5c2.484 0 4.54-1.793 4.924-4.162.007-.044.01-.087.012-.13L12.732 10z" /></svg>
+            7. Global Impact
+        </div>
+        <div class="nav-item" data-target="quiz">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.502l-1.133 2.267c-.069.138-.11.286-.13.44a1 1 0 00.967 1.256h2.326c.068-.137.108-.285.128-.439l1.133-2.267A1 1 0 0010 7zm0 4a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" /></svg>
+            Interactive Quiz
+        </div>
+    </nav>
+
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+        <section id="home" class="content-section active">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Welcome to the AP CSP Interactive Study Guide!</h2>
+            <p class="text-lg text-gray-700 mb-4">
+                This guide is designed to help you review the key concepts of AP Computer Science Principles.
+                Use the navigation on the left to explore the Seven Big Ideas, review key terms, and test your knowledge with an interactive quiz.
+            </p>
+            <div class="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 rounded-md" role="alert">
+                <p class="font-bold">Getting Started</p>
+                <p>Click on a "Big Idea" in the sidebar to begin. Each section contains summaries, interactive key terms (click on them to see definitions!), examples, and diagrams.</p>
+            </div>
+            <img src="https://placehold.co/700x350/6366f1/ffffff?text=AP+Computer+Science+Principles" alt="AP CSP Visual Placeholder" class="mt-8 rounded-lg shadow-md mx-auto">
+        </section>
+
+        <section id="bigIdea1" class="content-section">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Big Idea 1: Creativity (Creative Development)</h2>
+            <div class="space-y-6">
+                <div class="content-block">
+                    <h3>Summary</h3>
+                    <p>Computing is a creative activity. This Big Idea emphasizes designing and creating computational artifacts (like programs, images, audio, videos, or web content) through an iterative, often collaborative process. Creativity in computer science includes creative problem-solving and expression in any program or digital artifact.</p>
+                </div>
+
+                <div class="content-block">
+                    <h3>Key Concepts & Terms</h3>
+                    <p class="mb-2">
+                        The <strong class="key-term">Creative Development Process</strong> is an iterative design approach for creating programs or artifacts. It's often exploratory and can involve brainstorming, storyboarding, trial-and-error, and rapid prototyping.
+                        <span class="definition">An iterative design approach for creating programs or artifacts. It may include steps like ideation → prototype → test → refine. There is no single "right" method - it can involve trial and error and exploring personal interests.</span>
+                    </p>
+                    <p class="mb-2">
+                        A <strong class="key-term">Computational Artifact</strong> is anything created by a human using a computer. This could be software, digital music, data visualizations, websites, 3D models, etc., created for expression or problem-solving.
+                        <span class="definition">Any product of human creativity made with a computer - e.g. software, images, music, videos, or web pages.</span>
+                    </p>
+                    <p class="mb-2">
+                        <strong class="key-term">Collaboration</strong> in creative computing involves working with others, allowing multiple perspectives and skills to influence a project, often leading to more innovative solutions. Effective collaboration involves communication and division of tasks.
+                        <span class="definition">Working with others to produce a computational outcome. Effective collaboration uses communication and often online tools. It can enhance creativity by bringing in multiple viewpoints and expertise.</span>
+                    </p>
+                     <p class="mb-2">
+                        <strong class="key-term">Iteration</strong> means repeating steps, revising, and improving a project or algorithm. It's key to refining artifacts by continually testing and debugging.
+                        <span class="definition">Repeating steps, revising, and improving a project or algorithm. Iteration is key to refining artifacts (e.g., continually testing and debugging a program to add features or fix flaws).</span>
+                    </p>
+                </div>
+
+                <div class="content-block">
+                    <h3>Example</h3>
+                    <p>Imagine creating a mobile app to track homework. You'd first brainstorm features (like reminders or a calendar). Next, you prototype a simple version. You test it, gather feedback (e.g., users find the interface confusing), then iterate – redesigning it. You might collaborate with a classmate where one handles front-end design and the other back-end logic. Together, you produce a better app. This illustrates Big Idea 1: creativity and iteration leading to an improved computational artifact.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="bigIdea2" class="content-section">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Big Idea 2: Abstraction</h2>
+             <div class="space-y-6">
+                <div class="content-block">
+                    <h3>Summary</h3>
+                    <p>Abstraction reduces complexity by hiding details to focus on essential concepts. In computing, abstraction allows us to represent complex things more simply, using layers and models. It appears in data representation (binary to images), generalization in code (functions), and the layered architecture of computing systems (hardware to software).</p>
+                </div>
+                <div class="content-block">
+                    <h3>Key Concepts & Terms</h3>
+                     <p class="mb-2">
+                        <strong class="key-term">Abstraction (General)</strong>: The concept of simplifying complexity by focusing on main ideas and hiding unnecessary detail.
+                        <span class="definition">Simplifying complexity by focusing on main ideas and hiding detail. In computing, this could mean representing complex data in a simplified form or structuring programs in layers.</span>
+                    </p>
+                    <p class="mb-2">
+                        Data is represented at the lowest level by <strong class="key-term">Bit</strong> (binary digits: 0s and 1s). Higher-level abstractions group bits.
+                        <span class="definition">The most basic unit of digital data, a binary digit 0 or 1. All digital information is composed of bits in sequence (bit streams).</span>
+                    </p>
+                    <p class="mb-2">
+                        Number systems like <strong class="key-term">Binary (Base-2)</strong>, Decimal (Base-10), and <strong class="key-term">Hexadecimal (Base-16)</strong> are different abstractions for representing numbers. Hexadecimal is often a human-friendly shorthand for binary.
+                        <span class="definition">Binary (Base-2): A number system using only 0s and 1s. Example: decimal 13 is binary 1101. Hexadecimal (Base-16): Uses 16 symbols (0-9, A-F) and is often used as a compact representation of binary groups (e.g., one hex digit represents four bits).</span>
+                    </p>
+                    <p class="mb-2">
+                        <strong class="key-term">ASCII/Unicode</strong> are character encoding standards that map numbers to text characters, allowing text to be represented in binary.
+                        <span class="definition">Character encoding standards (abstractions) that map numerical values to characters. ASCII is an older standard, Unicode is more comprehensive supporting characters from most world languages. E.g., in ASCII, decimal 65 represents 'A'.</span>
+                    </p>
+                    <p class="mb-2">
+                        <strong class="key-term">Logic Gate</strong>: A hardware abstraction performing basic Boolean operations (AND, OR, NOT), forming building blocks of digital circuits.
+                        <span class="definition">A hardware abstraction that performs a basic boolean operation (AND, OR, NOT, etc.). Gates are the building blocks of digital circuits, modeled by Boolean algebra.</span>
+                    </p>
+                    <p class="mb-2">
+                        <strong class="key-term">Models and Simulations</strong> are abstractions of real-world phenomena, simplifying complex systems to make them easier to understand, experiment with, or make predictions.
+                        <span class="definition">Model: A simplified representation of something complex (e.g., a mathematical model of population growth), omitting extraneous details. Simulation: The use of a computer model to imitate a real-world process over time, allowing experimentation.</span>
+                    </p>
+                    <p class="mb-2">
+                        <strong class="key-term">Procedures/Functions</strong> in programming are abstractions that encapsulate a block of code to perform a specific task and can be reused.
+                        <span class="definition">Named blocks of code that perform a specific task. They help manage complexity by allowing code reuse and hiding the details of how a task is done behind a function name.</span>
+                    </p>
+                     <p class="mb-2">
+                        <strong class="key-term">Parameters</strong> are inputs to procedures/functions that allow them to generalize behavior for different data.
+                        <span class="definition">Inputs to a procedure that allow it to generalize behavior. For instance, `drawSquare(size)` uses `size` as a parameter so it can draw squares of any side length.</span>
+                    </p>
+                </div>
+                <div class="content-block">
+                    <h3>Example of Layered Abstraction</h3>
+                    <p>Reading an email involves many layers: 1. You see text/images in your email client (high-level app). 2. The email program calls OS functions to fetch data. 3. Data travels as packets over the Internet (bits routed via protocols). 4. Wi-Fi router turns bits into radio signals. 5. Email text is encoded (ASCII/UTF-8). At each step, lower-level details are hidden, making the complexity manageable.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="bigIdea3" class="content-section">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Big Idea 3: Data and Information</h2>
+            <div class="space-y-6">
+                <div class="content-block">
+                    <h3>Summary</h3>
+                    <p>Data and information facilitate the creation of knowledge. This Big Idea explores how we collect, process, analyze, and visualize data to gain insights. Computing enables handling large datasets, finding patterns, and deriving meaning. The cycle is often Data → Information → Knowledge.</p>
+                </div>
+                <div class="content-block">
+                    <h3>Detailed Concepts</h3>
+                    <h4>Data Collection and Generation</h4>
+                    <p>Data comes from sensors, transactions, surveys, user content, etc. Modern tech generates <strong class="key-term">Big Data</strong>. Challenges include volume, cleaning, and privacy.</p>
+                    <span class="definition">Extremely large data sets (e.g., billions of records) that require specialized tools and techniques for analysis due to their volume, velocity, or variety. Analyzing big data can reveal complex patterns and trends.</span>
+
+                    <h4>Data vs. Information vs. Knowledge</h4>
+                    <p><strong class="key-term">Data</strong>: Raw facts, figures (e.g., a list of numbers). <strong class="key-term">Information</strong>: Processed, organized, meaningful data (e.g., an average). <strong class="key-term">Knowledge</strong>: Interpreted information leading to understanding (e.g., "this month was hotter").</p>
+                    <span class="definition">Data: Raw values or facts without context. Information: Data processed or organized to have meaning. Knowledge: Insights or understanding gained from information.</span>
+                    
+                    <h4>Processing and Cleaning Data</h4>
+                    <p>Raw data is often messy. Processing includes <strong class="key-term">Cleaning Data</strong> (fixing errors, normalizing formats), <strong class="key-term">Filtering Data</strong> (isolating relevant subsets), combining sources, <strong class="key-term">Clustering</strong> (grouping similar data), and <strong class="key-term">Classification</strong> (assigning labels).</p>
+                    <span class="definition">Cleaning Data: Correcting or removing inaccurate records, standardizing formats to prepare raw data for analysis. Filtering Data: Selecting a subset of data based on criteria. Clustering: Grouping data points with similar attributes (unsupervised). Classification: Assigning data to predefined categories based on features (supervised).</span>
+
+                    <h4>Visualization and Communication</h4>
+                    <p><strong class="key-term">Visualization</strong> (charts, graphs) helps humans understand complex data. Choosing the right type and clear labeling are crucial. Interactivity enhances communication.</p>
+                    <span class="definition">A graphical representation of information (charts, graphs, plots) to help humans understand data patterns and trends.</span>
+
+                    <h4>Large Data Sets ("Big Data")</h4>
+                    <p>Enable discovery but pose challenges in storage, processing power, and privacy. Specialized tools (databases, MapReduce) are used. <strong class="key-term">Metadata</strong> (data about data, e.g., timestamps, source) is crucial for context and filtering.</p>
+                    <span class="definition">Data about data. Examples: a photo's metadata might include date taken, camera type, location; a data table's metadata might be column descriptions or data source info. Metadata increases the effective use of data by providing context.</span>
+                    
+                    <h4>Trade-offs: Storage, Security, Compression</h4>
+                    <p>Decisions involve balancing factors:
+                        <ul>
+                            <li>Storage vs. Precision: Fewer bits save space but reduce accuracy.</li>
+                            <li>Privacy vs. Utility: Data use benefits vs. protecting individuals.</li>
+                            <li>Security vs. Convenience: Strong security can be less convenient.</li>
+                            <li><strong class="key-term">Lossless Compression</strong> vs. <strong class="key-term">Lossy Compression</strong>: Lossless perfectly reconstructs data (e.g., PNG, ZIP) with moderate size reduction. Lossy permanently discards some data for much smaller sizes (e.g., JPEG, MP3), trading quality for size.</li>
+                        </ul>
+                    </p>
+                    <span class="definition">Lossless Compression: Allows perfect reconstruction of original data from compressed data (no information lost). Lossy Compression: Discards some data deemed less important, so original cannot be exactly reconstructed; achieves higher compression by accepting some quality loss.</span>
+                </div>
+                 <div class="content-block">
+                    <h3>Other Key Terms</h3>
+                     <p class="mb-2"><strong class="key-term">Data Mining</strong>: Examining large databases to find hidden patterns or correlations.
+                        <span class="definition">Techniques for examining large pre-existing databases to generate new information, often involving looking for hidden patterns or correlations in big data.</span>
+                    </p>
+                </div>
+                <div class="content-block">
+                    <h3>Example: School Performance Analysis</h3>
+                    <p>A school collects data on student study hours, attendance, and grades (Data). They clean it and calculate average study hours for grade ranges (Information). A scatter plot reveals students with high absences often have lower grades (Visualization). The school deduces that promoting study habits and attendance could improve performance (Knowledge).</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="bigIdea4" class="content-section">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Big Idea 4: Algorithms</h2>
+            <div class="space-y-6">
+                <div class="content-block">
+                    <h3>Summary</h3>
+                    <p>Algorithms are precise, unambiguous, finite sets of instructions for processes that can be executed by a computer. They are the core methods for solving problems or performing tasks. This Big Idea covers how algorithms are developed, expressed, evaluated (for efficiency, correctness, clarity), and the limitations of what algorithms can solve.</p>
+                </div>
+
+                <div class="content-block">
+                    <h3>Key Concepts & Terms</h3>
+                    <p class="mb-2">
+                        An <strong class="key-term">Algorithm</strong> is a finite set of instructions that accomplishes a specific task. It must be precise and unambiguous.
+                        <span class="definition">A finite set of instructions that accomplishes a specific task. It must be precise, unambiguous, and guaranteed to terminate.</span>
+                    </p>
+                    <p class="mb-2">
+                        Building blocks of algorithms: <strong class="key-term">Sequencing</strong> (executing steps in a given order), <strong class="key-term">Selection</strong> (making decisions using conditionals like IF-ELSE), and <strong class="key-term">Iteration</strong> (repetition using loops like FOR or REPEAT UNTIL).
+                        <span class="definition">Sequencing: The execution of steps in order, one after another. Selection: Using conditionals to decide which steps to execute next (branching logic, e.g., IF statements). Iteration: Repeating steps, either a fixed number of times or until a condition is met (loops).</span>
+                    </p>
+                    <p class="mb-2">
+                        Algorithms can be expressed in natural language, <strong class="key-term">Pseudocode</strong> (a structured, code-like but language-agnostic way to describe logic), or visual diagrams like flowcharts.
+                        <span class="definition">A way to describe an algorithm using code-like language that isn’t specific to any real programming language. It’s human-readable and captures the logic of the algorithm.</span>
+                    </p>
+                    <p class="mb-2">
+                        Algorithm <strong class="key-term">Efficiency</strong> is evaluated by its time complexity (how runtime grows with input size) and space complexity (memory usage). "Reasonable time" algorithms are typically polynomial (e.g., linear O(n), quadratic O(n²)), while "unreasonable time" algorithms are often exponential (e.g., O(2^n)) and become infeasible for large inputs.
+                        <span class="definition">Often measured in terms of time complexity (how execution time grows with input size) and space complexity (memory usage). Polynomial time (e.g., O(n), O(n²)) is generally considered reasonable; exponential time (e.g., O(2^n)) is generally unreasonable for large inputs.</span>
+                    </p>
+                    <p class="mb-2">
+                        A <strong class="key-term">Heuristic</strong> is an approach to problem-solving that employs a practical method not guaranteed to be optimal or perfect, but sufficient for reaching an immediate, short-term goal or approximation when exact methods are too slow or complex.
+                        <span class="definition">An approach to solving a problem that may not be perfect or exact but is practical for reaching a solution in a reasonable time. Often used for complex problems where exact algorithms are too slow (e.g., Traveling Salesman Problem).</span>
+                    </p>
+                    <p class="mb-2">
+                        A <strong class="key-term">Decidable Problem</strong> is one for which an algorithm can be constructed to always produce a correct yes/no answer for all inputs.
+                        <span class="definition">A problem for which an algorithm can be constructed to answer yes/no for all inputs (the algorithm will always terminate with a correct answer).</span>
+                    </p>
+                    <p class="mb-2">
+                        An <strong class="key-term">Undecidable Problem</strong> is one for which no algorithm can be written that always leads to a correct yes/no answer for all possible inputs (e.g., the Halting Problem).
+                        <span class="definition">A problem for which no algorithm can decide the answer for all cases (no single algorithm is guaranteed to always produce a correct yes/no answer for every possible input). The Halting Problem is a classic example.</span>
+                    </p>
+                    <p class="mb-2">
+                        <strong class="key-term">Empirical Testing</strong> involves running an algorithm with various inputs to observe its behavior (e.g., timing, checking results) to analyze performance or correctness.
+                        <span class="definition">Running an algorithm with various inputs to observe its behavior (e.g., timing how long it takes, checking results) as a way to analyze performance or correctness.</span>
+                    </p>
+                    <p class="mb-2">
+                        <strong class="key-term">Linear Search</strong> checks items one by one (O(n) complexity). <strong class="key-term">Binary Search</strong> repeatedly halves the search space (O(log n) complexity) but requires the list to be sorted.
+                        <span class="definition">Linear Search: Checks each item in a list sequentially until the target is found or the list ends. Efficiency: O(n). Binary Search: Efficiently finds an item in a sorted list by repeatedly dividing the search interval in half. Efficiency: O(log n). Requires sorted data.</span>
+                    </p>
+                </div>
+                 <div class="content-block">
+                    <h3>Example: Maze Solving</h3>
+                    <p>To solve a maze: An algorithm might involve "always turn right" (a heuristic, not guaranteed). Depth-first search systematically explores paths and backtracks (decidable for finite mazes). Breadth-first search finds the shortest path but might use more memory. These illustrate sequencing (follow corridor), selection (choose turn at intersection), and iteration (keep moving/backtracking).</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="bigIdea5" class="content-section">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Big Idea 5: Programming</h2>
+            <div class="space-y-6">
+                <div class="content-block">
+                    <h3>Summary</h3>
+                    <p>Programming enables problem-solving, human expression, and knowledge creation. It's the process of designing, writing, testing, debugging, and maintaining the source code of computer programs. This Big Idea covers fundamental programming concepts, the development process, how programs implement algorithms, and how abstraction helps manage complexity.</p>
+                </div>
+                <div class="content-block">
+                    <h3>Detailed Concepts</h3>
+                    <h4>Program Purpose and Functionality</h4>
+                    <p>Programs are developed for creative expression, personal curiosity, creating new knowledge, or solving problems for individuals, organizations, or society. Programs can also have unexpected outcomes beyond their original purpose.</p>
+                    
+                    <h4>Program Development Process</h4>
+                    <ul>
+                        <li><strong>Iterative Development:</strong> Write, test, debug, improve, add features, repeat. Programs are rarely perfect on the first try.</li>
+                        <li><strong>Incremental Development:</strong> Build programs in small, manageable, testable pieces (modules/functions), then integrate them.</li>
+                        <li><strong>Testing and Debugging:</strong> Continuously test with various inputs (including edge cases) to find and fix errors (<strong class="key-term">Bugs</strong>). Debugging is a critical skill.</li>
+                        <span class="definition">An error, flaw, or fault in a computer program or system that causes it to produce an incorrect or unexpected result, or to behave in unintended ways.</span>
+                        <li><strong>Documentation:</strong> Comments in code and external documentation explain the program's purpose and usage, aiding development and maintenance.</li>
+                        <li><strong>Collaboration:</strong> Coding in teams can reduce workload, bring diverse expertise, and improve error detection. Practices include pair programming and code reviews.</li>
+                    </ul>
+
+                    <h4>Implementing Algorithms</h4>
+                    <p>Programs execute algorithms. High-level code (Python, JavaScript) is translated into machine instructions. Understanding program flow (sequential, altered by loops/conditionals/function calls) is key.</p>
+                    <p><strong class="key-term">Variables</strong> store data that can change. They are named storage locations, initialized with values, and can be updated.</p>
+                    <span class="definition">A named storage location in a program that holds a value which may change during program execution (e.g., `score`, `userName`, `temperature`). In AP pseudocode: `x <- 5` assigns 5 to x.</span>
+                    <p>Programs use memory (for variables/data) and a CPU (to execute instructions), and involve input/output.</p>
+
+                    <h4>Abstraction in Programs</h4>
+                    <p>Programming is facilitated by abstractions that manage complexity:</p>
+                    <ul>
+                        <li><strong class="key-term">Procedures/Functions</strong>: Reusable blocks of code performing specific tasks. They encapsulate logic.
+                            <span class="definition">A named block of code that performs a specific task. Defined once and can be called (invoked) multiple times. May have parameters and may return a value.</span>
+                        </li>
+                        <li><strong class="key-term">Parameters</strong>: Inputs to procedures that allow them to work with different data, generalizing solutions and avoiding code duplication.
+                             <span class="definition">An input variable for a procedure/function, used to pass data into it so it can operate on that data. Parameters make procedures more flexible and reusable.</span>
+                        </li>
+                        <li><strong class="key-term">Return Values</strong>: Output from a function sent back to the caller.
+                            <span class="definition">The output of a function that is sent back to the part of the program where the function was called. In AP pseudocode, `RETURN (value)` is used.</span>
+                        </li>
+                        <li><strong>Data Abstractions:</strong> Structures like <strong class="key-term">Lists (Arrays)</strong> organize data, simplifying management (e.g., one list of 100 items vs. 100 variables).
+                            <span class="definition">A data structure that stores an ordered collection of items, which can be of mixed types. Elements are accessed by an index. In AP CSP, lists are 1-indexed.</span>
+                        </li>
+                        <li><strong class="key-term">Libraries/APIs</strong>: Collections of pre-written procedures for common tasks (e.g., graphics, data analysis). Using them is an abstraction.
+                            <span class="definition">Library: A collection of pre-written code (functions, procedures, classes) that provides functionalities for common tasks, allowing programmers to reuse code. API (Application Programming Interface): A set of rules and protocols for building and interacting with software components; it defines how different software pieces can communicate.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="content-block">
+                    <h3>Other Key Terms</h3>
+                    <p class="mb-2"><strong class="key-term">Syntax</strong>: The set of rules defining correctly structured programs in a language.
+                        <span class="definition">The set of rules that defines the combinations of symbols that are considered to be correctly structured programs in a specific programming language.</span>
+                    </p>
+                    <p class="mb-2"><strong class="key-term">Conditional (Branch)</strong>: Uses IF/ELSE to execute code based on whether a condition is true or false, enabling decision-making.
+                        <span class="definition">A programming construct (e.g., IF, ELSE IF, ELSE) that allows a program to execute different sequences of statements based on whether a Boolean condition evaluates to true or false.</span>
+                    </p>
+                     <p class="mb-2"><strong class="key-term">Event-driven programming</strong>: Program flow is determined by events (e.g., mouse clicks, key presses, messages from other programs). Common in GUIs.
+                        <span class="definition">A programming paradigm in which the flow of the program is determined by events such as user actions (mouse clicks, key presses), sensor outputs, or messages from other programs/threads.</span>
+                    </p>
+                    <p class="mb-2"><strong class="key-term">Runtime Error</strong>: An error occurring during program execution (e.g., division by zero, index out of bounds).
+                        <span class="definition">An error that occurs during the execution of a program (e.g., division by zero, accessing an array element with an out-of-bounds index, trying to open a non-existent file). Often causes the program to crash or behave unexpectedly.</span>
+                    </p>
+                    <p class="mb-2"><strong class="key-term">Logic Error</strong>: The program runs without crashing but produces incorrect results due to a flaw in the algorithm or implementation.
+                        <span class="definition">An error in a program's source code that results in incorrect or unexpected behavior, even though the program may run without crashing. The syntax is correct, but the underlying algorithm or its implementation is flawed.</span>
+                    </p>
+                </div>
+
+                <div class="content-block">
+                    <h3>Example: Simple Game Development</h3>
+                    <p>To create a character-collects-coins game: 1. **Plan:** Outline movement, collision, scoring. 2. **Incremental Coding:** Get character moving, then add one coin and collision logic, then multiple coins (using a list for coin positions – a data abstraction). Test at each step. 3. **Abstraction:** A function `checkCollision(character, coin)` returns true/false. A function `moveCharacter(direction)` updates position. 4. **Testing:** Test coin collection, movement boundaries. 5. **Documentation:** Add comments. This iterative, abstracting, testing approach improves correctness.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="bigIdea6" class="content-section">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Big Idea 6: The Internet</h2>
+            <div class="space-y-6">
+                <div class="content-block">
+                    <h3>Summary</h3>
+                    <p>The Internet is a global network of networks connecting millions of devices, built on openness, redundancy, and scalable design. It uses protocols like TCP/IP to enable communication. This Big Idea covers its structure, design principles (hierarchy, fault tolerance through redundancy, packet switching), scalability, and crucial cybersecurity issues.</p>
+                </div>
+
+                <div class="content-block">
+                    <h3>Internet Structure & Protocols</h3>
+                    <p>Connects devices (computers, phones, servers, IoT) via <strong class="key-term">Routers</strong> that forward data packets.</p>
+                    <span class="definition">A networking device that forwards data packets between computer networks. Routers perform the traffic directing functions on the Internet.</span>
+                    <p>Key <strong class="key-term">Protocols</strong> (agreed-upon rules for communication):</p>
+                    <span class="definition">A set of rules governing the exchange or transmission of data between devices. Examples: IP, TCP, HTTP, DNS.</span>
+                    <ul>
+                        <li><strong class="key-term">IP (Internet Protocol)</strong>: Addressing (IPv4, IPv6) and packet routing. Every device has an IP address.</li>
+                        <span class="definition">The principal communications protocol in the Internet protocol suite for relaying datagrams across network boundaries. Its routing function enables internetworking, and essentially establishes the Internet. Defines addressing (IP addresses) and packet structure.</span>
+                        <li><strong class="key-term">TCP (Transmission Control Protocol)</strong>: Reliable, ordered data delivery (breaks data into packets, reassembles, retransmits if lost). Used for web, email.</li>
+                        <span class="definition">A standard that defines how to establish and maintain a network conversation through which application programs can exchange data. TCP works with IP to send packets between computers over the Internet. It provides reliable, ordered, and error-checked delivery of a stream of octets.</span>
+                        <li><strong class="key-term">UDP (User Datagram Protocol)</strong>: Faster, but no guaranteed delivery/order (for streaming, games).</li>
+                        <span class="definition">A simpler, connectionless Internet protocol in which error-checking and recovery services are not attempted. UDP is used when speed is desirable and error correction is not necessary, such as for live video streaming or online games.</span>
+                        <li><strong class="key-term">DNS (Domain Name System)</strong>: Translates human-readable domain names (e.g., `google.com`) into IP addresses. Hierarchical system.</li>
+                        <span class="definition">The Internet's system for converting alphabetic domain names (like `www.example.com`) into numerical IP addresses (like `93.184.216.34`) that computers use to connect to each other. It's a hierarchical and distributed naming system.</span>
+                        <li><strong class="key-term">HTTP (HyperText Transfer Protocol)</strong>: Protocol for the World Wide Web (fetching web pages). <strong class="key-term">HTTPS</strong> is the secure version using SSL/TLS.</li>
+                        <span class="definition">HTTP: The underlying protocol used by the World Wide Web for transmitting hypermedia documents, such as HTML. HTTPS (HTTP Secure): An extension of HTTP used for secure communication over a computer network, encrypted using Transport Layer Security (TLS) or Secure Sockets Layer (SSL).</span>
+                        <li><strong class="key-term">SMTP (Simple Mail Transfer Protocol)</strong>: For sending emails.</li>
+                        <span class="definition">An Internet standard communication protocol for electronic mail transmission.</span>
+                        <li><strong class="key-term">SSL/TLS (Secure Sockets Layer/Transport Layer Security)</strong>: Protocols for encryption and security, providing a secure channel for HTTP (making it HTTPS).</li>
+                        <span class="definition">Cryptographic protocols designed to provide communications security over a computer network. TLS is the successor to SSL. They are widely used in applications such as web browsing (HTTPS), email, instant messaging, and VoIP.</span>
+                    </ul>
+                </div>
+
+                <div class="content-block">
+                    <h3>Design Principles</h3>
+                    <p><strong class="key-term">Hierarchy</strong>: Seen in IP addressing and DNS, allowing scalability by distributing responsibility.</p>
+                    <span class="definition">A system or organization in which elements are arranged in levels of subordination or ranking. In the Internet, DNS and IP addressing are hierarchical, which helps with organization and scalability.</span>
+                    <p><strong class="key-term">Redundancy</strong> & <strong class="key-term">Fault Tolerance</strong>: Multiple paths for data mean the Internet can withstand failures. If one link breaks, data can reroute.</p>
+                    <span class="definition">Redundancy: The inclusion of extra components that are not strictly necessary to functioning, in case of failure in other components. Fault Tolerance: The property that enables a system to continue operating properly in the event of the failure of some of its components. The Internet's redundant pathways contribute to its fault tolerance.</span>
+                    <p><strong class="key-term">Packet Switching</strong>: Data is broken into small <strong class="key-term">Packets</strong>, each with header (address, sequence) and payload. Packets can take different routes and are reassembled at the destination. Efficiently uses network resources.</p>
+                    <span class="definition">Packet Switching: A method of grouping data into packets that are transmitted over a digital network. Packets are routed independently and may take different paths to the destination, where they are reassembled. Packet: A small unit of data transmitted over a packet-switched network. Contains a header (with addressing, routing info) and a payload (actual data).</span>
+                    <p><strong class="key-term">Scalability</strong>: The Internet's design (open protocols, hierarchical addressing, end-to-end architecture) allows it to grow to billions of devices. IPv6 was introduced to provide more addresses than IPv4.</p>
+                    <span class="definition">The capability of a system, network, or process to handle a growing amount of work, or its potential to be enlarged to accommodate that growth. The Internet is designed to be highly scalable.</span>
+                </div>
+                
+                <div class="content-block">
+                    <h3>Interactive Packet Switching Diagram</h3>
+                    <p class="text-sm text-gray-600 mb-2">The Internet sends data in packets. Packets from the same message can take different routes and are reassembled at the destination. This makes the Internet resilient. Click buttons to simulate sending messages or a link failure.</p>
+                    <div class="flex space-x-2 mb-4">
+                        <button id="sendMessage1Btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md text-sm">Send Message 1 (S-A-B-E-R)</button>
+                        <button id="sendMessage2Btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm">Send Message 2 (S-C-D-E-R)</button>
+                        <button id="simulateFailureBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md text-sm">Simulate Link A-B Failure</button>
+                        <button id="resetSimulationBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md text-sm">Reset Simulation</button>
+                    </div>
+                    <svg id="packetSwitchingDiagram" viewBox="0 0 500 300" class="w-full rounded-md border border-gray-300 bg-white shadow-sm">
+                        <circle id="nodeS" cx="50" cy="150" r="20" fill="#fde047" stroke="#ca8a04" stroke-width="2"/> <text x="45" y="155" font-family="Inter" font-size="12" fill="#1e293b">S</text>
+                        <circle id="nodeA" cx="150" cy="70" r="15" fill="#93c5fd" stroke="#2563eb" stroke-width="2"/> <text x="145" y="75" font-family="Inter" font-size="10" fill="#1e293b">A</text>
+                        <circle id="nodeB" cx="250" cy="70" r="15" fill="#93c5fd" stroke="#2563eb" stroke-width="2"/> <text x="245" y="75" font-family="Inter" font-size="10" fill="#1e293b">B</text>
+                        <circle id="nodeC" cx="150" cy="230" r="15" fill="#93c5fd" stroke="#2563eb" stroke-width="2"/> <text x="145" y="235" font-family="Inter" font-size="10" fill="#1e293b">C</text>
+                        <circle id="nodeD" cx="250" cy="230" r="15" fill="#93c5fd" stroke="#2563eb" stroke-width="2"/> <text x="245" y="235" font-family="Inter" font-size="10" fill="#1e293b">D</text>
+                        <circle id="nodeE" cx="350" cy="150" r="15" fill="#93c5fd" stroke="#2563eb" stroke-width="2"/> <text x="345" y="155" font-family="Inter" font-size="10" fill="#1e293b">E</text>
+                        <circle id="nodeR" cx="450" cy="150" r="20" fill="#fde047" stroke="#ca8a04" stroke-width="2"/> <text x="445" y="155" font-family="Inter" font-size="12" fill="#1e293b">R</text>
+                        <circle id="nodeF" cx="250" cy="150" r="15" fill="#fca5a5" stroke="#b91c1c" stroke-width="2"/> <text x="245" y="155" font-family="Inter" font-size="10" fill="#1e293b">F</text> <line id="linkS-A" x1="68" y1="140" x2="138" y2="80" stroke="#a3a3a3" stroke-width="3"/>
+                        <line id="linkA-B" x1="165" y1="70" x2="235" y2="70" stroke="#a3a3a3" stroke-width="3"/>
+                        <line id="linkB-E" x1="262" y1="80" x2="338" y2="140" stroke="#a3a3a3" stroke-width="3"/>
+                        <line id="linkS-C" x1="68" y1="160" x2="138" y2="220" stroke="#a3a3a3" stroke-width="3"/>
+                        <line id="linkC-D" x1="165" y1="230" x2="235" y2="230" stroke="#a3a3a3" stroke-width="3"/>
+                        <line id="linkD-E" x1="262" y1="220" x2="338" y2="160" stroke="#a3a3a3" stroke-width="3"/>
+                        <line id="linkE-R" x1="365" y1="150" x2="432" y2="150" stroke="#a3a3a3" stroke-width="3"/>
+                        
+                        <line id="linkA-F" x1="160" y1="85" x2="238" y2="142" stroke="#a3a3a3" stroke-width="3" stroke-dasharray="4,4"/>
+                        <line id="linkF-E" x1="265" y1="150" x2="335" y2="150" stroke="#a3a3a3" stroke-width="3" stroke-dasharray="4,4"/>
+
+                        </svg>
+                </div>
+
+
+                <div class="content-block">
+                    <h3>Cybersecurity</h3>
+                    <p>Protecting networks, devices, and data from unauthorized access or criminal use. Key concerns:</p>
+                    <h4>Vulnerabilities and Attacks:</h4>
+                    <ul>
+                        <li><strong class="key-term">Malware</strong> (Viruses, Worms, Trojans, Ransomware): Malicious software.</li>
+                        <span class="definition">Malicious software designed to harm or exploit any programmable device, service or network. Includes viruses (attach to files, need user action), worms (self-replicate across networks), Trojans (disguise as legitimate software), ransomware (encrypts data demanding payment).</span>
+                        <li><strong class="key-term">Phishing</strong>: Tricking users into revealing sensitive info via fake emails/websites.</li>
+                        <span class="definition">A social engineering attack where fraudulent communications (often emails or fake websites) impersonate a trustworthy entity to trick individuals into revealing sensitive information like passwords, credit card numbers, or personal details.</span>
+                        <li><strong class="key-term">DDoS (Distributed Denial of Service)</strong>: Overwhelming a target with traffic from many compromised systems (botnet), making it unreachable.</li>
+                        <span class="definition">An attack that floods a server or network with excessive requests/traffic from many compromised computer systems (often a botnet), aiming to make the target service unavailable to legitimate users.</span>
+                        <li><strong>Spoofing & MITM (Man-in-the-Middle)</strong>: Intercepting/altering communications or impersonating systems.</li>
+                        <li><strong>SQL Injection / Software Vulnerabilities</strong>: Exploiting bugs in software (e.g., web forms) to manipulate systems or data.</li>
+                        <li><strong>Weak Passwords & Credential Reuse</strong>: Easily guessable or reused passwords are a major vulnerability.</li>
+                    </ul>
+                    <h4>Security Measures:</h4>
+                    <ul>
+                        <li><strong class="key-term">Encryption</strong>: Converting data into unreadable code (ciphertext) using a key.
+                            <ul>
+                                <li><strong class="key-term">Symmetric Encryption</strong>: Same key for encryption and decryption (e.g., AES). Key must be shared securely.</li>
+                                <li><strong class="key-term">Asymmetric (Public-Key) Encryption</strong>: Pair of keys: public (shared openly) for encryption, private (kept secret) for decryption (e.g., RSA). Solves key exchange problem, used in SSL/TLS.</li>
+                            </ul>
+                        </li>
+                        <span class="definition">Encryption: The process of converting readable data (plaintext) into an unreadable format (ciphertext) using an algorithm and a key, so that only authorized parties with the correct key can decrypt and read it. Symmetric Encryption: Uses the same secret key for both encryption and decryption. Asymmetric (Public-Key) Encryption: Uses a pair of keys – a public key for encryption (shared widely) and a private key for decryption (kept secret by the owner).</span>
+                        <li><strong class="key-term">Digital Certificates & CAs (Certificate Authorities)</strong>: CAs issue certificates to verify a public key belongs to a specific website (domain), enabling trust in HTTPS.</li>
+                        <span class="definition">Digital Certificate: An electronic document used to prove the ownership of a public key, binding it to an entity (like a website or organization). Certificate Authority (CA): A trusted entity that issues digital certificates. Browsers and operating systems have a list of trusted CAs.</span>
+                        <li><strong class="key-term">Firewalls</strong>: Filter network traffic, blocking unauthorized access.</li>
+                        <span class="definition">A network security system (hardware or software) that monitors and controls incoming and outgoing network traffic based on predetermined security rules. It acts as a barrier between a trusted internal network and untrusted external networks (like the Internet).</span>
+                        <li><strong>Antivirus/Anti-malware Software</strong>: Detects and removes malicious software.</li>
+                        <li><strong>Software Updates/Patches</strong>: Close known security vulnerabilities.</li>
+                        <li><strong class="key-term">Authentication</strong> (Passwords, Multi-Factor Authentication - MFA): Verifying user identity. MFA adds layers (e.g., something you know + something you have).</li>
+                        <span class="definition">The process of verifying the identity of a user, process, or device. Common methods include passwords (something you know), security tokens or smart cards (something you have), and biometrics (something you are). Multi-Factor Authentication (MFA) uses two or more different factors.</span>
+                        <li><strong>User Education</strong>: Critical, as users can be a weak link (e.g., falling for phishing).</li>
+                    </ul>
+                     <p><strong class="key-term">Bandwidth</strong>: Data transfer capacity of a network (bits per second). <strong class="key-term">Latency</strong>: Time for data to travel source to destination (delay).</p>
+                     <span class="definition">Bandwidth: The maximum rate of data transfer across a given path, typically measured in bits per second (bps). Latency: The delay before a transfer of data begins following an instruction for its transfer; the time it takes for a data packet to travel from source to destination.</span>
+                     <p><strong class="key-term">Botnet</strong>: A network of private computers infected with malicious software and controlled as a group without the owners' knowledge, e.g., to send spam or launch DDoS attacks.</p>
+                     <span class="definition">A network of computers infected with malware (bots) that are under the control of a single attacking party, known as the "bot-herder." Botnets are often used to launch DDoS attacks, send spam, or steal data.</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="bigIdea7" class="content-section">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Big Idea 7: Global Impact</h2>
+            <div class="space-y-6">
+                <div class="content-block">
+                    <h3>Summary</h3>
+                    <p>Computing has profound global impacts – beneficial and harmful – on people and society. This Big Idea examines how computing innovations transform communication, learning, work, and life, and how societal factors influence these developments. It addresses issues like the digital divide, privacy, intellectual property, ethics, and bias.</p>
+                </div>
+                <div class="content-block">
+                    <h3>Detailed Concepts</h3>
+                    <h4>Computing and Communication</h4>
+                    <p>Computing enhances communication (email, chat, video conferencing) and collaboration (shared online tools, cloud computing). Social media fosters new interactions and online communities. Access to information (search engines, Wikipedia) is widespread. New forms of expression (blogs, podcasts, videos) empower individuals. <strong class="key-term">Assistive Technologies</strong> enhance human capabilities.</p>
+                    <span class="definition">Hardware and software designed to help people with disabilities perform tasks that might otherwise be difficult or impossible. Examples include screen readers for the visually impaired, speech-to-text software, and adaptive keyboards.</span>
+
+                    <h4>Problem Solving at Scale</h4>
+                    <ul>
+                        <li><strong class="key-term">Crowdsourcing</strong>: Obtaining input/work from many people via the Internet (e.g., Kickstarter, Wikipedia).</li>
+                        <span class="definition">Obtaining information or input into a task or project by enlisting the services of a large number of people, either paid or unpaid, typically via the Internet.</span>
+                        <li><strong class="key-term">Citizen Science</strong>: Public participation in scientific research (e.g., classifying galaxies, reporting bird sightings).</li>
+                        <span class="definition">Scientific research conducted, in whole or in part, by amateur (or nonprofessional) scientists. Often involves public participation in data collection and analysis.</span>
+                        <li><strong>Human Computation</strong>: Using human intelligence for tasks computers find hard (e.g., CAPTCHAs, image tagging).</li>
+                    </ul>
+
+                    <h4>Innovation Across Fields</h4>
+                    <p>Computing drives innovation in medicine (diagnostics, bioinformatics), business (e-commerce, FinTech), science (simulations, genome sequencing), education (online learning), entertainment (CGI, games), etc. <strong class="key-term">Open Access</strong> and <strong class="key-term">Creative Commons</strong> enable broader sharing of information and creative works.</p>
+                    <span class="definition">Open Access: A publishing model for scholarly communication that makes research information available to readers at no cost. Creative Commons: A non-profit organization that provides standardized licenses creators can use to grant public permission to share and use their creative work on conditions of their choice.</span>
+                    
+                    <h4>Beneficial vs. Harmful Effects</h4>
+                    <p>Computing innovations have dual impacts:</p>
+                    <ul>
+                        <li><strong>Beneficial:</strong> Easier access to info/education, new jobs, social connectivity, efficiency, medical advances, creativity.</li>
+                        <li><strong>Harmful:</strong>
+                            <ul>
+                                <li><strong class="key-term">Privacy Invasion</strong>: Collection and aggregation of personal data (location, browsing habits) by apps, websites, IoT devices.</li>
+                                <span class="definition">The intrusion into the personal life of another, causing outrage, mental suffering, or humiliation to a person of reasonable sensitivities. In computing, this often relates to the unauthorized collection, use, or disclosure of personal data.</span>
+                                <li><strong>Security Risks:</strong> Cyber threats disrupting infrastructure, identity theft.</li>
+                                <li><strong class="key-term">Intellectual Property (IP) Issues</strong>: Easy copying/sharing challenges copyright. <strong class="key-term">DMCA (Digital Millennium Copyright Act)</strong> addresses this.</li>
+                                <span class="definition">Intellectual Property: Creations of the mind, such as inventions; literary and artistic works; designs; and symbols, names and images used in commerce. IP rights include copyrights, patents, and trademarks. DMCA: A 1998 United States copyright law that criminalizes production and dissemination of technology, devices, or services intended to circumvent measures that control access to copyrighted works.</span>
+                                <li><strong>Social Issues:</strong> Misinformation/propaganda, echo chambers, internet addiction, mental health impacts, <strong class="key-term">Job Displacement</strong> due to automation.</li>
+                                 <span class="definition">The elimination of jobs that occurs when technological advancements, automation, or economic shifts make certain roles obsolete or reduce the need for human labor in those positions.</span>
+                                <li><strong>Environmental Impact:</strong> E-waste, energy consumption of data centers/cryptocurrency.</li>
+                                <li><strong class="key-term">Ethical Concerns</strong>: <strong class="key-term">Bias in Algorithms</strong> (AI reflecting societal biases), surveillance, <strong class="key-term">Internet Censorship</strong>.</li>
+                                <span class="definition">Ethical Concerns: Issues that involve considerations of right and wrong, fairness, and responsibility in the context of computing. Bias in Algorithms: Systematic and repeatable errors in a computer system that create unfair outcomes, such as privileging one arbitrary group of users over others, often stemming from biased training data or flawed assumptions in the algorithm design. Internet Censorship: The control or suppression of what can be accessed, published, or viewed on the Internet, often by governments or organizations.</span>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>The Digital Divide</h4>
+                    <p>Unequal access to computing and the Internet due to socioeconomic status, geography, education, etc. It can exacerbate existing inequalities. Efforts to bridge it include cheaper tech and educational programs.</p>
+                    <p class="mb-2"><strong class="key-term">Digital Divide</strong>: The gap between demographics and regions that have access to modern information and communications technology (ICT), and those that don't or have restricted access.
+                        <span class="definition">The gap between those who have ready access to computers and the Internet, and those who do not. This can exist between countries, regions, socioeconomic groups, or even neighborhoods, and affects opportunities in education, employment, and civic participation.</span>
+                    </p>
+
+                    <h4>Context Matters</h4>
+                    <p>Innovations influence and are influenced by their social, economic, and cultural contexts. Society's needs drive tech, and tech changes society. Impacts vary globally (e.g., mobile banking in regions with few traditional banks).</p>
+                </div>
+                 <div class="content-block">
+                    <h3>Other Key Terms</h3>
+                     <p class="mb-2"><strong class="key-term">Innovation (Computing)</strong>: A new or significantly improved technology, product, process, or idea that includes a computer or program as a central part of its function.
+                        <span class="definition">A new or improved technology, product, or idea. In AP CSP, usually refers to a computing innovation – one that includes a computer or program as a central part of its function.</span>
+                    </p>
+                    <p class="mb-2"><strong class="key-term">Open Source Software</strong>: Software whose source code is publicly available for anyone to inspect, modify, and distribute, fostering collaboration.
+                        <span class="definition">Software for which the original source code is made freely available and may be redistributed and modified. Examples include Linux and Apache Web Server.</span>
+                    </p>
+                </div>
+                <div class="content-block">
+                    <h3>Example: Social Media</h3>
+                    <p><strong>Purpose:</strong> Connect people, share content. <strong>Beneficial:</strong> Rapid info dissemination, social movements, business advertising. <strong>Harmful:</strong> Misinformation, cyberbullying, privacy issues, data harvesting. <strong>Context:</strong> Drives new job roles (influencers), shifts ad revenue, faces varying cultural acceptance and censorship globally. Raises ethical debates on content moderation and data use.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="content-section">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Interactive Quiz</h2>
+            <p class="text-gray-700 mb-6">Test your understanding of AP CSP concepts. Select an answer and click "Check Answer".</p>
+            <div id="quizContainer" class="space-y-8">
+                </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Navigation ---
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                contentSections.forEach(section => section.classList.remove('active'));
+                item.classList.add('active');
+                const targetId = item.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+
+                // If navigating to quiz, render it
+                if (targetId === 'quiz') {
+                    renderQuiz();
+                }
+                // If navigating to Internet, ensure diagram is reset or initialized
+                if (targetId === 'bigIdea6') {
+                    resetPacketSimulation(); 
+                }
+            });
+        });
+
+        // --- Key Terms ---
+        const keyTerms = document.querySelectorAll('.key-term');
+        keyTerms.forEach(term => {
+            term.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent click from bubbling up to document
+                const definition = term.nextElementSibling;
+                if (definition && definition.classList.contains('definition')) {
+                    // Close other open definitions
+                    document.querySelectorAll('.definition').forEach(def => {
+                        if (def !== definition) def.style.display = 'none';
+                    });
+                    // Toggle current definition
+                    definition.style.display = definition.style.display === 'block' ? 'none' : 'block';
+                }
+            });
+        });
+        // Close definitions when clicking elsewhere
+        document.addEventListener('click', (event) => {
+            if (!event.target.classList.contains('key-term')) {
+                document.querySelectorAll('.definition').forEach(def => def.style.display = 'none');
+            }
+        });
+
+
+        // --- Accordions ---
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                if (content && content.classList.contains('accordion-content')) {
+                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+                    header.classList.toggle('open');
+                }
+            });
+        });
+
+        // --- Interactive Packet Switching Diagram Logic ---
+        const svgNS = "http://www.w3.org/2000/svg";
+        const diagram = document.getElementById('packetSwitchingDiagram');
+        const sendMessage1Btn = document.getElementById('sendMessage1Btn');
+        const sendMessage2Btn = document.getElementById('sendMessage2Btn');
+        const simulateFailureBtn = document.getElementById('simulateFailureBtn');
+        const resetSimulationBtn = document.getElementById('resetSimulationBtn');
+
+        const nodeCoords = {
+            S: { x: 50, y: 150 }, A: { x: 150, y: 70 }, B: { x: 250, y: 70 },
+            C: { x: 150, y: 230 }, D: { x: 250, y: 230 }, E: { x: 350, y: 150 },
+            R: { x: 450, y: 150 }, F: { x: 250, y: 150 } // Alternative router
+        };
+        
+        let linkABFailed = false;
+
+        function createPacket(id, color, startNode) {
+            const packet = document.createElementNS(svgNS, "circle");
+            packet.setAttribute("id", `packet-${id}-${Date.now()}`);
+            packet.setAttribute("cx", nodeCoords[startNode].x);
+            packet.setAttribute("cy", nodeCoords[startNode].y);
+            packet.setAttribute("r", "5");
+            packet.setAttribute("fill", color);
+            packet.classList.add("packet");
+            diagram.appendChild(packet);
+            return packet;
+        }
+
+        function animatePacket(packet, path) {
+            let currentStep = 0;
+            function move() {
+                if (currentStep < path.length) {
+                    const targetNode = path[currentStep];
+                    // Special handling for link A-B failure for path1
+                    if (linkABFailed && path.includes('A') && path.includes('B') && path[currentStep-1] === 'A' && targetNode === 'B') {
+                         // Try to reroute via F if A-B failed
+                        const rerouteIndex = path.indexOf('B');
+                        if(rerouteIndex !== -1) {
+                            // New path: S-A-F-E-R
+                            const newPathSegment = ['F', 'E', 'R']; 
+                            path.splice(rerouteIndex, path.length - rerouteIndex, ...newPathSegment);
+                            // console.log("Rerouting via F:", path);
+                        }
+                    }
+
+                    packet.setAttribute("cx", nodeCoords[targetNode].x);
+                    packet.setAttribute("cy", nodeCoords[targetNode].y);
+                    currentStep++;
+                    setTimeout(move, 600); // Animation speed
+                } else {
+                    // Optional: remove packet after animation or fade out
+                    setTimeout(() => { if(packet.parentNode) packet.parentNode.removeChild(packet); }, 1000);
+                }
+            }
+            move();
+        }
+        
+        function resetPacketSimulation() {
+            // Remove all existing packets
+            const existingPackets = diagram.querySelectorAll('.packet');
+            existingPackets.forEach(p => p.remove());
+            // Reset link failure
+            linkABFailed = false;
+            const linkAB = document.getElementById('linkA-B');
+            if(linkAB) linkAB.classList.remove('link-failed');
+        }
+
+        if (sendMessage1Btn) {
+            sendMessage1Btn.addEventListener('click', () => {
+                const packet = createPacket("msg1", "lightgreen", "S");
+                // Path: S -> A -> B -> E -> R
+                // If A-B failed, it will try S -> A -> F -> E -> R in animatePacket
+                animatePacket(packet, ['S', 'A', 'B', 'E', 'R']);
+            });
+        }
+        if (sendMessage2Btn) {
+            sendMessage2Btn.addEventListener('click', () => {
+                const packet = createPacket("msg2", "lightblue", "S");
+                // Path: S -> C -> D -> E -> R
+                animatePacket(packet, ['S', 'C', 'D', 'E', 'R']);
+            });
+        }
+        if (simulateFailureBtn) {
+            simulateFailureBtn.addEventListener('click', () => {
+                linkABFailed = true;
+                const linkAB = document.getElementById('linkA-B');
+                if(linkAB) linkAB.classList.add('link-failed');
+                alert("Link A-B is now simulated as failed. Message 1 will attempt to reroute via A-F-E if sent.");
+            });
+        }
+        if (resetSimulationBtn) {
+            resetSimulationBtn.addEventListener('click', resetPacketSimulation);
+        }
+
+
+        // --- Quiz Data & Logic ---
+        const quizData = [
+            {
+                question: "What is the output of the following pseudocode segment?<br><pre class='bg-gray-100 p-2 rounded mt-2'>x <- 1\ny <- 0\nREPEAT 3 TIMES {\n  y <- y + x\n  x <- x + 1\n}\nDISPLAY(y)</pre>",
+                options: ["3", "5", "6", "9"],
+                answer: "6",
+                explanation: "Trace: Initially x=1, y=0. \nIter 1: y = 0+1=1, x=2. \nIter 2: y = 1+2=3, x=3. \nIter 3: y = 3+3=6, x=4. Loop ends. Display y (6)."
+            },
+            {
+                question: "Consider the following pseudocode:<br><pre class='bg-gray-100 p-2 rounded mt-2'>numbers <- [2, 5, 1, 4]\nsum <- 0\nFOR EACH item IN numbers {\n  IF (item > 3) {\n    sum <- sum + item\n  }\n}\nDISPLAY(sum)</pre>What value is displayed?",
+                options: ["7", "9", "12", "4"],
+                answer: "9",
+                explanation: "The loop iterates through [2, 5, 1, 4]. \nitem=2: 2 > 3 is false. sum=0. \nitem=5: 5 > 3 is true. sum = 0+5=5. \nitem=1: 1 > 3 is false. sum=5. \nitem=4: 4 > 3 is true. sum = 5+4=9. Display sum (9)."
+            },
+            {
+                question: "A company wants to store high-quality photographs for archival purposes but also needs to email smaller versions. Which compression types are most appropriate for these two uses, respectively?",
+                options: ["Lossy for archival, Lossless for email", "Lossless for archival, Lossy for email", "Lossy for both", "Lossless for both"],
+                answer: "Lossless for archival, Lossy for email",
+                explanation: "Lossless compression (e.g., PNG, TIFF) is best for archival because it preserves all original data, ensuring maximum quality. Lossy compression (e.g., JPEG) is suitable for email because it significantly reduces file size, making it easier to send, even though some quality is lost."
+            },
+            {
+                question: "Which of the following best describes the primary function of DNS (Domain Name System) in the Internet?",
+                options: ["To encrypt data for secure transmission.", "To ensure reliable delivery of data packets.", "To translate human-readable domain names into IP addresses.", "To assign IP addresses to new devices joining a network."],
+                answer: "To translate human-readable domain names into IP addresses.",
+                explanation: "DNS acts like the Internet's phonebook, converting user-friendly domain names (like www.example.com) into the numerical IP addresses (like 192.0.2.1) that computers use to locate each other."
+            },
+            {
+                question: "A user receives an email that appears to be from their bank, asking them to click a link and verify their account details due to a 'security alert.' The link leads to a website that looks identical to the bank's official site but has a slightly different URL. This is an example of:",
+                options: ["A DDoS attack", "Malware infection", "Phishing attack", "Symmetric encryption"],
+                answer: "Phishing attack",
+                explanation: "Phishing involves tricking users into divulging sensitive information by impersonating a trustworthy entity. The fake email and website are classic phishing techniques."
+            },
+            {
+                question: "Consider the binary number 10110. What is its decimal equivalent?",
+                options: ["16", "20", "22", "26"],
+                answer: "22",
+                explanation: "10110 in binary = (1 * 2^4) + (0 * 2^3) + (1 * 2^2) + (1 * 2^1) + (0 * 2^0) = 16 + 0 + 4 + 2 + 0 = 22."
+            },
+            {
+                question: "Which of the following is a significant ethical concern related to the use of AI algorithms in decision-making processes (e.g., loan applications, hiring)?",
+                options: ["High computational cost of AI algorithms.", "Potential for bias in algorithms leading to unfair outcomes.", "Limited availability of AI development tools.", "AI algorithms are always 100% accurate."],
+                answer: "Potential for bias in algorithms leading to unfair outcomes.",
+                explanation: "If AI algorithms are trained on biased data or reflect societal biases in their design, they can perpetuate or even amplify unfairness in decision-making, which is a major ethical concern."
+            },
+            {
+                question: "A procedure `calculatePrice(itemCost, taxRate)` is defined. If this procedure is called as `calculatePrice(100, 0.08)`, what do `100` and `0.08` represent?",
+                options: ["Global variables", "Return values", "Local variables", "Arguments (or actual parameters)"],
+                answer: "Arguments (or actual parameters)",
+                explanation: "When a procedure is called, the values passed to it are known as arguments. These arguments are assigned to the procedure's parameters (`itemCost` and `taxRate` in this case) for use within the procedure."
+            },
+            {
+                question: "Which Internet protocol is primarily responsible for breaking down messages into packets, adding sequence numbers, and ensuring all packets are reliably received and reassembled in the correct order at the destination?",
+                options: ["IP (Internet Protocol)", "HTTP (HyperText Transfer Protocol)", "UDP (User Datagram Protocol)", "TCP (Transmission Control Protocol)"],
+                answer: "TCP (Transmission Control Protocol)",
+                explanation: "TCP provides reliable, ordered, and error-checked delivery of a stream of data. It handles packetization, sequencing, acknowledgments, and retransmissions to ensure data integrity."
+            },
+            {
+                question: "A programmer is developing a system to manage a library's book inventory. Which of the following data abstractions would be most suitable for storing the titles of all books currently available?",
+                options: ["A single integer variable", "A list (or array) of strings", "A Boolean variable", "A single string variable"],
+                answer: "A list (or array) of strings",
+                explanation: "A list (or array) is designed to hold a collection of items. Since book titles are text, a list of strings would be the most appropriate way to store multiple book titles."
+            }
+        ];
+
+        const quizContainer = document.getElementById('quizContainer');
+
+        function renderQuiz() {
+            quizContainer.innerHTML = ''; // Clear previous quiz
+            quizData.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('quiz-question');
+                questionDiv.innerHTML = `
+                    <p class="text-lg font-medium text-gray-800 mb-3">Question ${index + 1}:</p>
+                    <div class="text-gray-700 mb-4">${q.question}</div>
+                    <div class="options-container space-y-2">
+                        ${q.options.map(option => `<button class="quiz-option w-full text-left">${option}</button>`).join('')}
+                    </div>
+                    <button class="check-answer-btn mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out">Check Answer</button>
+                    <div class="feedback mt-3 text-sm"></div>
+                `;
+                quizContainer.appendChild(questionDiv);
+
+                const optionButtons = questionDiv.querySelectorAll('.quiz-option');
+                let selectedOption = null;
+
+                optionButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        // Allow re-selection only if not yet checked
+                        if (!checkButton.disabled) {
+                            optionButtons.forEach(b => b.classList.remove('selected'));
+                            btn.classList.add('selected');
+                            selectedOption = btn;
+                        }
+                    });
+                });
+
+                const checkButton = questionDiv.querySelector('.check-answer-btn');
+                const feedbackDiv = questionDiv.querySelector('.feedback');
+
+                checkButton.addEventListener('click', () => {
+                    if (!selectedOption) {
+                        feedbackDiv.textContent = "Please select an answer.";
+                        feedbackDiv.className = 'feedback text-yellow-700 bg-yellow-50';
+                        return;
+                    }
+
+                    optionButtons.forEach(btn => btn.disabled = true); 
+                    checkButton.disabled = true; 
+
+                    const userAnswer = selectedOption.textContent;
+                    if (userAnswer === q.answer) {
+                        selectedOption.classList.add('correct');
+                        feedbackDiv.innerHTML = `<strong class="text-green-700">Correct!</strong><br>${q.explanation}`;
+                        feedbackDiv.className = 'feedback text-green-700 bg-green-50';
+                    } else {
+                        selectedOption.classList.add('incorrect');
+                        feedbackDiv.innerHTML = `<strong class="text-red-700">Incorrect.</strong> The correct answer is <strong>${q.answer}</strong>.<br>${q.explanation}`;
+                        feedbackDiv.className = 'feedback text-red-700 bg-red-50';
+                        optionButtons.forEach(btn => {
+                            if (btn.textContent === q.answer) {
+                                btn.classList.add('correct');
+                            }
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Initial render if quiz is the active tab (though home is default now)
+        if (document.getElementById('quiz').classList.contains('active')) {
+             renderQuiz();
+        }
+        // Ensure diagram is initialized if Internet is the active tab
+        if (document.getElementById('bigIdea6').classList.contains('active')) {
+            resetPacketSimulation();
+        }
+
+    </script>
+
+</body>
+</html>
+     </main>
 
     <footer class="site-footer">
         <div class="container">
