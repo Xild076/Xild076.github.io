@@ -206,7 +206,6 @@ with blog_page.Container(css_class="my_lg"):
 cool_stuff_page = site.add_page("cool_stuff", "Cool Stuff")
 
 site.add_html_file_page("apush_timeline", "APUSH Timeline", "APUSH.html")
-site.add_html_file_page("csp_study_guide", "CSP Study Guide", "csp.html")
 
 with cool_stuff_page.Background(color="var(--light)", padding=Spacing.XL, animation=AnimationType.FADE_IN, css_class="rounded-lg"):
     cool_stuff_page.Write("Cool Stuff", align=Alignment.CENTER, spacing_after=Spacing.LG, text_size="50px", text_color="var(--bs-body-color)")
@@ -216,7 +215,7 @@ with cool_stuff_page.Container(css_class="my_lg"):
     cool_stuff_page.Divider(spacing_before=Spacing.XL, spacing_after=Spacing.XL, thickness=2.5)
 
     cool_stuff_page.Widget("APUSH Timeline", "Just finished the APUSH test, wanted to post this thing here.", link="apush_timeline.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
-    cool_stuff_page.Widget("CSP Study Guide", "A study guide for the CSP test.", link="csp_study_guide.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
+    cool_stuff_page.Widget("CSP Study Guide", "A study guide for the CSP test.", link="csp.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
 
 about_page = site.add_page("about", "About Me")
 
