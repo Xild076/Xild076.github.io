@@ -37,7 +37,7 @@ with index_page.Container(css_class="my_lg"):
 
             with index_page.Container(css_class="rounded-lg"):
                 index_page.Markdown("### ETSA --- QC", align=Alignment.CENTER, spacing_after=Spacing.LG)
-                index_page.Markdown("Recently, I've been working on Quantum Criticism with Professor David Guy Brizan and Alex Peczon at USF. Entity-Targeted Sentiment Analysis (ETSA) is a tool designed to quantify and visualize how sentiment toward specific entities evolves within individual news articles, and how those intra-article trends aggregate over time. By focusing on Actor–Subject–Victim (ASVC) structures and rule-based extraction, ETSA delivers an explainable pipeline that can be integrated into a full-stack application for end-to-end agenda detection.")
+                index_page.Markdown("Recently, I have been working on ETSA with Assistant Professor David Guy Brizan and Alex Pezcon (MAGICS Lab @ University of San Francisco). It is a unified, graph-centric pipeline for tracking how sentiment attaches to—and evolves around—entities and their aspects within any text. ETSA processes raw sentences one by one, builds a dynamic property graph of entities and descriptive phrases, scores sentiment at multiple levels, and propagates those scores through tunable, explainable message-passing.")
                 index_page.Button("View the project", link="https://github.com/Xild076/ETSA--QC-", style_type=ButtonType.PRIMARY, animation=AnimationType.PULSE, scroll_animation=True, scroll_animation_delay=0.15)
 
     index_page.Divider(spacing_before=Spacing.XL, spacing_after=Spacing.XL, thickness=2.5)
