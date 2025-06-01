@@ -170,6 +170,7 @@ with projects_page.Container(css_class="my_lg"):
 
 blog_page = site.add_page("blog", "Blog")
 
+site.add_blog_post("heuristic_eq", "Programming - Finding Heuristic Equations", "heuristic_eq.md", author="Harry Yin", date="2025-05-31")
 site.add_blog_post("sentiment_target", "Programming - Entity Sentiment Targetting", "sentiment_target.md", author="Harry Yin", date="2025-04-04")
 site.add_blog_post("question", "Misc - The Question We Forget", "question_forget.md", author="Harry Yin", date="2025-03-24")
 site.add_blog_post("polarization", "Programming - Polarization in Modern Media", "polarization.md", author="Harry Yin", date="2025-03-20")
@@ -191,6 +192,7 @@ with blog_page.Container(css_class="my_lg"):
 
     blog_page.Write("Latest Blog Posts:", align=Alignment.CENTER, spacing_after=Spacing.LG, text_size='30px')
     blog_page.BlockQuote("Some random words by some random guy.", author="me, 2025", align=Alignment.CENTER, spacing_after=Spacing.LG, animation=AnimationType.FADE_IN)
+    blog_page.Widget("Finding Heuristic Equations", "This is a blog post on finding heuristic equations.", link="blog/sentiment_target.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     blog_page.Widget("Entity Sentiment Targetting", "This is a blog post on entity sentiment targetting.", link="blog/sentiment_target.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     blog_page.Widget("The Question We Forget", "This is a blog post on the question we forget.", link="blog/question.html", image_url="/static/imgs/question.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     blog_page.Widget("Polarization in Modern Media", "This is a blog post on my thoughts on the polarization of modern media.", link="blog/polarization.html", image_url="/static/imgs/polarization.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
