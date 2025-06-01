@@ -192,7 +192,7 @@ with blog_page.Container(css_class="my_lg"):
 
     blog_page.Write("Latest Blog Posts:", align=Alignment.CENTER, spacing_after=Spacing.LG, text_size='30px')
     blog_page.BlockQuote("Some random words by some random guy.", author="me, 2025", align=Alignment.CENTER, spacing_after=Spacing.LG, animation=AnimationType.FADE_IN)
-    blog_page.Widget("Finding Heuristic Equations", "This is a blog post on finding heuristic equations.", link="blog/sentiment_target.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
+    blog_page.Widget("Finding Heuristic Equations", "This is a blog post on finding heuristic equations.", link="blog/heuristic_eq.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     blog_page.Widget("Entity Sentiment Targetting", "This is a blog post on entity sentiment targetting.", link="blog/sentiment_target.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     blog_page.Widget("The Question We Forget", "This is a blog post on the question we forget.", link="blog/question.html", image_url="/static/imgs/question.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     blog_page.Widget("Polarization in Modern Media", "This is a blog post on my thoughts on the polarization of modern media.", link="blog/polarization.html", image_url="/static/imgs/polarization.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
