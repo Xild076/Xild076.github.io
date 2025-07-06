@@ -14,42 +14,44 @@ Stock market prediction is an inherently complex problem, influenced by countles
 
 </center>
 
-Many existing prediction models focus solely on historical stock prices, ignoring crucial economic indicators and sentiment data that significantly impact market behavior. StockPred aims to explore how a hybrid AI-driven approach can enhance market forecasting by integrating deep learning, reinforcement learning, and sentiment analysis.
+### StockPred — A novel approach at predicting stock prices
 
-### StockPred and Its Structure
+StockPred presents a novel approach at predicting stock prices. It implements a lightweight architecture inspired by LLMs to achieve surprisingly high accuracy.
+---
+#### Rationale
+Why use an LLM inspired architecture?
 
-StockPred is a proof-of-concept project that experiments with AI techniques for stock prediction, testing their effectiveness in a realistic market setting. While not intended for direct financial decision-making, it provides a framework for exploring how AI can synthesize financial data, news sentiment, and technical indicators to generate stock trend predictions.
-
-The pipeline consists of several experimental components:
-
-1. Data Collection & Preprocessing:
-    - Gathers historical stock prices, financial statements, and macroeconomic indicators from sources like Yahoo Finance, FRED, and other financial APIs.
-    - Extracts and analyzes news sentiment to assess how media coverage influences stock movements.
-
-2. Feature Engineering & Clustering:
-    - Structures stock data into feature sets, including price history, trading volume, economic indicators, and sentiment scores.
-    - Uses clustering techniques to identify similar market patterns for better generalization.
-
-3. Hybrid Deep Learning Model (LSTM + Transformer):
-    - Combines LSTMs for sequential trend detection and Transformer models for enhanced pattern recognition.
-    - Implements a custom loss function that prioritizes directional accuracy over raw price prediction.
-
-4. Sentiment & News Analysis:
-    - NLP sentiment model for analyzing financial news sentiment.
-    - Weighs sentiment data alongside quantitative stock indicators to adjust predictions dynamically.
-
-5. Calculated Stock Values:
-    - Instead of providing binary "buy/sell" recommendations, StockPred generates actual stock values.
-    - This provides the user with more agency, as it predicts future prices instead of given assumptions for buying and selling.
-
+The story is a bit long, but in short, I was watching a youtube video on how LLMs work, then thought that some parts of the LLM process like attention and the fact that you can input outputs back in to continously predict caught my interest, and I thought that it would be applicable to this project, something I was already working on. Turns out, it worked out much better than I thought it would.
+#### Architecture
+**Model:**
+Ticker Embedding -> Input Projection -> Positional Embedding -> Transformer Encoder -> Output Head MLP
+**Data:**
+- yfinance for finance data
+- FRED for interest rate, GDP, inflation, unemployment, and volitility
+#### Efficiency
+The model is only has about 2M parameters, making it very efficient and runnable on low-end GPUs and high-end CPUs. This makes it one of the most accessible stock prediction models out there, especially given its accuracy.
+#### Accuracy
+The latest trained model, 2025-07-06T13:00:17.372776, when tested over 3562 samples, returned:
+- A directional accuracy of 87.20% (Meaning 87.20% of the time, the model predicted whether stock would go up or down accurately.)
+- A trading winrate of 86.69% (Meaning 86.69%, the model would make you money.)
+- A median R^2 score of 0.8193 (How well the model's predicted values matched actual values, ignoring outliers on both sides)
+- A positive R^2 % rate of 93.68% (Meaning 93% of the time, the model was close to being correct than the mean.)
+All of these scores are well above the average for models of this size and the directional accuracy is also well above even larger models.
+#### Limitations
+However, the models come at limitations too:
+- A R^2 score of -1.8326 (On average, the model predicted worse than the mean.)
+- A RMSE of 140.0130 (On average, the model was off by 140 points.)
+- A MAPE of 242.48% (On average, the predictions were more than twice the real score.)
+Despite having overall good accuracy, there are a few disasterously horrible predictions, leading to horrible predictions shown above. 
+### Usage
 You can try this program out here: [https://xild-stockpred.streamlit.app/](https://xild-stockpred.streamlit.app/)
 
-### Innovations
-StockPred introduces several experimental ideas in stock market forecasting:
+### Key Points
+StockPred introduces several key benefits and innovations:
 
-1. Hybrid AI Approach: Tests the effectiveness of combining LSTMs and Transformers
-2. Sentiment-Driven Adjustments: Evaluates how real-time financial news and investor sentiment influence market trends.
-3. Multi-Source Data Fusion: Merges stock history, macroeconomic data, and sentiment analysis for a broader market perspective.
+1. Model: The model bases itself off of LLM architecture, which is a relatively unexplored method for model architecture.
+2. Effectiveness: The model boasts an 867.2% directional accuracy along with many other good metrics, many of which outstrip, as mentioned before, even better models.
+3. Efficiency: This is possibly one of the smallest models with the highest accuracy, making it both accessible and proficient.
 
 ### Conclusion
 
