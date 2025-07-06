@@ -16,8 +16,9 @@ Stock market prediction is an inherently complex problem, influenced by countles
 
 ### StockPred — A novel approach at predicting stock prices
 
+#### Intro
 StockPred presents a novel approach at predicting stock prices. It implements a lightweight architecture inspired by LLMs to achieve surprisingly high accuracy.
----
+
 #### Rationale
 Why use an LLM inspired architecture?
 
