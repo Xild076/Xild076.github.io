@@ -92,7 +92,8 @@ site.add_project_page(
         {"time": "2023-10-15", "description": "Completed the first beta version of Polystock AI"},
         {"time": "2023-11-20", "description": "Wrote the first paper on Polystock AI"},
         {"time": "2024-09-03", "description": "Began to rework the project to use more advanced techniques"},
-        {"time": "2024-11-10", "description": "Completed the second beta version of Polystock AI with full functionality and partially trained models"}
+        {"time": "2024-11-10", "description": "Completed the second beta version of Polystock AI with full functionality and partially trained models"},
+        {"time": "2025-07-06", "description": "Updated Polystock AI to use a different data source, better data storage, and a more advanced model architecture"}
     ],
     technologies_used=[
         "Python 3.x for backend processing",
