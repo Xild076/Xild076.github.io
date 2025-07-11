@@ -173,7 +173,7 @@ blog_page = site.add_page("blog", "Blog")
 
 site.add_blog_post("on_mortality", "Misc - Scary Moment", "on_mortality.md", author="Harry Yin", date="2025-06-20")
 site.add_blog_post("heuristic_eq", "Programming - Finding Heuristic Equations", "heuristic_eq.md", author="Harry Yin", date="2025-05-31")
-site.add_blog_post("sentiment_target", "Programming - Entity Sentiment Targetting", "sentiment_target.md", author="Harry Yin", date="2025-04-04")
+site.add_blog_post("sentiment_target", "Programming - Entity Sentiment Targeting", "sentiment_target.md", author="Harry Yin", date="2025-04-04")
 site.add_blog_post("question", "Misc - The Question We Forget", "question_forget.md", author="Harry Yin", date="2025-03-24")
 site.add_blog_post("polarization", "Programming - Polarization in Modern Media", "polarization.md", author="Harry Yin", date="2025-03-20")
 site.add_blog_post("ai_vs_algorithm", "Programming - Stockfish vs AlphaZero, Algorithm vs AI", "ai_algorithm.md", author="Harry Yin", date="2025-03-13")
