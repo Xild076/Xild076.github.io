@@ -44,7 +44,7 @@
 </header>
 
     <main id="main-content" role="main">
-<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-down">Polystock AI (Stock Prediction)</p><div class="tabs-container"  style="margin-top: var(--spacing-lg)" data-scroll-animation="fade-in-up"><ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tabs-4316527984-tab-0" data-bs-toggle="tab" data-bs-target="#tabs-4316527984-pane-0" type="button" role="tab" aria-controls="tabs-4316527984-pane-0" aria-selected="true">Overview</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4316527984-tab-1" data-bs-toggle="tab" data-bs-target="#tabs-4316527984-pane-1" type="button" role="tab" aria-controls="tabs-4316527984-pane-1" aria-selected="false">Timeline</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4316527984-tab-2" data-bs-toggle="tab" data-bs-target="#tabs-4316527984-pane-2" type="button" role="tab" aria-controls="tabs-4316527984-pane-2" aria-selected="false">Tech &amp; Docs</button></li></ul><div class="tab-content"><div class="tab-pane fade show active" id="tabs-4316527984-pane-0" role="tabpanel" aria-labelledby="tabs-4316527984-tab-0"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p><center></p>
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-down">Polystock AI (Stock Prediction)</p><div class="tabs-container"  style="margin-top: var(--spacing-lg)" data-scroll-animation="fade-in-up"><ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tabs-4387864448-tab-0" data-bs-toggle="tab" data-bs-target="#tabs-4387864448-pane-0" type="button" role="tab" aria-controls="tabs-4387864448-pane-0" aria-selected="true">Overview</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4387864448-tab-1" data-bs-toggle="tab" data-bs-target="#tabs-4387864448-pane-1" type="button" role="tab" aria-controls="tabs-4387864448-pane-1" aria-selected="false">Timeline</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4387864448-tab-2" data-bs-toggle="tab" data-bs-target="#tabs-4387864448-pane-2" type="button" role="tab" aria-controls="tabs-4387864448-pane-2" aria-selected="false">Tech &amp; Docs</button></li></ul><div class="tab-content"><div class="tab-pane fade show active" id="tabs-4387864448-pane-0" role="tabpanel" aria-labelledby="tabs-4387864448-tab-0"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p><center></p>
 
 <h2>StockPred - AI-Powered Stock Prediction</h2>
 
@@ -76,6 +76,8 @@
 
 <p><strong>Model:</strong>
 Ticker Embedding -> Input Projection -> Positional Embedding -> Transformer Encoder -> Output Head MLP
+<strong>Loss:</strong>
+Custom Directional MSE loss
 <strong>Data:</strong></p>
 
 <ul>
@@ -85,17 +87,16 @@ Ticker Embedding -> Input Projection -> Positional Embedding -> Transformer Enco
 
 <h4>Efficiency</h4>
 
-<p>The model is only has about 10M parameters, making it very efficient and runnable on low-end GPUs and high-end CPUs. This makes it one of the most accessible stock prediction models out there, especially given its accuracy.</p>
+<p>The model is only has about 30M parameters big, making it very efficient and runnable on low-end GPUs and high-end CPUs. This makes it one of the most accessible stock prediction models out there, especially given its accuracy.</p>
 
 <h4>Accuracy</h4>
 
-<p>The latest trained model, 2025-07-06T13:00:17.372776, when tested over 3562 samples, returned:</p>
+<p>The latest trained model, model<em>20250714</em>053856, when tested over 4909 samples, returned:</p>
 
 <ul>
-<li>A directional accuracy of 87.20% (Meaning 87.20% of the time, the model predicted whether stock would go up or down accurately.)</li>
-<li>A trading winrate of 86.69% (Meaning 86.69%, the model would make you money.)</li>
-<li>A median R^2 score of 0.8193 (How well the model's predicted values matched actual values, ignoring outliers on both sides)</li>
-<li>A positive R^2 % rate of 93.68% (Meaning 93% of the time, the model was close to being correct than the mean.)
+<li>A directional accuracy of 90.65%</li>
+<li>A median R^2 score of 0.8732</li>
+<li>An R^2 score of 0.5887
 All of these scores are well above the average for models of this size and the directional accuracy is also well above even larger models.</li>
 </ul>
 
@@ -104,15 +105,19 @@ All of these scores are well above the average for models of this size and the d
 <p>However, the models come at limitations too:</p>
 
 <ul>
-<li>A R^2 score of -1.8326 (On average, the model predicted worse than the mean.)</li>
-<li>A RMSE of 140.0130 (On average, the model was off by 140 points.)</li>
-<li>A MAPE of 242.48% (On average, the predictions were more than twice the real score.)
+<li>A RMSE of 418.98</li>
+<li>A MAPE of 127.63%</li>
+<li>Recursive predictions make the prediction accuracy exponentially worse. It is recommended you only predict for 5 days (the default horizon) for highest accuracy.
 Despite having overall good accuracy, there are a few disasterously horrible predictions, leading to horrible predictions shown above. </li>
 </ul>
 
 <h3>Usage</h3>
 
-<p>You can try this program out here: <a rel="nofollow noopener" target="_blank" href="https://xild-stockpred.streamlit.app/">https://xild-stockpred.streamlit.app/</a></p>
+<p>You can use this model at:</p>
+
+<ul>
+<li>https://xild-stockpred.streamlit.app/</li>
+</ul>
 
 <h3>Key Points</h3>
 
@@ -127,7 +132,7 @@ Despite having overall good accuracy, there are a few disasterously horrible pre
 <h3>Conclusion</h3>
 
 <p>StockPred serves as a research-driven proof of concept, not a financial advisory tool. It provides a testing ground for integrating AI models into stock prediction, assessing their strengths and limitations. The ultimate goal is to refine these methods and explore their potential applications in real-world financial analysis.</p>
-</div></div><div class="tab-pane fade" id="tabs-4316527984-pane-1" role="tabpanel" aria-labelledby="tabs-4316527984-tab-1"><div class="timeline"  style="margin-bottom: var(--spacing-md)"><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2023-06-11</div><p>Began project Polystock AI</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.15s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2023-10-15</div><p>Completed the first beta version of Polystock AI</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.3s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2023-11-20</div><p>Wrote the first paper on Polystock AI</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.44999999999999996s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-09-03</div><p>Began to rework the project to use more advanced techniques</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.6s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-11-10</div><p>Completed the second beta version of Polystock AI with full functionality and partially trained models</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.75s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-07-06</div><p>Updated Polystock AI to use a different data source, better data storage, and a more advanced model architecture</p></div></div></div></div><div class="tab-pane fade" id="tabs-4316527984-pane-2" role="tabpanel" aria-labelledby="tabs-4316527984-tab-2"><p class='mb-sm'><strong>Technologies Used:</strong> <span class="badge bg-secondary me-xs mb-xs">Python 3.x for backend processing</span><span class="badge bg-secondary me-xs mb-xs">FRED API for data</span><span class="badge bg-secondary me-xs mb-xs">Streamlit for hosting</span><span class="badge bg-secondary me-xs mb-xs">Requests for HTTP requests</span><span class="badge bg-secondary me-xs mb-xs">Yfinance for stock data</span><span class="badge bg-secondary me-xs mb-xs">Pandas for data manipulation</span><span class="badge bg-secondary me-xs mb-xs">Numpy for numerical operations</span><span class="badge bg-secondary me-xs mb-xs">Matplotlib for plotting</span><span class="badge bg-secondary me-xs mb-xs">PyTorch for ML development</span><span class="badge bg-secondary me-xs mb-xs">Github for development</span></p><h5 class='mt-md mb-sm'>Documents & Links:</h5><div class="gap-md grid grid-cols-1 project-document-widgets"  style="margin-bottom: var(--spacing-md)"><div class="animate-fade-in-up widget-horizontal-layout"  style="margin-bottom: var(--spacing-md)" object-fit="ObjectFit.CONTAIN"><div class="widget-image-container" style="flex-basis: 100px; width: 100px; height: 100px"><img src="/static/imgs/placeholder.png" alt="Beta Paper" style="object-fit: cover; display: block; width: 100%; height: 100%"></div>
+</div></div><div class="tab-pane fade" id="tabs-4387864448-pane-1" role="tabpanel" aria-labelledby="tabs-4387864448-tab-1"><div class="timeline"  style="margin-bottom: var(--spacing-md)"><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2023-06-11</div><p>Began project Polystock AI</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.15s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2023-10-15</div><p>Completed the first beta version of Polystock AI</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.3s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2023-11-20</div><p>Wrote the first paper on Polystock AI</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.44999999999999996s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-09-03</div><p>Began to rework the project to use more advanced techniques</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.6s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-11-10</div><p>Completed the second beta version of Polystock AI with full functionality and partially trained models</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.75s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-07-06</div><p>Updated Polystock AI to use a different data source, better data storage, and a more advanced model architecture</p></div></div></div></div><div class="tab-pane fade" id="tabs-4387864448-pane-2" role="tabpanel" aria-labelledby="tabs-4387864448-tab-2"><p class='mb-sm'><strong>Technologies Used:</strong> <span class="badge bg-secondary me-xs mb-xs">Python 3.x for backend processing</span><span class="badge bg-secondary me-xs mb-xs">FRED API for data</span><span class="badge bg-secondary me-xs mb-xs">Streamlit for hosting</span><span class="badge bg-secondary me-xs mb-xs">Requests for HTTP requests</span><span class="badge bg-secondary me-xs mb-xs">Yfinance for stock data</span><span class="badge bg-secondary me-xs mb-xs">Pandas for data manipulation</span><span class="badge bg-secondary me-xs mb-xs">Numpy for numerical operations</span><span class="badge bg-secondary me-xs mb-xs">Matplotlib for plotting</span><span class="badge bg-secondary me-xs mb-xs">PyTorch for ML development</span><span class="badge bg-secondary me-xs mb-xs">Github for development</span></p><h5 class='mt-md mb-sm'>Documents & Links:</h5><div class="gap-md grid grid-cols-1 project-document-widgets"  style="margin-bottom: var(--spacing-md)"><div class="animate-fade-in-up widget-horizontal-layout"  style="margin-bottom: var(--spacing-md)" object-fit="ObjectFit.CONTAIN"><div class="widget-image-container" style="flex-basis: 100px; width: 100px; height: 100px"><img src="/static/imgs/placeholder.png" alt="Beta Paper" style="object-fit: cover; display: block; width: 100%; height: 100%"></div>
             <div class="widget-content-container d-flex flex-column">
                 <h5 class="widget-title">Beta Paper</h5>
                 <p class="widget-description flex-grow-1">View Beta Paper.</p>
