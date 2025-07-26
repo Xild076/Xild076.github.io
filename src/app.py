@@ -33,12 +33,12 @@ with index_page.Container(css_class="my_lg"):
     with index_page.Card(animation=AnimationType.FADE_IN, scroll_animation=True, scroll_animation_delay=0.15):
         with index_page.Columns(n=2, gap=Spacing.LG, spacing_before=Spacing.LG):
             with index_page.Container(css_class="rounded-lg"):
-                index_page.Image("/static/imgs/ETSA Pipeline.png", alt="ETSA Pipeline", caption="ETSA Pipeline", width="2541px", height="511px", object_fit=ObjectFit.COVER, align=Alignment.CENTER)
+                index_page.Image("/static/imgs/placeholder.png", alt="ETSA Pipeline", caption="ETSA Pipeline", width="300px", height="300px", object_fit=ObjectFit.COVER, align=Alignment.CENTER)
 
             with index_page.Container(css_class="rounded-lg"):
                 index_page.Markdown("### ETSA --- QC", align=Alignment.CENTER, spacing_after=Spacing.LG)
                 index_page.Markdown("Recently, I have been working on ETSA with Assistant Professor David Guy Brizan and Alex Pezcon (MAGICS Lab @ University of San Francisco). It is a unified, graph-centric pipeline for tracking how sentiment attaches to—and evolves around—entities and their aspects within any text. ETSA processes raw sentences one by one, builds a dynamic property graph of entities and descriptive phrases, scores sentiment at multiple levels, and propagates those scores through tunable, explainable message-passing. We are currently collecting data for the project: [You can participate in the survey here.](https://etsa---qc---survey.streamlit.app/) We would greatly appreciate your help in collecting data for this project. The survey is quick and easy, and it will help us a lot in our research. Thank you for your time and support!", align=Alignment.LEFT, spacing_after=Spacing.LG)
-                index_page.Button("View the project", link="https://github.com/Xild076/ETSA--QC-", style_type=ButtonType.PRIMARY, animation=AnimationType.PULSE, scroll_animation=True, scroll_animation_delay=0.15)
+                index_page.Button("View the project", link="projects/etsa_qc.html", style_type=ButtonType.PRIMARY, animation=AnimationType.PULSE, scroll_animation=True, scroll_animation_delay=0.15)
 
     index_page.Divider(spacing_before=Spacing.XL, spacing_after=Spacing.XL, thickness=2.5)
 
@@ -195,6 +195,7 @@ with projects_page.Container(css_class="my_lg"):
     projects_page.Divider(spacing_before=Spacing.XL, spacing_after=Spacing.XL, thickness=2.5)
 
     projects_page.Write("Latest Projects:", align=Alignment.CENTER, spacing_after=Spacing.LG, text_size='30px')
+    projects_page.Widget("ETSA --- QC", "A unified, graph-centric pipeline for tracking how sentiment attaches to and evolves around entities and their aspects within any text.", link="projects/etsa_qc.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     projects_page.Widget("Alitheia AI (Objective News)", "A project aimed towards locating and presenting the most objective news possible.", link="projects/objectivenews.html", image_url="/static/imgs/objective_news.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     projects_page.Widget("Polystock AI", "A deep learning system for forecasting stock market behavior using real-time financial data.", link="projects/stockpred.html", image_url="/static/imgs/stock_pred.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     projects_page.Widget("LSD AI", "An AI system for analyzing speech and debate content using NLP, audio analysis, and content tracking.", link="projects/lsdai.html", image_url="/static/imgs/lsd_ai.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
