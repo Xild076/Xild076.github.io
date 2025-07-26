@@ -7,7 +7,7 @@ A unified, graph-centric pipeline for tracking how sentiment attaches to and evo
 ## Pipeline
 <center>
 
-<img src="static/imgs/etsa_pipeline.png" alt="ETSA Pipeline" width="600">
+<img src="content/projects/etsa/etsa_pipeline.png" alt="ETSA Pipeline" width="600">
 
 </center>
 

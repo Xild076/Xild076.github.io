@@ -255,7 +255,7 @@ with cool_stuff_page.Container(css_class="my_lg"):
 
     cool_stuff_page.Widget("APUSH Timeline", "Just finished the APUSH test, wanted to post this thing here.", link="apush_timeline.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     cool_stuff_page.Widget("CSP Study Guide", "A study guide for the CSP test.", link="csp.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
-    cool_stuff_page.Widget("Graph Demo", "A demo showcasing the ETSA graph capabilities.", link="graph_sentiment_analysis.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
+    cool_stuff_page.Widget("Graph Demo", "A demo showcasing the ETSA graph capabilities.", link="projects/etsa/graph_sentiment_analysis.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
 
 about_page = site.add_page("about", "About Me")
 
