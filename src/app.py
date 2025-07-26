@@ -253,7 +253,7 @@ with cool_stuff_page.Background(color="var(--light)", padding=Spacing.XL, animat
 with cool_stuff_page.Container(css_class="my_lg"):
     cool_stuff_page.Divider(spacing_before=Spacing.XL, spacing_after=Spacing.XL, thickness=2.5)
 
-    cool_stuff_page.Widget("APUSH Timeline", "Just finished the APUSH test, wanted to post this thing here.", link="/content/cool_stuff/APUSH.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
+    cool_stuff_page.Widget("APUSH Timeline", "Just finished the APUSH test, wanted to post this thing here.", link="/apush_timeline.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     cool_stuff_page.Widget("CSP Study Guide", "A study guide for the CSP test.", link="csp.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     cool_stuff_page.Widget("Graph Demo", "A demo showcasing the ETSA graph capabilities.", link="/projects/etsa_qc/graph_sentiment_analysis.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
 
