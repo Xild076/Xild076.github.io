@@ -58,10 +58,10 @@ projects_page = site.add_page("projects", "Projects")
 site.add_project_page(
     "etsa_qc",
     "ETSA --- QC",
-    project_readme_file="projects/etsa_qc/etsa_qc_intro.md",
+    project_readme_file="projects/etsa/etsa_qc_intro.md",
     timeline_events=[
         {"time": "2025-03-17", "description": "Began project ETSA --- QC"},
-        {"time": "2025-04-11", "description": "Officially joined the MAGICS Lab at USF"},
+        {"time": "2025-04-11", "description": "Joined the MAGICS Lab at USF"},
     ],
     technologies_used=[
         "Python 3.x for backend processing",
@@ -80,7 +80,7 @@ site.add_project_page(
         {"title": "Summary of Novelty", "url": "projects/etsa/A Summary of Novelty.md"},
         {"title": "Survey Proposal", "url": "projects/etsa/ABSA Survey Proposal.md"},
         {"title": "ETSA --- QC Survey", "url": "https://etsa-survey.streamlit.app/"},
-        {"title": "Graph Demo", "url": "graph_sentiment_analysis.html"}
+        {"title": "Graph Demo", "url": "docs/graph_sentiment_analysis.html"}
     ],
     meta_info={"author": "Xild076", "project_id": "ETSA-QC"}
 )
