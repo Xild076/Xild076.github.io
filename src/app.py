@@ -244,7 +244,7 @@ with blog_page.Container(css_class="my_lg"):
 
 cool_stuff_page = site.add_page("cool_stuff", "Cool Stuff")
 
-site.add_html_file_page("apush_timeline", "APUSH Timeline", "APUSH.html")
+site.add_html_file_page("apush_timeline", "APUSH Timeline", "apush_timeline.html.html")
 
 with cool_stuff_page.Background(color="var(--light)", padding=Spacing.XL, animation=AnimationType.FADE_IN, css_class="rounded-lg"):
     cool_stuff_page.Write("Cool Stuff", align=Alignment.CENTER, spacing_after=Spacing.LG, text_size="50px", text_color="var(--bs-body-color)")
