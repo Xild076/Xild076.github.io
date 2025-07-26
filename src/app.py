@@ -80,7 +80,7 @@ site.add_project_page(
         {"title": "Summary of Novelty", "url": "projects/etsa/A Summary of Novelty.md"},
         {"title": "Survey Proposal", "url": "projects/etsa/ABSA Survey Proposal.md"},
         {"title": "ETSA --- QC Survey", "url": "https://etsa-survey.streamlit.app/"},
-        {"title": "Graph Demo", "url": "docs/graph_sentiment_analysis.html"}
+        {"title": "Graph Demo", "url": "projects/etsa/graph_sentiment_analysis.html"}
     ],
     meta_info={"author": "Xild076", "project_id": "ETSA-QC"}
 )
