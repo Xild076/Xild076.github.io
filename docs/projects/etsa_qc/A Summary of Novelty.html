@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Summary of Novelty | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Harry Yin (Xild076)">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/projects/etsa_qc/A Summary of Novelty.html">
+    <meta property="og:title" content="Summary of Novelty | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/projects/etsa_qc/A Summary of Novelty.html">
+    <meta property="twitter:title" content="Summary of Novelty | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="">
+
+    <link rel="icon" href="/static/img/favicon.ico" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container document-page-container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center"  style="margin-bottom: var(--spacing-md); font-size: 2.5rem">Summary of Novelty</p><hr class="divider" style="margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 0; border-top-width: 1px; border-top-style: solid; border-top-color: var(--bs-border-color); height: 0; opacity: 0.25"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><h2>Existing Literature</h2>
+
+<h3>Limitations of Current ABSA Benchmarks</h3>
+
+<p>Most ABSA models are trained and evaluated on benchmark datasets such as SemEval (Pontiki et al., <a rel="nofollow noopener" target="_blank" href="https://aclanthology.org/S14-2004/">2014</a>, <a rel="nofollow noopener" target="_blank" href="https://aclanthology.org/S15-2082/">2015</a>, <a rel="nofollow noopener" target="_blank" href="https://aclanthology.org/S16-1002/">2016</a>), MAMS (<a rel="nofollow noopener" target="_blank" href="https://aclanthology.org/D19-1654/">Jiang et al., 2019</a>), and Twitter (<a rel="nofollow noopener" target="_blank" href="https://www.ijcai.org/Proceedings/15/Papers/194.pdf">Vo et al., 2015</a>). However, these benchmarks predominantly focus on sentence-level examples, lacking comprehensive document-level annotations. Given a random example pulled from the MAMS dataset—</p>
+
+<pre><code>The O -999
+decor B-ASP Negative
+Was O -999
+not O -999
+good O -999
+at O -999
+all O -999
+but O -999
+their O -999
+food O -999
+and O -999
+amazing O -999
+prices O -999
+make O -999
+up O -999
+made O -999
+it O -999
+. O -999
+
+</code></pre>
+
+<p>(−999 means the token is not an aspect) —it is evident that the datasets used to train and benchmark most modern ABSA models fail to consider multiple entities and broader contextual understanding.</p>
+
+<h3>Limitations of Transformer-Based ABSA Models</h3>
+
+<p>There are multiple transformer-based models adapted for ABSA, from BERT (<a rel="nofollow noopener" target="_blank" href="https://arxiv.org/pdf/1810.04805">Devlin et al., 2019</a>) to RoBERTa (<a rel="nofollow noopener" target="_blank" href="https://arxiv.org/pdf/1907.11692">Liu et al., 2019</a>), culminating in what can be considered the current SOTA model: PyABSA (<a rel="nofollow noopener" target="_blank" href="https://arxiv.org/pdf/2208.01368">Yang et al., 2022</a>), which provides plug-and-play implementations for a variety of neural ABSA architectures and basic ABSA functionality. While they are powerful, these systems are very limited. They suffer from three core limitations:</p>
+
+<ol>
+<li><strong>Inability to operate on full-text input with sentiment shifts</strong><br />
+Due to being a transformer model, the models are still somewhat able to retain context. For instance, with two sentences, it is still able to retain sentiment:</li>
+</ol>
+
+<blockquote>
+  <p><strong>Example:</strong><br />
+  Input: <code>"The individual was pure evil. [ASP]They[ASP] ate a candy"</code><br />
+  Output: <code>'sentiment': ['Negative'], 'confidence': [0.9839126467704773]</code></p>
+</blockquote>
+
+<p>However, this ability falls apart for longer inputs:</p>
+
+<blockquote>
+  <p><strong>Example:</strong><br />
+  Input: <code>"The initial setup for [ASP]the new software[ASP] was a bit confusing, and the manual wasn't very clear. I even encountered a few error messages. However, once I got past that initial hurdle, its performance was blazingly fast. It has streamlined my workflow considerably, and the advanced features are a game-changer. I'm now much more productive thanks to it."</code><br />
+  Output: <code>'sentiment': ['Negative'], 'confidence': [0.8788386583328247]</code></p>
+</blockquote>
+
+<p>With the addition of more context and a slight temporal shift in sentiment, the model is unable to properly grasp the sentiment progression. In a <a rel="nofollow noopener" target="_blank" href="https://drive.google.com/file/d/14TwtppLsao0d2hbtBgNFwn2GgVljbJmS/view?usp=sharing">micro-dataset</a> (see <code>long_text_limitation_showcase</code> and <code>entity_interaction_limitation_showcase</code>), the evaluated accuracy for each dataset of 10 sentences was 60% and 40% respectively and 50% collectively.</p>
+
+<p>A highly likely reason for this trend is primacy bias within transformer models—the tendency to overweight earlier inputs and underweight later context which is seen very predominantly in BERT models (<a rel="nofollow noopener" target="_blank" href="https://arxiv.org/pdf/2412.15241">Goel et al., 2025</a>). This is an issue, however, as it fails to reflect human psychology, which tends to follow a serial position curve (<a rel="nofollow noopener" target="_blank" href="https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0045106">Murdock, 1962</a>), or a U shape with both first and last impressions being important.</p>
+
+<ol start="2">
+<li><strong>Failure to model sentiment interaction between entities</strong> 
+Many of the models fail to capture the nuances of the relationship between actions and entities. For instance, if entity A performed action B against entity C, the relationship between A, B, and C often goes unnoticed.</li>
+</ol>
+
+<blockquote>
+  <p><strong>Example:</strong><br />
+  Input: <code>"The [ASP]rescue team[ASP] battled treacherous weather conditions and unstable terrain for hours to reach the stranded hikers. Their perseverance in the face of such overwhelming natural obstacles was heroic and ultimately successful."</code><br />
+  Output: <code>'sentiment': ['Negative'], 'confidence': [0.49039655923843384]</code></p>
+</blockquote>
+
+<p>The given example illustrates the case well. The aspect, rescue team (a positive entity), performed the action, battled (a relatively negative verb), against the other aspect, treacherous weather conditions and unstable terrain (a negative entity). However, the transformer predicted a negative sentiment where, theoretically, performing a negative action against a negative entity should give a positive sentiment. In a <a rel="nofollow noopener" target="_blank" href="https://drive.google.com/file/d/14TwtppLsao0d2hbtBgNFwn2GgVljbJmS/view?usp=sharing">micro-dataset</a> (see <code>entity_interaction_limitation</code>), the evaluated accuracy for the dataset of 10 sentences was 70%.</p>
+
+<p>This is extremely important because, more often than not, the texts upon which these tools operate involve complex inter-entity dynamics.</p>
+
+<ol start="3">
+<li><strong>Lack of valence scoring and sentiment granularity</strong><br />
+The sentiment models, including PyABSA, only focus on sentiment polarity with three options: Positive, Negative, and Neutral instead of a more nuanced explanation of sentiment intensity.</li>
+</ol>
+
+<h3>Graph-Based Sentiment Propagation</h3>
+
+<p>GNNs have emerged as a tool for capturing structural relationships in text, for instance, DyGIE++ (<a rel="nofollow noopener" target="_blank" href="https://www.semanticscholar.org/paper/Entity%2C-Relation%2C-and-Event-Extraction-with-Span-Wadden-Wennberg/fac2368c2ec81ef82fd168d49a0def2f8d1ec7d8">Wadden et al., 2019</a>) which utilized a dynamic span graph to extract relations and SenticGCN (<a rel="nofollow noopener" target="_blank" href="https://www.sentic.net/sentic-gcn.pdf">Liang et al., 2021</a>) or ASGCN (<a rel="nofollow noopener" target="_blank" href="https://arxiv.org/pdf/1909.03477">Zhang et al., 2019</a>) which builds graphs from dependencies to model the relationship between aspect terms and opinion words for ABSA. However, these models still fall short in several key areas:</p>
+
+<ol>
+<li><p><strong>Limited long-text and temporal context evaluation</strong><br />
+The models are mostly built on an individual sentence level (SentiGNC and ASGCN) and fail to capture shifts in sentiment over long texts. DyGIE++, which performs cross-sentence entity evaluations, does not provide sentiment analysis.</p></li>
+<li><p><strong>Inadequate modeling</strong><br />
+By focusing only on dependency paths, the models fail to look at deeper semantic relationships. As a result, they generally do not differentiate between the nature of various sentiment relations, for instance, how the verb/action 'attacked' impacts sentiment versus 'helped' when performed on different entities.</p></li>
+</ol>
+
+<h3>Missing Granularity in Sentiment Analysis</h3>
+
+<p>Most sentiment classification systems output discrete polarity labels (positive, neutral, negative) or coarse-grained intensity scores. While tools like VADER (<a rel="nofollow noopener" target="_blank" href="https://ojs.aaai.org/index.php/ICWSM/article/view/14550">Hutto &amp; Gilbert, 2014</a>) and CoreNLP's (<a rel="nofollow noopener" target="_blank" href="https://aclanthology.org/P14-5010.pdf">Manning et al., 2014</a>) sentiment module offer real-valued sentiment estimates, they do so in isolation from structured context. They cannot, for instance, distinguish between a positive sentiment toward a villain and a positive sentiment toward a hero. (e.g., “X helped Y” vs. “X helped the criminal”). Furthermore, in the specific area of ABSA, there are no relevant or SOTA models that perform sentiment classification with granularity.</p>
+
+<h3>Summary</h3>
+
+<p>Thus, to summarize, the five main problems we found in existing ABSA models/tools and aim to solve with our pipeline are:</p>
+
+<ol>
+<li>Lack of detailed, full-text level analysis</li>
+<li>Failure to analyze temporal shifts in sentiment</li>
+<li>Inadequacy in nuanced, inter-entity and semantic analysis</li>
+<li>Lack of granularity and valence in ABSA analysis</li>
+<li>Lack of explainability in ABSA models</li>
+</ol>
+
+<h2>Our Proposed Pipeline</h2>
+
+<p><img src="ETSA%20Pipeline.png" alt="image" /><br />
+Full Image: [[ETSA Pipeline.png]]</p>
+
+<p>Our proposed methodology for entity-centric narrative analysis unfolds through a multi-stage pipeline designed to systematically extract and interpret complex textual information.</p>
+
+<p>The initial stage, <strong>Entity Identification and Coreference Resolution</strong>, processes raw textual input to identify all mentions of entities (e.g., persons, organizations). Crucially, it resolves coreferences, linking various textual references to their canonical entity representations, thereby consolidating all mentions pertaining to a unique, underlying entity and noting their precise textual locations.</p>
+
+<p>Following this, the <strong>Entity-Associated Phrase (EAP) Extraction</strong> stage builds upon the identified entities. It focuses on extracting descriptive words, phrases, or tokens directly pertinent to each entity. These EAPs serve to characterize the entity or describe its state or attributes, effectively enriching the entity representation with contextual details.</p>
+
+<p>Subsequently, <strong>Entity-Based Graph Mapping (EBGM)</strong> transforms the processed text and entity information into a structured graph. In this representation, typically constructed on a sentence-by-sentence basis, entities are modeled as nodes, and their corresponding EAPs become node attributes. Furthermore, interactions, actions, or relationships between entities, as discerned from the text, are formalized as edges connecting the respective entity nodes, creating a relational understanding of the narrative.</p>
+
+<p>The pipeline then proceeds to <strong>Sentiment Analysis and Assignment</strong>. This stage quantifies the sentiment associated with entities and their interactions within the graph. Sentiment scores are computed by considering contextual factors such as the positioning of sentiment-bearing terms, the directionality of sentiment, and the overall polarity of described events. The graph is thus augmented with these affective annotations, providing insight into the emotional tone surrounding entities and their relationships.</p>
+
+<blockquote>
+  <p><strong>Example:</strong> "Team Alpha, known for their brave actions and strategic planning, attacks Villain Corp while also protecting Civilians."
+  <strong>Output:</strong> ![[Sentiment Graph.png]]</p>
+</blockquote>
+
+<p>Finally, the <strong>Sentiment Recursion and Evolution</strong> stage models the dynamic changes in entity sentiment as the narrative progresses. Sentiment scores are not treated as static but are updated recursively. As new information, actions, or descriptions pertaining to an entity emerge in subsequent textual segments, its sentiment score is recalculated, allowing the system to capture temporal shifts and reflect the cumulative impact of unfolding events on the perceived sentiment.</p>
+
+<p>This integrated pipeline provides a comprehensive framework for transforming unstructured text into a rich, structured representation, enabling a deeper understanding of the entities, their characteristics, their interactions, and the dynamic evolution of their associated sentiments throughout a narrative.</p>
+
+<h3>Full Text Analysis</h3>
+
+<p>This pipeline solves for the first issue of full-text analysis by analyzing all of the sentences in a given document and combining the data. In doing so, it can capture the nuances of longer contexts, something of which current ASBA models can not.</p>
+
+<h3>Temporal Shifts</h3>
+
+<p>Building off of the full-text analysis, by analysis all sentences independently and looking at how the sentiment interacts, the pipeline can properly analyze sentiment progression without primacy bias.</p>
+
+<h3>Inter-entity Analysis</h3>
+
+<p>By focusing on specifically how entities interact with each other as the basis of the sentiment calculations, the pipeline can accurately determine how entity sentiment plays off each other, building a more accurate sentiment model.</p>
+
+<h3>Granularity and Valence</h3>
+
+<p>Since the model are computed from tools that include inherent granularity and valence, the model inherits the traits and provides calculated sentiments. Due to the nature of sentiment interactions between entities and subtle shifts in sentiment direction, granularity and valence is necessary in the calculations the model uses.</p>
+
+<h3>Explainability</h3>
+
+<p>By using rule-based methods where possible, creating heuristic sentiment calculations, by exporting every part of the sentiment calculation sequence in human-interpretable JSON files, the pipeline offers the explainability of sentiment calculations other transformer models fail to do.</p>
+</div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Harry Yin (Xild076). All rights reserved.
+            <p class="text-muted mt-xs">Powered by SiteGen</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

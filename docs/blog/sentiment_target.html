@@ -66,10 +66,10 @@
 
 <p>"Adam criticized John's horrible decisions."</p>
 
-<p>Adam will have a netural/positive sentiment because Adam acted negatively upon the "horrible decision", which would turn positive.
+<p>Adam will have a neutral/positive sentiment because Adam acted negatively upon the "horrible decision", which would turn positive.
 John will have a negative sentiment as John is associated with "horrible decisions".</p>
 
-<p>Now, let's check out how the dependancies work.</p>
+<p>Now, let's check out how the dependencies work.</p>
 
 <div class="codehilite">
 <pre><span></span><code><span class="n">analyze_text_structures</span><span class="p">(</span><span class="s2">&quot;Adam criticized John&#39;s horrible decisions.&quot;</span><span class="p">,</span> <span class="s2">&quot;dep&quot;</span><span class="p">)</span>
@@ -112,11 +112,11 @@ Subj -> Negative Verb -> Obj (Positive Sentiment) = Negative Sentiment towards S
 
 <p>From this, we can see two key things. First, the sentiment associated with John would be about -0.5423. However, what would the sentiment associated with Adam be?</p>
 
-<p>While this may seem arbritrary, I simply multiplied the two together (as the sentiment patterns fit surprisingly well into math) to get a sentiment of about 0.19587876, or mildly positive.</p>
+<p>While this may seem arbitrary, I simply multiplied the two together (as the sentiment patterns fit surprisingly well into math) to get a sentiment of about 0.19587876, or mildly positive.</p>
 
-<p>However, there are still are two main conditions I don't understand: sentence structure and descriptive cases (descriptive voice means that "the sad person"—sad brings a negtive connotation but a positive verb towards the sad person would reflect well on the subject instead of negatively).</p>
+<p>However, there are still are two main conditions I don't understand: sentence structure and descriptive cases (descriptive voice means that "the sad person"—sad brings a negative connotation but a positive verb towards the sad person would reflect well on the subject instead of negatively).</p>
 
-<p>Given that, let's first look at the more straight-forward and possibly more difficult: sentence stucture. There are many different sentence structures, and determining the characters and their interactions is very difficult. However, we can boil it down to the very essentials to make things simpler: all we need to know is the actor and all associated clauses.</p>
+<p>Given that, let's first look at the more straight-forward and possibly more difficult: sentence structure. There are many different sentence structures, and determining the characters and their interactions is very difficult. However, we can boil it down to the very essentials to make things simpler: all we need to know is the actor and all associated clauses.</p>
 
 <div class="codehilite">
 <pre><span></span><code><span class="n">analyze_text_structures</span><span class="p">(</span><span class="s2">&quot;John&#39;s horrible decisions were criticized by Adam.&quot;</span><span class="p">,</span> <span class="s2">&quot;dep&quot;</span><span class="p">)</span>
@@ -210,7 +210,7 @@ This one was actually way simpler than all the other ones as "a horrible person"
 <li>There are possibly more rules involved, just ones I haven't discovered yet</li>
 </ul></li>
 <li>The Action is the verb and associated information with xcomp.</li>
-<li>The Victim clause is the clause of the victim/reviever who recieves the action
+<li>The Victim clause is the clause of the victim/receiver who receives the action
 <ul>
 <li>Associated information includes anything attached with advcl, or poss</li>
 </ul></li>
@@ -330,9 +330,9 @@ print(sia.polarity_scores("Adam did harmful things."))
 {'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
 </code></pre>
 
-<p>Well... the first one makes sense but the other two are just ridiculous. "Harmful" and "freak-out" are definately negative.</p>
+<p>Well... the first one makes sense but the other two are just ridiculous. "Harmful" and "freak-out" are for-sure negative.</p>
 
-<p>Now, let's try to solve this! Solving this is pretty simple—let's just look at other tools instead and agregate a solution together! Let's use the same three examples.</p>
+<p>Now, let's try to solve this! Solving this is pretty simple—let's just look at other tools instead and aggregate a solution together! Let's use the same three examples.</p>
 
 <div class="codehilite">
 <pre><span></span><code><span class="kn">from</span> <span class="nn">textblob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
@@ -396,7 +396,7 @@ AFINN sentiment: -0.4
 Polarity sentiment: {'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
 </code></pre>
 
-<p>I'll be the first to admit that this is more than just "cobbled together", this is downright falling apart. But it's good enough for now, so let's move on to tacklign issue #2: sentiment mitigation and neutral sentiment cases.</p>
+<p>I'll be the first to admit that this is more than just "cobbled together", this is downright falling apart. But it's good enough for now, so let's move on to tackling issue #2: sentiment mitigation and neutral sentiment cases.</p>
 
 <p>Let's go back to the Adam example.</p>
 
@@ -408,7 +408,7 @@ Polarity sentiment: {'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
 
 <p>Given:
 Compound A/VC Sentiment = (V/AC * ASC+A + A/VC) / 2,
-as mentioned before, the sentiment multiplied together would be 0.0 * -0.6808 = 0, which makes no sense. After all, taking action against a neutral individual is still negative. Thus, I decided to modify the equation slightly to reflect this by giving an addative to the compount sentiments and by adding a 1/3 weighing ratio:</p>
+as mentioned before, the sentiment multiplied together would be 0.0 * -0.6808 = 0, which makes no sense. After all, taking action against a neutral individual is still negative. Thus, I decided to modify the equation slightly to reflect this by giving an additive to the compound sentiments and by adding a 1/3 weighing ratio:</p>
 
 <p>Compound A/VC Sentiment = ((V/AC + 1) * ASC+A + A/VC * 3) / 4, V/AC &gt;= 0
 Compound A/VC Sentiment = ((V/AC - 1) * ASC+A + A/VC * 3) / 4, V/AC &lt; 0</p>
@@ -456,10 +456,10 @@ Compound A/VC Sentiment = ((V/AC - 1) * ASC+A + A/VC * 3) / 4, V/AC &lt; 0</p>
 
 <span class="c1"># Positive -&gt; positive -&gt; negative case</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positive -&gt; positive -&gt; negative&quot;</span><span class="p">)</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;The kind man positively helped the evil villians.&quot;</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;The kind man positively helped the evil villains.&quot;</span>
 <span class="n">ac</span> <span class="o">=</span> <span class="s2">&quot;The kind man&quot;</span>
 <span class="n">asca</span> <span class="o">=</span> <span class="s2">&quot;positively helped&quot;</span>
-<span class="n">vc</span> <span class="o">=</span> <span class="s2">&quot;the evil villians&quot;</span>
+<span class="n">vc</span> <span class="o">=</span> <span class="s2">&quot;the evil villains&quot;</span>
 
 <span class="n">ac_s</span> <span class="o">=</span> <span class="n">get_sentiment</span><span class="p">(</span><span class="n">ac</span><span class="p">)</span>
 <span class="n">asca_s</span> <span class="o">=</span> <span class="n">get_sentiment</span><span class="p">(</span><span class="n">asca</span><span class="p">)</span>
@@ -494,10 +494,10 @@ Compound A/VC Sentiment = ((V/AC - 1) * ASC+A + A/VC * 3) / 4, V/AC &lt; 0</p>
 
 <span class="c1"># Positive -&gt; negative -&gt; negative case</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positive -&gt; negative -&gt; negative&quot;</span><span class="p">)</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;The kind man sucker punched the evil villians.&quot;</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;The kind man sucker punched the evil villains.&quot;</span>
 <span class="n">ac</span> <span class="o">=</span> <span class="s2">&quot;The kind man&quot;</span>
 <span class="n">asca</span> <span class="o">=</span> <span class="s2">&quot;sucker punched&quot;</span>
-<span class="n">vc</span> <span class="o">=</span> <span class="s2">&quot;the evil villians&quot;</span>
+<span class="n">vc</span> <span class="o">=</span> <span class="s2">&quot;the evil villains&quot;</span>
 
 <span class="n">ac_s</span> <span class="o">=</span> <span class="n">get_sentiment</span><span class="p">(</span><span class="n">ac</span><span class="p">)</span>
 <span class="n">asca_s</span> <span class="o">=</span> <span class="n">get_sentiment</span><span class="p">(</span><span class="n">asca</span><span class="p">)</span>

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Survey Proposal | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Harry Yin (Xild076)">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/projects/etsa_qc/ABSA Survey Proposal.html">
+    <meta property="og:title" content="Survey Proposal | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/projects/etsa_qc/ABSA Survey Proposal.html">
+    <meta property="twitter:title" content="Survey Proposal | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="">
+
+    <link rel="icon" href="/static/img/favicon.ico" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container document-page-container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center"  style="margin-bottom: var(--spacing-md); font-size: 2.5rem">Survey Proposal</p><hr class="divider" style="margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 0; border-top-width: 1px; border-top-style: solid; border-top-color: var(--bs-border-color); height: 0; opacity: 0.25"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><h2>1. Investigation Targets</h2>
+
+<p>This survey aims to use collect data on aspect based sentiment in order to develop mathematical formulas to map how sentiment is associated to entities due to entity interactions.</p>
+
+<h3>a. Compound Sentiments</h3>
+
+<p>Compound sentiments refer to the final intra-sentence sentiments directed at entities that undergo a shift due to entity relations. As a ground truth, we will assume the following:</p>
+
+<ol>
+<li>Directly associated words (ie: adjectives, adverbs, etc) will serve as the foundational sentiment of an entity from which sentiment shifts due to entity interactions will occur.</li>
+<li>VADER sentiment analysis will be used as the numerical sentiment calculator.</li>
+</ol>
+
+<h4>i. Action</h4>
+
+<h5>Explanation:</h5>
+
+<p>Action type entity relationships are relationships that occur because an "actor" entity performed an action upon a "target" entity.</p>
+
+<h5>Logic:</h5>
+
+<p>This was chosen as one of the three core entity relationships because how actions are viewed are heavily influenced by context, especially upon who an action is taken. For instance, beating someone up is considered negative, but if the one being beat up is a very bad person, the entire perception shifts.</p>
+
+<h5>Example:</h5>
+
+<p>The <strong>brave firefighter (actor)</strong> <em>heroically saved (action)</em> the <strong>innocent, little kitten (target)</strong>.</p>
+
+<p><strong>Actor:</strong> firefighter (associated tokens: "brave") (sentiment: +0.5267 - VADER)
+<strong>Action:</strong> saved (associated tokens: "heroically") (sentiment: +0.4215 - VADER)
+<strong>Target:</strong> kitten (associated tokens: "innocent, little") (sentiment: +0.34 - VADER)</p>
+
+<p>&lt;&lt;&lt; Pass through an arbitrary formula (based off of my own gut feelings as of right now for the sake of an example) &gt;&gt;&gt;</p>
+
+<p><strong>Actor:</strong> firefighter (sentiment: +0.7)
+<strong>Target:</strong> kitten (sentiment: +0.3)</p>
+
+<p><strong>Rationale:</strong> The sentiment for firefighter increased because it saved a positive-associated entity (the kitten) while the kitten stayed generally the same since it was a more passive entity.</p>
+
+<h5>Sub-points of interest:</h5>
+
+<ul>
+<li>Possible negativity biases.
+<h4>ii. Association</h4></li>
+</ul>
+
+<h5>Explanation:</h5>
+
+<p>Association type entity relationships are relationships that occur because two entities are connected or related to one another due to proximity or explicit denotation.</p>
+
+<h5>Logic:</h5>
+
+<p>This was chosen as a core relationship because proximity plays a great role in how people perceive entities. It runs off of the same principle as hasty generalization fallacies—because things are connected, even if something isn't directly implicated, there remains a sentiment shift.</p>
+
+<h5>Example:</h5>
+
+<p>The <strong>good person (entity)</strong> and the <strong>bad individual (entity)</strong> ate food together.</p>
+
+<p><strong>Entity 1:</strong> person (associated tokens: "good") (sentiment: +0.4404 - VADER)
+<strong>Entity 2:</strong> individual (associated tokens: "bad") (sentiment: -0.5423 - VADER)</p>
+
+<p>&lt;&lt;&lt; Associated by tokens: "and" and "together" &gt;&gt;&gt;
+&lt;&lt;&lt; Pass through an arbitrary formula (based off of my own gut feelings) &gt;&gt;&gt;</p>
+
+<p><strong>Entity 1:</strong> person (sentiment: +0.3 - VADER)
+<strong>Entity 2:</strong> individual (sentiment: -0.3 - VADER)</p>
+
+<p><strong>Rationale:</strong> The sentiment for the person decreased because they were associated with a negative-associated entity, while the reverse was true for the individual.</p>
+
+<h5>Sub-points of interest:</h5>
+
+<ul>
+<li>Possible negativity biases</li>
+<li>Inter-sentence cases of association
+<h4>iii. Belonging</h4></li>
+</ul>
+
+<h5>Explanation:</h5>
+
+<p>Belonging type entity relationships are relationships that occur because an entity (child) is the derivative of another entity (parent).</p>
+
+<h5>Logic:</h5>
+
+<p>This was chosen as a core relationship because while somewhat similar to association relationships, the fact that a child entity is a derivative of a parent entity means that the child entity has a massive effect on the perception of a parent entity, especially since a parent entity is the wholistic make up of its derivative parts.</p>
+
+<h5>Example:</h5>
+
+<p>The <strong>good phone (parent)</strong>'s <strong>battery (child)</strong> was horrible.</p>
+
+<p><strong>Entity 1:</strong> phone (associated tokens: "good") (sentiment: +0.4404 - VADER)
+<strong>Entity 2:</strong> battery (associated tokens: "horrible") (sentiment: -0.5423 - VADER)</p>
+
+<p>&lt;&lt;&lt; Belonging by tokens: "'s" &gt;&gt;&gt;
+&lt;&lt;&lt; Pass through an arbitrary formula (based off of my own gut feelings) &gt;&gt;&gt;</p>
+
+<p><strong>Entity 1:</strong> phone (sentiment: +0.1 - VADER)
+<strong>Entity 2:</strong> battery (sentiment: -0.5 - VADER)</p>
+
+<p><strong>Rationale:</strong> The phone's sentiment decreased because its derivative part was negative-associated, reflecting badly on phone in general. Meanwhile, the battery faced nearly no changes because its just one of the parts that made up the phone, meaning the phone sentiment to it is almost irrelevant. </p>
+
+<h5>Sub-points of interest:</h5>
+
+<ul>
+<li>Possible negativity biases</li>
+<li>Inter-sentence cases of belonging
+<h3>b. Aggregate Sentiments</h3></li>
+</ul>
+
+<h5>Explanation:</h5>
+
+<p>Aggregate sentiment looks at how shifts in sentiment over time ultimately define the final impression left after reading a full text.</p>
+
+<h5>Logic:</h5>
+
+<p>People often have primacy and recency biases in terms of impressions, which lends itself to different weighing of sentiment. For instance, the start and end of a sentence may be valued higher in terms of sentiment than the middle parts. Thus, if an entity is referenced multiple times, the final aggregate sentiment will be more than the sum of its parts, it will be a sum of its weighted parts.</p>
+
+<h5>Example:</h5>
+
+<p>The phone is good. The phone has a bad battery life. The phone also has a bad screen. However, the phone has good functionality and effectiveness.</p>
+
+<p><strong>By Sentence:</strong></p>
+
+<ul>
+<li>"The phone is good." (sentiment: +0.4404 - VADER)</li>
+<li>"The phone has a bad battery life." (sentiment: -0.5423 - VADER)</li>
+<li>"The phone also has a bad screen." (sentiment: -0.5423 - VADER)</li>
+<li>"However, the phone has good functionality and effectiveness." (sentiment: +0.4404 - VADER)</li>
+</ul>
+
+<p>&lt;&lt;&lt; Pass through an arbitrary formula (based off of my own gut feelings) &gt;&gt;&gt;</p>
+
+<p><strong>Final "phone" sentiment:</strong> +0.3</p>
+
+<p><strong>Rationale:</strong> Due to primacy and recency bias, more weight is given to the start and end, resulting in a positive compound sentiment.</p>
+
+<h2>2. Survey design</h2>
+
+<p>The survey will contain 30 questions. 4 questions will have the purpose of gathering data on compound action, 4 will gather data on association, 4 will gather data on possession, and 15 will gather data on aggregation. One question will be an attention check.</p>
+
+<p>To prevent biases, the survey will take the following measures:</p>
+
+<ul>
+<li>Gender neutral and repetitive names for the association and action relationship questions.</li>
+<li>Commonly-used objects with no branding for the possession relationship and aggregation questions.</li>
+</ul>
+
+<p>In addition, to add variety, within each question, for both negative and positive terms, a phrase will be chosen from a list of phrases composed of four different possible valences: very (sentiment score on VADER from 1 to 0.7), medium (0.7 to 0.5), somewhat (0.5 to 0.3), and slightly (0.3 to 0.1).</p>
+
+<p>Users will score the sentiment on a 9-point Likert scale where each possible choice will align with the four different valence choices as put above in addition to a neutral choice of 0.1 to -0.1.</p>
+
+<p>For the sake of reproducibility, the random seed will be recorded per user. </p>
+
+<p>In addition, the structured examples with positive and negative are only there to show one of the two possible combinations. To cover more ground and combinations, the sentiments may be reversed, for instance, if a text structure says: {+} {+} {-}, on random, it may be flipped to {-} {-} {+} instead.</p>
+
+<p>Independent/non-linking questions will be randomized in its given order. The attention check will be added in the middle.</p>
+
+<h3>a. Compound Sentiments</h3>
+
+<h4>i. Action</h4>
+
+<p><em>4 questions</em>
+<sup>Note: x and y can refer to any positive (+)/negative (-) sentiments. Given this, the given questions should cover all possible permutations.</sup></p>
+
+<h5>Question 1:</h5>
+
+<p><strong>Purpose:</strong> To check x-x-y relationships.
+<strong>Text or Structure:</strong>
+"{+ actor} {+ action} {- target}"</p>
+
+<h5>Question 2:</h5>
+
+<p><strong>Purpose:</strong> To check y-x-x relationships
+<strong>Text or Structure:</strong>
+"{+ actor} {- action} {- target}"</p>
+
+<h5>Question 3:</h5>
+
+<p><strong>Purpose:</strong> To check x-x-x relationships
+<strong>Text or Structure:</strong>
+"{- actor} {- action} {- target}"</p>
+
+<h5>Question 4:</h5>
+
+<p><strong>Purpose:</strong> To check x-y-x relationships.
+<strong>Text or Structure:</strong>
+"{+ actor} { action} {+ target}"</p>
+
+<h4>ii. Association</h4>
+
+<p><em>4 questions</em></p>
+
+<h5>Question 1:</h5>
+
+<p><strong>Purpose:</strong> To check association opposite polarity.
+<strong>Text or Structure:</strong>
+"{+ entity} and {- entity} often {neutral action} together."</p>
+
+<h5>Question 2:</h5>
+
+<p><strong>Purpose:</strong> To check inter-sentence association.
+<strong>Text or Structure:</strong>
+"{- entity} often hung out with {- entity}."</p>
+
+<h5>Question 3:</h5>
+
+<p><strong>Purpose:</strong> To check inter-sentence association and negativity bias.
+<strong>Text or Structure:</strong>
+"{+ entity} did {+ action} {neutral action} together every weekend."</p>
+
+<h5>Question 4:</h5>
+
+<p><strong>Purpose:</strong> To check association opposite polarity.
+<strong>Text or Structure:</strong>
+"{- entity} partnered with {+ entity} all the time."</p>
+
+<h4>iii. Belonging</h4>
+
+<p><em>4 questions</em></p>
+
+<h5>Question 1:</h5>
+
+<p><strong>Purpose:</strong> To check association opposite polarity
+<strong>Text or Structure:</strong>
+"The {- parent}'s {+ child} was {+ description}, though the {- parent} itself was {- description}."</p>
+
+<h5>Question 2:</h5>
+
+<p><strong>Purpose:</strong> To check association same polarity
+<strong>Text or Structure:</strong>
+"The {- parent} is {- description}, and its {- child} is {- description}."</p>
+
+<h5>Question 3:</h5>
+
+<p><strong>Purpose:</strong> To check association opposite polarity
+<strong>Text or Structure:</strong>
+"The {- child} was {- description}, but the {+ parent} was {+ description}."</p>
+
+<h5>Question 4:</h5>
+
+<p><strong>Purpose:</strong> To check association same polarity
+<strong>Text or Structure:</strong>
+"The {+ parent} is {+ description}, and its {+ child} is {+ description}."</p>
+
+<h3>b. Aggregate Sentiments</h3>
+
+<p><em>2 packets, 8 questions total</em></p>
+
+<h5>Packet 1:</h5>
+
+<p><em>3 questions</em>
+<strong>Purpose:</strong> To check shorter aggregate sentiment shifts.
+<strong>Text or Structure:</strong></p>
+
+<ol>
+<li>"xxx was good."</li>
+<li>"xxx was good."</li>
+<li>"xxx was bad."</li>
+</ol>
+
+<h5>Packet 2:</h5>
+
+<p><em>5 questions</em>
+<strong>Purpose:</strong> To check medium-length aggregate sentiment shifts and shift back cases.
+<strong>Text or Structure:</strong></p>
+
+<ol>
+<li>"xxx was bad."</li>
+<li>"xxx was good."</li>
+<li>"xxx was good."</li>
+<li>"xxx was bad."</li>
+<li>"xxx was bad."</li>
+</ol>
+
+<h5>Packet 3:</h5>
+
+<p><em>9 questions</em>
+<strong>Purpose:</strong> To check long-length aggregate sentiment shifts.</p>
+
+<h3>Template</h3>
+
+<h4>Independent Questions</h4>
+
+<p><sub>These will include the Action, Association, and Possession questions.</sub></p>
+
+<p><strong>Please read the following text:</strong></p>
+
+<blockquote>
+  <p>The brave firefighter heroically saved the innocent, little kitten.</p>
+</blockquote>
+
+<p><strong>After reading sentence, how do you feel about (the) firefighter?</strong></p>
+
+<ul>
+<li>Very Negative (-4)</li>
+<li>Negative (-3)</li>
+<li>Somewhat Negative (-2)</li>
+<li>Slightly Negative (-1)</li>
+<li>Neutral (0)</li>
+<li>Slightly Positive (1)</li>
+<li>Somewhat Positive (2)</li>
+<li>Positive (3)</li>
+<li>Very Positive (4)</li>
+</ul>
+
+<p><strong>After reading sentence, how do you feel about (the) kitten?</strong></p>
+
+<ul>
+<li>Very Negative (-4)</li>
+<li>Negative (-3)</li>
+<li>Somewhat Negative (-2)</li>
+<li>Slightly Negative (-1)</li>
+<li>Neutral (0)</li>
+<li>Slightly Positive (1)</li>
+<li>Somewhat Positive (2)</li>
+<li>Positive (3)</li>
+<li>Very Positive (4)
+<h4>Packets</h4></li>
+</ul>
+
+<p><sub>These will include Aggregate questions. Note that the questions will be shown one by one.</sub></p>
+
+<p><strong>The following questions are continuations of each other.</strong></p>
+
+<p><strong>Please read the following text:</strong></p>
+
+<blockquote>
+  <p>The phone is good.</p>
+</blockquote>
+
+<p><strong>After reading sentence, how do you feel about (the) phone?</strong></p>
+
+<ul>
+<li>Very Negative (-4)</li>
+<li>Negative (-3)</li>
+<li>Somewhat Negative (-2)</li>
+<li>Slightly Negative (-1)</li>
+<li>Neutral (0)</li>
+<li>Slightly Positive (1)</li>
+<li>Somewhat Positive (2)</li>
+<li>Positive (3)</li>
+<li>Very Positive (4)</li>
+</ul>
+
+<p>--- Page Break ---</p>
+
+<p><strong>Please read the following text:</strong></p>
+
+<blockquote>
+  <p>The phone is good.  The phone has a bad battery life.</p>
+</blockquote>
+
+<p><strong>After reading sentence, how do you feel about (the) phone?</strong></p>
+
+<ul>
+<li>Very Negative (-4)</li>
+<li>Negative (-3)</li>
+<li>Somewhat Negative (-2)</li>
+<li>Slightly Negative (-1)</li>
+<li>Neutral (0)</li>
+<li>Slightly Positive (1)</li>
+<li>Somewhat Positive (2)</li>
+<li>Positive (3)</li>
+<li>Very Positive (4)</li>
+</ul>
+
+<p>--- Page Break ---</p>
+
+<p><strong>Please read the following text:</strong></p>
+
+<blockquote>
+  <p>The phone is good.  The phone has a bad battery life. However, the phone has good functionality and effectiveness.</p>
+</blockquote>
+
+<p><strong>After reading sentence, how do you feel about (the) phone?</strong></p>
+
+<ul>
+<li>Very Negative (-4)</li>
+<li>Negative (-3)</li>
+<li>Somewhat Negative (-2)</li>
+<li>Slightly Negative (-1)</li>
+<li>Neutral (0)</li>
+<li>Slightly Positive (1)</li>
+<li>Somewhat Positive (2)</li>
+<li>Positive (3)</li>
+<li>Very Positive (4)</li>
+</ul>
+
+<p>--- Page Break ---
+&lt;&lt; 9 question packet here &gt;&gt;</p>
+
+<h2>3. Mathematical Formulae</h2>
+
+<p><sub>Note that these formulae will be based off of preconceived assumptions about how sentiment works and may be up to change depending on the survey results. Initial sentiments will be based off of directly associated tokens and VADER sentiment calculations. The survey data will be normalized to fit the VADER scores. Also please note that the λ is independent for each equation, even those of the same category.</sub></p>
+
+<h3>a. Compound Sentiments</h3>
+
+<h4>i. Building blocks</h4>
+
+<h5>1. Weighted averages</h5>
+
+<p>$$s<em>{new}=λ*s</em>{old}+(1-λ)*s_{update}$$
+Measures importance of directly associated sentiment and entity-interaction derived sentiment</p>
+
+<h5>2. Signed weights and biases</h5>
+
+<p>$$w(δ)=\begin{cases} 
+      w^+ &amp; s<em>{driver}&gt; 0 \
+      w^- &amp; s</em>{driver}\leq0
+   \end{cases}
+$$
+$$b(δ)=\begin{cases} 
+      b^+ &amp; s<em>{driver}&gt; 0 \
+      b^- &amp; s</em>{driver}\leq0
+   \end{cases}
+$$
+Considers greater weight put on negative information due to negativity bias with signed weights and uneven mitigation of bias with signed biases. $δ$ is the sign of the driver's sentiment</p>
+
+<h5>3. Normalization</h5>
+
+<p>$$s<em>{final}=\tanh(s</em>{new})$$
+Compresses the sum between $(-1,1)$ to prevent sentiment from exceeding VADER structure.</p>
+
+<h3>a. Compound Sentiments</h3>
+
+<h4>i. Action</h4>
+
+<h5>Actor:</h5>
+
+<p><strong>Formula:</strong>
+$$s<em>{final-actor}=\tanh[λ</em>{actor}*s<em>{init-actor} + (1-λ</em>{actor}) * w<em>{actor}(δ) * s</em>{action} * s<em>{init-target} + b</em>{actor}(δ)]$$
+<strong>Inputs:</strong></p>
+
+<ul>
+<li>$s_{init-actor}$: the actor's sentiment before the action</li>
+<li>$s_{action}$: the sentiment of the action</li>
+<li>$s_{init-target}$: the actor's target's before the action
+<strong>Weights:</strong></li>
+<li>$λ_{actor}$: memory weight factor</li>
+<li>$w_{actor}$: actor signed weight</li>
+<li>$b_{actor}$: actor signed biases
+<strong>Rationale:</strong> The actor's sentiment is a combination of past sentiment and actions taken. The impact is based off of the sentiment of the target—if its a bad action on a bad person, the ultimate outcome is positive, it multiplies actions to determine the "true" evaluators. The  bias included reflects possible negativity biases.</li>
+</ul>
+
+<h5>Target:</h5>
+
+<p><strong>Formula:</strong>
+$$s<em>{final-target}=\tanh[λ</em>{target}*s<em>{init-target} + (1-λ</em>{target}) * w<em>{target}(δ) * s</em>{action}+b_{target}(δ)]$$
+<strong>Inputs:</strong></p>
+
+<ul>
+<li>$s_{init-target}$: the actor's sentiment before the action</li>
+<li>$s_{action}$: the sentiment of the action
+<strong>Weights:</strong></li>
+<li>$λ_{target}$: memory weight factor</li>
+<li>$w_{action}$: action signed weight</li>
+<li>$b_{target}$: actor signed biases
+<strong>Rationale:</strong> Since the role of the actor plays a smaller role on the receiving end, the sentiment of the target is removed, but it may be added back depending on survey results.</li>
+</ul>
+
+<h4>ii. Association</h4>
+
+<p><strong>Formula:</strong>
+$$s<em>{final-entity}=\tanh[λ</em>{entity}*s<em>{init-entity} + (1-λ</em>{entity}) * w<em>{entity}(δ) * s</em>{other} + b_{entity}(δ)]$$
+<strong>Inputs:</strong></p>
+
+<ul>
+<li>$s_{init-entity}$: the actor's sentiment before the action</li>
+<li>$s_{other}$: the sentiment of the other entity
+<strong>Weights:</strong></li>
+<li>$λ_{entity}$: memory weight factor</li>
+<li>$w_{entity}$: entity signed weight</li>
+<li>$b_{entity}$: entity signed biases
+<strong>Rationale:</strong> Much simpler, just an average with higher weight. May become more complex depending on the situation.</li>
+</ul>
+
+<h4>iii. Belonging</h4>
+
+<h5>Parent</h5>
+
+<p><strong>Formula:</strong>
+$$s<em>{final-parent}=\tanh[λ</em>{parent}*s<em>{init-parent} + (1-λ</em>{parent}) * (s_{child})]$$
+<strong>Inputs:</strong></p>
+
+<ul>
+<li>$s_{init-parent}$: the parent's sentiment before the action</li>
+<li>$s_{child}$: the sentiment of the child
+<strong>Weights:</strong></li>
+<li>$λ_{parent}$: memory weight factor
+<strong>Rationale:</strong> Much simpler, just an average with higher weight. May become more complex depending on the situation.</li>
+</ul>
+
+<h5>Child</h5>
+
+<p><strong>Formula:</strong>
+$$s<em>{final-child}=\tanh[λ</em>{child}*s<em>{init-child} + (1-λ</em>{child}) * (s_{parent})]$$
+<strong>Inputs:</strong></p>
+
+<ul>
+<li>$s_{init-child}$: the child's sentiment before the action</li>
+<li>$s_{parent}$: the sentiment of the other parent
+<strong>Weights:</strong></li>
+<li>$λ_{child}$: memory weight factor
+<strong>Rationale:</strong> Much simpler, just an average with higher weight. May become more complex depending on the situation. Despite the child being influenced much less than the parent, it is still possible there are some minor influences, thus the formula.</li>
+</ul>
+
+<h3>b. Aggregate Sentiments</h3>
+
+<p><strong>Formula:</strong>
+$$s<em>{final}=Σ</em>{i=1}^{N}[w<em>i*s</em>i]$$
+where
+$$w<em>i=\frac{i^{α-1}(n-i+1)^{β-1}}{\sum</em>{k=1}^nk^{α-1}(n-k+1)^{β-1}}$$
+where
+$α=M<em>α*N+b</em>α$
+$β=M<em>β*N+b</em>β$
+(modified probability mass function, a type of beta curve that provides weighed probabilities in parabolic form)
+<strong>Inputs:</strong></p>
+
+<ul>
+<li>$s$: list of all sentiments
+<strong>Weights:</strong></li>
+<li>$α$: Primacy weight, and the smaller $α$ gets, the more weight is put on primacy.</li>
+<li>$β$: Recency weight, and the smaller $β$ gets, the more weight is put on recency.</li>
+</ul>
+
+<p><strong>Rationale:</strong> Primacy and recency bias means that aggregate sentiments would most likely be based off of weights looking like a pseudo-parabola. Furthermore, primacy and recency may change depending on the length of the text, hence the linear function for alpha and beta.
+<strong>How to apply survey:</strong> Unlike the other ones, the survey will be harder to apply here because we can only see the $Δs$, not the weight applied to each. Thus, just throwing everything at a graph will not work. The only thing we know for sure at the end of the day is the final ground truth, that the entire rating will be $x$. I suppose how we would be going forward is to run the test through each step of the human investigation with the simple algorithm and an optimization program to check for the closest solution, round it, and call it a day for the heuristic approach.</p>
+</div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Harry Yin (Xild076). All rights reserved.
+            <p class="text-muted mt-xs">Powered by SiteGen</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

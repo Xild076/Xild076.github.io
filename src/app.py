@@ -33,7 +33,7 @@ with index_page.Container(css_class="my_lg"):
     with index_page.Card(animation=AnimationType.FADE_IN, scroll_animation=True, scroll_animation_delay=0.15):
         with index_page.Columns(n=2, gap=Spacing.LG, spacing_before=Spacing.LG):
             with index_page.Container(css_class="rounded-lg"):
-                index_page.Image("/static/imgs/placeholder.png", alt="Placeholder 1", caption="A placeholder image", width="300px", height="300px", object_fit=ObjectFit.COVER, align=Alignment.CENTER)
+                index_page.Image("/static/imgs/ETSA Pipeline.png", alt="ETSA Pipeline", caption="ETSA Pipeline", width="2541px", height="511px", object_fit=ObjectFit.COVER, align=Alignment.CENTER)
 
             with index_page.Container(css_class="rounded-lg"):
                 index_page.Markdown("### ETSA --- QC", align=Alignment.CENTER, spacing_after=Spacing.LG)
@@ -50,21 +50,52 @@ with index_page.Container(css_class="my_lg"):
 
         with index_page.Card(animation=AnimationType.FADE_IN, scroll_animation=True, scroll_animation_delay=0.15):
             index_page.Markdown("### Latest Blog Post:", align=Alignment.CENTER, spacing_after=Spacing.LG, scroll_animation=True, scroll_animation_delay=0.15)
-            index_page.Widget("Scary Moment", "Describing a scary moment in my life.", link="blog/on_mortality.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
+            index_page.Widget("Revisiting Projects", "Explaining revisiting some projects.", link="blog/revisit.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
             index_page.Button("View all blog posts", link="/blog.html", style_type=ButtonType.PRIMARY, animation=AnimationType.FADE_IN, scroll_animation=True, scroll_animation_delay=0.15)
 
 projects_page = site.add_page("projects", "Projects")
 
 site.add_project_page(
+    "etsa_qc",
+    "ETSA --- QC",
+    project_readme_file="projects/etsa_qc/etsa_qc_intro.md",
+    timeline_events=[
+        {"time": "2025-03-17", "description": "Began project ETSA --- QC"},
+        {"time": "2025-04-11", "description": "Officially joined the MAGICS Lab at USF"},
+    ],
+    technologies_used=[
+        "Python 3.x for backend processing",
+        "Streamlit for hosting",
+        "SpaCy for NLP",
+        "REBEL for entity resolution",
+        "NetworkX for graph processing",
+        "Hugging Face Transformers for state-of-the-art models",
+        "Maverick for coreference resolution",
+        "Github for development",
+        "Pandas for data manipulation",
+        "Numpy for numerical operations",
+        "Matplotlib for plotting"
+    ],
+    project_documents=[
+        {"title": "Summary of Novelty", "url": "projects/etsa/A Summary of Novelty.md"},
+        {"title": "Survey Proposal", "url": "projects/etsa/ABSA Survey Proposal.md"},
+        {"title": "ETSA --- QC Survey", "url": "https://etsa-survey.streamlit.app/"},
+        {"title": "Graph Demo", "url": "graph_sentiment_analysis.html"}
+    ],
+    meta_info={"author": "Xild076", "project_id": "ETSA-QC"}
+)
+
+site.add_project_page(
     "objectivenews",
     "Alitheia AI (Objective News)",
-    project_readme_file="objective_news_intro.md",
+    project_readme_file="projects/objective_news/objective_news_intro.md",
     timeline_events=[
         {"time": "2024-10-01", "description": "Began project Objective News"},
         {"time": "2024-12-15", "description": "Completed the first beta version of Objective News"},
         {"time": "2025-01-02", "description": "Completed the second beta version of Objective News"},
         {"time": "2025-02-09", "description": "Completed official proposal paper for full version of Objective News"},
-        {"time": "2025-03-06", "description": "Renamed project to Alitheia AI (Greek for 'truth')"}
+        {"time": "2025-03-06", "description": "Renamed project to Alitheia AI (Greek for 'truth')"},
+        {"time": "2025-07-25", "description": "Massive rework including but not limited to: improved clustering algorithms, hyperparameter tuning, self-attention model trained with meta-learning, etc... (see project page for more details)"},
     ],
     technologies_used=[
         "Python 3.x for backend processing",
@@ -77,8 +108,8 @@ site.add_project_page(
         "Github for development"
     ],
     project_documents=[
-        {"title": "Beta Paper", "url": "paper_vbeta.md"},
-        {"title": "Official Proposal", "url": "Proposal—Objective News.pdf"}
+        {"title": "Beta Paper", "url": "projects/objective_news/paper_vbeta.md"},
+        {"title": "Official Proposal", "url": "projects/objective_news/Proposal—Objective News.pdf"}
     ],
     meta_info={"author": "Xild076", "project_id": "ObjectiveNews"}
 )
@@ -86,7 +117,7 @@ site.add_project_page(
 site.add_project_page(
     "stockpred",
     "Polystock AI (Stock Prediction)",
-    project_readme_file="stock_pred_intro.md",
+    project_readme_file="projects/stockpred/stock_pred_intro.md",
     timeline_events=[
         {"time": "2023-06-11", "description": "Began project Polystock AI"},
         {"time": "2023-10-15", "description": "Completed the first beta version of Polystock AI"},
@@ -108,21 +139,21 @@ site.add_project_page(
         "Github for development"
     ],
     project_documents=[
-        {"title": "Beta Paper", "url": "RL_for_Stocks.pdf"}
+        {"title": "Beta Paper", "url": "projects/stockpred/RL_for_Stocks.pdf"}
     ],
     meta_info={"author": "Xild076", "project_id": "StockPred"}
 )
 
 site.add_project_page(
     "lsdai",
-    "LSD AI (Speech and Debate AI)",
-    project_readme_file="lsd_ai_intro.md",
+    "L&SD AI (Speech and Debate AI)",
+    project_readme_file="projects/lsdai/lsd_ai_intro.md",
     timeline_events=[
-        {"time": "2024-06-24", "description": "Began project LSD AI"},
-        {"time": "2024-08-11", "description": "Completed the first beta version of LSD AI"},
+        {"time": "2024-06-24", "description": "Began project L&SD AI"},
+        {"time": "2024-08-11", "description": "Completed the first beta version of L&SD AI"},
         {"time": "2024-08-19", "description": "Began reworking and updating the project"},
-        {"time": "2024-09-01", "description": "Completed the second beta of LSDAI"},
-        {"time": "2024-10-27", "description": "Migrated LSDAI from an app to Streamlit"}
+        {"time": "2024-09-01", "description": "Completed the second beta of L&SD AI"},
+        {"time": "2024-10-27", "description": "Migrated L&SD AI from an app to Streamlit"}
     ],
     technologies_used=[
         "Python 3.x for backend processing",
@@ -132,15 +163,15 @@ site.add_project_page(
         "Github for development"
     ],
     project_documents=[
-        {"title": "LSDAI README", "url": "lsd_ai_readme.md"}
+        {"title": "LS&DAI README", "url": "projects/lsdai/lsd_ai_readme.md"}
     ],
-    meta_info={"author": "Xild076", "project_id": "LSDAI"}
+    meta_info={"author": "Xild076", "project_id": "LS&DAI"}
 )
 
 site.add_project_page(
     "aicat",
     "AI Catalog (Basic PyTorch recreation)",
-    project_readme_file="ai_catolog_intro.md",
+    project_readme_file="projects/catalog/ai_catalog_intro.md",
     timeline_events=[
         {"time": "2024-02-09", "description": "Began project AI Catalog"},
         {"time": "2024-04-05", "description": "Finalized first version of VPG with only numpy"},
@@ -171,19 +202,20 @@ with projects_page.Container(css_class="my_lg"):
 
 blog_page = site.add_page("blog", "Blog")
 
-site.add_blog_post("on_mortality", "Misc - Scary Moment", "on_mortality.md", author="Harry Yin", date="2025-06-20")
-site.add_blog_post("heuristic_eq", "Programming - Finding Heuristic Equations", "heuristic_eq.md", author="Harry Yin", date="2025-05-31")
-site.add_blog_post("sentiment_target", "Programming - Entity Sentiment Targeting", "sentiment_target.md", author="Harry Yin", date="2025-04-04")
-site.add_blog_post("question", "Misc - The Question We Forget", "question_forget.md", author="Harry Yin", date="2025-03-24")
-site.add_blog_post("polarization", "Programming - Polarization in Modern Media", "polarization.md", author="Harry Yin", date="2025-03-20")
-site.add_blog_post("ai_vs_algorithm", "Programming - Stockfish vs AlphaZero, Algorithm vs AI", "ai_algorithm.md", author="Harry Yin", date="2025-03-13")
-site.add_blog_post("bias_types", "Programming - Types of Bias", "modern_media.md", author="Harry Yin", date="2025-03-12")
-site.add_blog_post("fatalism", "Misc - My Thoughts on Fatalism", "fatalism.md", author="Harry Yin", date="2025-03-11")
-site.add_blog_post("debias", "Programming - Removing Bias from Text", "bias_removal.md", author="Harry Yin", date="2025-03-10")
-site.add_blog_post("fake_news", "Programming - Methods to Detect Fake News", "fake_news.md", author="Harry Yin", date="2025-03-09")
-site.add_blog_post("self_atten_blog", "Programming - Self Attention in Textual Clustering", "self_atten_blog.md", author="Harry Yin", date="2025-03-08")
-site.add_blog_post("likeable_character", "Misc - What makes a likeable character?", "likeable_character.md", author="Harry Yin", date="2025-03-08")
-site.add_blog_post("hello_blog", "Hello Blog", "hello_blog.md", author="Harry Yin", date="2025-03-07")
+site.add_blog_post("revisit", "Programming - Revisiting old projects", "blogs/revisiting_projects.md", author="Harry Yin", date="2025-07-25")
+site.add_blog_post("on_mortality", "Misc - Scary Moment", "blogs/on_mortality.md", author="Harry Yin", date="2025-06-20")
+site.add_blog_post("heuristic_eq", "Programming - Finding Heuristic Equations", "blogs/heuristic_eq.md", author="Harry Yin", date="2025-05-31")
+site.add_blog_post("sentiment_target", "Programming - Entity Sentiment Targeting", "blogs/sentiment_target.md", author="Harry Yin", date="2025-04-04")
+site.add_blog_post("question", "Misc - The Question We Forget", "blogs/question_forget.md", author="Harry Yin", date="2025-03-24")
+site.add_blog_post("polarization", "Programming - Polarization in Modern Media", "blogs/polarization.md", author="Harry Yin", date="2025-03-20")
+site.add_blog_post("ai_vs_algorithm", "Programming - Stockfish vs AlphaZero, Algorithm vs AI", "blogs/ai_algorithm.md", author="Harry Yin", date="2025-03-13")
+site.add_blog_post("bias_types", "Programming - Types of Bias", "blogs/bias_types.md", author="Harry Yin", date="2025-03-12")
+site.add_blog_post("fatalism", "Misc - My Thoughts on Fatalism", "blogs/fatalism.md", author="Harry Yin", date="2025-03-11")
+site.add_blog_post("debias", "Programming - Removing Bias from Text", "blogs/debias.md", author="Harry Yin", date="2025-03-10")
+site.add_blog_post("fake_news", "Programming - Methods to Detect Fake News", "blogs/fake_news.md", author="Harry Yin", date="2025-03-09")
+site.add_blog_post("self_atten_blog", "Programming - Self Attention in Textual Clustering", "blogs/self_atten_blog.md", author="Harry Yin", date="2025-03-08")
+site.add_blog_post("likeable_character", "Misc - What makes a likeable character?", "blogs/likeable_character.md", author="Harry Yin", date="2025-03-08")
+site.add_blog_post("hello_blog", "Hello Blog", "blogs/hello_blog.md", author="Harry Yin", date="2025-03-07")
 
 with blog_page.Background(color="var(--light)", padding=Spacing.XL, animation=AnimationType.FADE_IN, css_class="rounded-lg"):
     blog_page.Write("Blogs", align=Alignment.CENTER, spacing_after=Spacing.LG, text_size="50px", text_color="var(--bs-body-color)")
@@ -194,6 +226,7 @@ with blog_page.Container(css_class="my_lg"):
 
     blog_page.Write("Latest Blog Posts:", align=Alignment.CENTER, spacing_after=Spacing.LG, text_size='30px')
     blog_page.BlockQuote("Some random words by some random guy.", author="me, 2025", align=Alignment.CENTER, spacing_after=Spacing.LG, animation=AnimationType.FADE_IN)
+    blog_page.Widget("Revisiting Old Projects", "A blog post about revisiting old projects and the importance of doing so.", link="blog/revisit.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     blog_page.Widget("Scary Moment", "Describing a scary moment in my life.", link="blog/on_mortality.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     blog_page.Widget("Finding Heuristic Equations", "This is a blog post on finding heuristic equations.", link="blog/heuristic_eq.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     blog_page.Widget("Entity Sentiment Targetting", "This is a blog post on entity sentiment targetting.", link="blog/sentiment_target.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
@@ -221,6 +254,7 @@ with cool_stuff_page.Container(css_class="my_lg"):
 
     cool_stuff_page.Widget("APUSH Timeline", "Just finished the APUSH test, wanted to post this thing here.", link="apush_timeline.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
     cool_stuff_page.Widget("CSP Study Guide", "A study guide for the CSP test.", link="csp.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
+    cool_stuff_page.Widget("Graph Demo", "A demo showcasing the ETSA graph capabilities.", link="graph_sentiment_analysis.html", image_url="/static/imgs/placeholder.png", animation=AnimationType.FADE_IN_LEFT, scroll_animation=True, scroll_animation_delay=0.15)
 
 about_page = site.add_page("about", "About Me")
 
