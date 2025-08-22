@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bias Removal | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Harry Yin">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/blog/bias_removal.html">
+    <meta property="og:title" content="Bias Removal | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/blog/bias_removal.html">
+    <meta property="twitter:title" content="Bias Removal | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="">
+
+    <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md); font-size: 3.5rem" data-scroll-animation="fade-in-down">Bias Removal</p><div class="align-items-start blog-post-meta d-flex flex-row flex-wrap justify-content-center mb-md text-muted"  style="margin-top: var(--spacing-sm); margin-bottom: 0"><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">By Harry Yin</p><p class="meta-separator mx-sm text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">•</p><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">Published on 2025-01-10</p><p class="meta-separator mx-sm text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">•</p><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">4 min read</p></div><hr class="divider" style="margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 0; border-top-width: 1px; border-top-style: solid; border-top-color: var(--bs-border-color); height: 0; opacity: 0.25"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p>While working on Alitheia AI (once again lol), I came across an issue: how do you remove bias and subjectivity from a text without altering its fundamental meaning? In order to present information in the most objective way possible, this was a necessary step that I needed to take, but unfortunately, there was basically no research done on it.</p>
+
+<p>When it came to objectifying sentences, I had two main ideas: 1. creating a rule-based algorithm to alter the text to improve objectivity and 2. fine-tuning summarization models to add the function of objectifying text.</p>
+
+<p>Due to my inexperience in fine-tuning summarization models and the computational power necessary to do so (I do all my programming and processing on a MacBook Air with the occasional use of Colab), I ended up going with the first option.</p>
+
+<p>Looking into things a bit more, I found some research that attempted to do similar things—<a rel="nofollow noopener" target="_blank" href="https://arxiv.org/pdf/2208.05777"><em>Dbias: Detecting biases and ensuring Fairness in news articles</em> by Raza et al</a> and <a rel="nofollow noopener" target="_blank" href="https://nlp.stanford.edu/pubs/pryzant2020bias.pdf"><em>Automatically Neutralizing Subjective Bias in Text</em> by Pryzant et al</a>, though a few things about their methodology and results confused me.</p>
+
+<p>The main issue I had with these projects was their complexity. While a comprehensive pipeline is definitely good for accuracy, the four-tiered BERT-based model in Dbias seemed a bit too computationally intensive to be run casually, and while Pryzant et al's methods were a more computationally friendly with just two larger BERT-based models used, overall, it was still relatively intensive. While using distilled versions may improve its efficiency, I still feel that there are better ways to go about this.</p>
+
+<p>Another issue I had with the systems was the usage of a masking method to find word replacements. While masking methods are great at finding contextual fits, they often miss the point of the entire text. For instance, a text saying "They were elated." that masks "elated" ("They were [MASK].") could have a lot of things fit into that mask—"happy", "sad", "angry", and evidently some of those words don't fit due to context mismatches.</p>
+
+<p>This issue is seen more prominently in Dbias, where the sentence "Billy Eilish issues apology for mouthing an anti-Asian derogatory term in resurface video." masked "mouthing" and "anti-Asian" ("Billy Eilish issues apology for [MASK] an [MASK] derogatory term in resurface video."), and while the masking makes sense, the results don't. While results varied for the word "mouthing", with the better ones being "using" and the worse ones being "wearing", the "anti-Asian" result made even less sense; the replacement was "intentional" all the way through. While the issues were more obvious in Dbias, the issues also showed themselves in Pryzant's work as they used the same masking methods. While I admit that larger models and more context do somewhat account for the issue, I do feel that given the computational cost-to-result ratio, using a BERT masking method is just not a good idea.</p>
+
+<p>Thus, I decided to look into my own methods of improvement, one geared towards improved efficiency and accuracy in de-biasing.</p>
+
+<p>The first issue comes with determining what actually causes subjectivity and bias within the text. Doing some research led me to <a rel="nofollow noopener" target="_blank" href="https://www.adelaide.edu.au/writingcentre/ua/media/21/learningguide-objectivelanguage.pdf">The University of Adelaide's <em>Objective Language Writing Centre Learning Guide</em></a>, which outlined the common points of subjectivity within writing:</p>
+
+<ul>
+<li><p>Personal language</p></li>
+<li><p>Judgmental language</p></li>
+<li><p>Emotive language</p></li>
+</ul>
+
+<p>Personal language isn't as large of an issue in bias removal—in fact, I believe that personal language is pretty important for distinguishing opinion from perceived "fact", thus I will ignore it for now.</p>
+
+<p>Judgemental and emotive language, on the other hand, are problematic issues. From what I can tell, these are found most predominantly in adjectives, adverbs, titular nouns, and verbs (not accounting for more structural system bias that may be more hidden). To debias, these words need to be altered. </p>
+
+<p>However, there needs to be a criterion to determine how to alter these words, as each word in a sentence has a property that may make it uniquely difficult to alter.</p>
+
+<ol>
+<li>Structural value: Does the removal of the word impact the structure of the sentence?</li>
+<li>Is the word subjective: Does the removal/alteration of the word improve bias, or is it an important descriptive word</li>
+<li>Does the removal of this one word improve the subjectivity of the entire text: Sometimes, words can be subjective but prove to improve the overall objectivity of the text in rare cases. This also must be accounted for.</li>
+</ol>
+
+<p>Thus, given this, it is decently straightforward to develop a rule-based objectivity based on NLP pipelines like NLTK and Stanza where words can be marked for change and removal.</p>
+
+<p>Furthermore, for a word replacement, I thought to turn to the more unique method of synonym finding using a dictionary API. While this may not produce the same nuance, creating a list of words and checking for which word provides the most objective alternative, should hold up much better than a BERT-based model when it comes to retaining meaning.</p>
+
+<p>All in all, while I kept the explanation of my methodology rather short, I do believe that it can serve as a different, more algorithmic approach to de-biasing within the ML community, though I am no expert so I'd love to hear from anyone with more experience in this field about their perspective on my methodology.</p>
+
+<p>More research definitely needs to be done in this area, though, with growing polarization often fueled by such bias-riddled rhetoric. But, that is a worry for tomorrow's me.</p>
+
+<p>Cheers!</p>
+</div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Harry Yin. All rights reserved.
+            <p class="text-muted mt-xs">Powered by Custom developed SiteGen(.py)</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI vs Algorithm | Harry Yin&#39;s Portfolio</title>
+    <meta name="description" content="A showcase of my projects and thoughts :D">
+    <meta name="keywords" content="portfolio, projects, blog, developer">
+    <meta name="author" content="Harry Yin">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xild076.github.io/blog/ai_algorithm.html">
+    <meta property="og:title" content="AI vs Algorithm | Harry Yin&#39;s Portfolio">
+    <meta property="og:description" content="A showcase of my projects and thoughts :D">
+    <meta property="og:image" content="">
+    <meta property="og:site_name" content="Harry Yin&#39;s Portfolio">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xild076.github.io/blog/ai_algorithm.html">
+    <meta property="twitter:title" content="AI vs Algorithm | Harry Yin&#39;s Portfolio">
+    <meta property="twitter:description" content="A showcase of my projects and thoughts :D">
+    <meta property="twitter:image" content="">
+
+    <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+        <header class="site-header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md); font-size: 3.5rem" data-scroll-animation="fade-in-down">AI vs Algorithm</p><div class="align-items-start blog-post-meta d-flex flex-row flex-wrap justify-content-center mb-md text-muted"  style="margin-top: var(--spacing-sm); margin-bottom: 0"><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">By Harry Yin</p><p class="meta-separator mx-sm text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">•</p><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">Published on 2025-01-15</p><p class="meta-separator mx-sm text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">•</p><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">2 min read</p></div><hr class="divider" style="margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 0; border-top-width: 1px; border-top-style: solid; border-top-color: var(--bs-border-color); height: 0; opacity: 0.25"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p>Several days ago, I watched a chess video by Levy on AlphaZero, the legendary chess AI from 2017 that beat Stockfish, the past and prevailing champion. It was a pretty exciting video, however, it got me thinking—what was the key difference between the two chess bots? In essence, the two are the same thing—mathematical constructs to determine the best chess move to make. However, the two operate in very different ways and with very different principles, and that is what I want to explore.</p>
+
+<p>First of all, I am no chess savant, in fact, the only thing I know about chess (other than the very basics) is en passant, but I do know about AIs and algorithms, thus I will be evaluating two models based as a programmer instead of a chess player.</p>
+
+<p>When considering general differences between the two, the first that comes to mind is computational power. Stockfish is a very accessible chess bot as it runs purely on CPU while AlphaZero is a notoriously computationally intensive AI that requires TPUs to run. That can't be considered accessible by any means. </p>
+
+<p>However, the general difference is natural—Stockfish uses common search algorithms and very basic neural networks to make 30+ move predictions while AlphaZero is a self-learning AI model with millions if not billions of parameters that looks at deep patterns. </p>
+
+<p>Given this fact, though, I think that the key, core difference becomes clear. Stockfish is meant to be the perfect machine while AlphaZero is meant to be the perfect human, and I feel that AlphaZero fails to capitalize on this fact. </p>
+
+<p>What I mean by this is that Stockfish, given the way it's built, seems to be aiming towards predicting as many future possibilities in the game as possible. This is a very mechanical way of approaching things, while AlphaZero, on the other hand, seems to attempt emulating human behavior by zoning in on patterns within play.</p>
+
+<p>Then given that, my question is, why was AlphaZero trained only off of self-play? When you look at most grandmasters, they each have a distinct style of play, driven by their own psychology. If trained off of these grandmaster's games, in theory, AlphaZero could develop an insight into chess player's mindset to best find ways to counter them efficiently. This is something that Stockfish, being purely rule-based, can't do, yet AlphaZero fails to capitalize on this by focusing solely on self-play.</p>
+
+<p>While I understand that DeepMind intended AlphaZero to only do self-play so AlphaZero could create some more unique play-styles, I feel that it is a massive missed opportunity and can be explored. Creating a hybrid training method of both using grandmaster games as reference and then self-playing to develop unique play-styles while still retaining knowledge on the human psyche.</p>
+
+<p>However, I am no expert and I definitely don't have the ability to make such impressive AI. Even though I have my small ideas, AlphaZero is still beyond impressive and pretty ahead of its time. This was just a small blog off of some small thoughts, but yeah!</p>
+
+<p>Cheers!</p>
+</div></div>    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            &copy; 2025 Harry Yin. All rights reserved.
+            <p class="text-muted mt-xs">Powered by Custom developed SiteGen(.py)</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
