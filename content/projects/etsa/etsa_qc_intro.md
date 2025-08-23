@@ -7,7 +7,7 @@ A unified, graph-centric pipeline for tracking how sentiment attaches to and evo
 ## Pipeline
 <center>
 
-<img src="content/projects/etsa/etsa_pipeline.png" alt="ETSA Pipeline" width="600">
+<img src="/static/imgs/etsa_pipeline.png" alt="ETSA Pipeline" width="600">
 
 </center>
 
@@ -15,4 +15,4 @@ A unified, graph-centric pipeline for tracking how sentiment attaches to and evo
 
 ETSA is currently collecting data to optimize its sentiment analysis formulas. We would greatly appreciate if you completed the survey here:
 
-- https://etsa-survey.streamlit.app/ 
+- [ETSA Survey](https://etsa-survey.streamlit.app/) 

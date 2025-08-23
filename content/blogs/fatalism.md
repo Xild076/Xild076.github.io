@@ -26,7 +26,7 @@ The first epiphany was that, in the end, all physics is derived from the observa
 
 Given this, there may be an aspect of the universe that we overlooked that may point to a true sentience and will for humans we haven't discovered yet. However, this is a far too optimistic train of thought—while I have no way to prove the laws of physics, I have no way to disprove the laws of physics, thus, I may only accept determinism for now while still holding on to some hope of free will, however small.
 
-The second epiphany started with Descartes' famous line: "I think therefore I am" and worked under a determinist mindset. I realized that, even if free will, thought, and subjectivity are all illusions created through emergent properties by the laws physics, they are real to me. I realized that, by looking at the universe, I had neglected to look within and around me. 
+The second epiphany started with Descartes' famous line: "I think therefore I am" and worked under a determinist mindset. I realized that, even if free will, thought, and subjectivity are all illusions created through emergent properties by the laws of physics, they are real to me. I realized that, by looking at the universe, I had neglected to look within and around me. 
 
 Even if all I don't truly possess free will or subjectivity, I still feel that I have them and that is all I am afforded by the universe. Thus, indulging in determinist and fatalist though is useless. Even if our lives are predetermined, as long as we have the illusion of free will, then we must operate under such an illusion. When looking at society, humans were never once free—the need to eat, drink, and sleep all serve as driving forces behind our "free will". 
 

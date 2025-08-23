@@ -946,10 +946,16 @@ class Site:
                     else: 
                         final_doc_link = doc_content_file_path
                     
+                    # For external URLs, use the full URL; for internal ones, prepend the slug
+                    if final_doc_link.startswith(("http://", "https://")) or urlparse(final_doc_link).scheme:
+                        widget_link = final_doc_link
+                    else:
+                        widget_link = slug + "/" + final_doc_link
+                    
                     doc_widgets_container.Widget(
                         title=doc_title_text,
                         description=doc_description_text,
-                        link= slug + "/" + final_doc_link,
+                        link=widget_link,
                         link_text="View Document" if final_doc_link != "#" else "N/A",
                         image_url="/static/imgs/placeholder.png",
                         image_height="100px", 
