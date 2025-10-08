@@ -143,6 +143,7 @@ def build_blog_page(site: Site):
         
         with page.Container(css_class="row"):
             all_blog_posts = [
+                {"slug": "writing_fun", "title": "Misc - Short Story: The Frog Who Cried Rain", "file": "blogs/writing_fun.md", "author": "Harry Yin", "date": "2025-09-30"},
                 {"slug": "ai_ethics", "title": "Programming - My thoughts on AI ethics and how that ties into Fatalism", "file": "blogs/ai_ethics.md", "author": "Harry Yin", "date": "2025-08-22"},
                 {"slug": "local_minima", "title": "Programming - Funny ways to describe the local minima to an edgy teen", "file": "blogs/local_minima.md", "author": "Harry Yin", "date": "2025-08-10"},
                 {"slug": "revisit", "title": "Programming - Revisiting old projects", "file": "blogs/revisiting_projects.md", "author": "Harry Yin", "date": "2025-07-25"},
@@ -366,6 +367,7 @@ def add_project_pages(site : Site):
 
 def add_blog_posts(site):
     blog_posts = [
+        {"slug": "writing_fun", "title": "Misc - Short Story: The Frog Who Cried Rain", "file": "blogs/writing_fun.md", "author": "Harry Yin", "date": "2025-09-30"},
         {"slug": "ai_ethics", "title": "Programming - My thoughts on AI ethics and how that ties into Fatalism", "file": "blogs/ai_ethics.md", "author": "Harry Yin", "date": "2025-08-22"},
         {"slug": "local_minima", "title": "Programming - Funny ways to describe the local minima to an edgy teen", "file": "blogs/local_minima.md", "author": "Harry Yin", "date": "2025-08-10"},
         {"slug": "revisit", "title": "Programming - Revisiting old projects", "file": "blogs/revisiting_projects.md", "author": "Harry Yin", "date": "2025-07-25"},
