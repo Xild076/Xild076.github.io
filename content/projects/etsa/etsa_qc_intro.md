@@ -11,6 +11,11 @@ A unified, graph-centric pipeline for tracking how sentiment attaches to and evo
 
 </center>
 
+## Explainable Trace Example
+
+<img src="/static/imgs/pipeline_trace.png" alt="ETSA Pipeline Explainable Trace" width="600">
+
+
 ## Data Collection
 
 ETSA is currently collecting data to optimize its sentiment analysis formulas. We would greatly appreciate if you completed the survey here:
