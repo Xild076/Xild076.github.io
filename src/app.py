@@ -305,6 +305,26 @@ def add_project_pages(site : Site):
         ],
         meta_info={"author": "Xild076", "project_id": "LS&DAI"}
     )
+
+    site.add_project_page(
+        'twt',
+        'Thinking without Thinking',
+        project_readme_file='projects/twt/twt_intro.md',
+        timeline_events=[
+            {"time": "2024-08-29", "description": "Begin development of Thinking Without Thinking"},
+            {"time": "2024-08-30", "description": "Implemented the first system of self-criticism began hosting on Streamlit"},
+            {"time": "2024-10-15", "description": "Began reworking TWT to include pipeline blocks system"},
+        ],
+        technologies_used=[
+            "Python 3.x for backend processing",
+            "Streamlit for hosting",
+            "Google API keys for content generation",
+            "Github for development"
+        ],
+        project_documents=[
+        ],
+        meta_info={"author": "Xild076", "project_id": "TWT"}
+    )
     
     site.add_project_page(
         'objectivenews',
