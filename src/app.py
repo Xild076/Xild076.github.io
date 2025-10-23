@@ -83,13 +83,25 @@ def build_projects_page(site: Site):
                 with page.Container(css_class="project-card-media d-flex justify-content-center align-items-center"):
                     page.Image("/static/imgs/etsa_pipeline.png", alt="ETSA Pipeline", height="220px", object_fit=ObjectFit.CONTAIN, align=Alignment.CENTER)
                 with page.Container():
-                    page.Write("Entity Targeted Sentiment Analysis", text_size="24px", text_color="var(--heading-color)", spacing_after=Spacing.SM)
+                    page.Write("Entity Targeted Sentiment Analysis (AeVAA)", text_size="24px", text_color="var(--heading-color)", spacing_after=Spacing.SM)
                     page.Write("Advanced NLP pipeline combining graph-centric analysis with quantum-centric techniques for precise sentiment detection.", text_color="var(--text)", spacing_after=Spacing.MD)
                     page.Write("Technologies: Python, NetworkX, NLTK, Machine Learning", text_color="var(--text-secondary)", text_size="14px", spacing_after=Spacing.MD)
                     with page.Container(css_class="d-flex gap-2"):
                         page.Button("View Project", link="projects/etsa_qc.html", style_type=ButtonType.PRIMARY)
                         page.Button("GitHub", link="https://github.com/Xild076/ETSA--QC-", style_type=ButtonType.OUTLINE_PRIMARY)
 
+        with page.Card(spacing_after=Spacing.LG, css_class="project-showcase"):
+            with page.Columns(n=2, gap=Spacing.LG):
+                with page.Container(css_class="project-card-media d-flex justify-content-center align-items-center"):
+                    page.Image("/static/imgs/twt.png", alt="Thinking Without Thinking", height="220px", object_fit=ObjectFit.CONTAIN, align=Alignment.CENTER)
+                with page.Container():
+                    page.Write("Thinking Without Thinking", text_size="24px", text_color="var(--heading-color)", spacing_after=Spacing.SM)
+                    page.Write("A free, open source agentic AI tool based fully on text systems.", text_color="var(--text)", spacing_after=Spacing.MD)
+                    page.Write("Technologies: Python, Streamlit, Google API", text_color="var(--text-secondary)", text_size="14px", spacing_after=Spacing.MD)
+                    with page.Container(css_class="d-flex gap-2"):
+                        page.Button("View Project", link="projects/twt.html", style_type=ButtonType.PRIMARY)
+                        page.Button("GitHub", link="https://github.com/Xild076/ThinkingWithoutThinking", style_type=ButtonType.OUTLINE_PRIMARY)
+        
         # LSD-AI
         with page.Card(spacing_after=Spacing.LG, css_class="project-showcase"):
             with page.Columns(n=2, gap=Spacing.LG):
@@ -101,7 +113,7 @@ def build_projects_page(site: Site):
                     page.Write("Technologies: Python, TensorFlow, PyTorch, Research Methodologies", text_color="var(--text-secondary)", text_size="14px", spacing_after=Spacing.MD)
                     with page.Container(css_class="d-flex gap-2"):
                         page.Button("View Project", link="projects/lsdai.html", style_type=ButtonType.PRIMARY)
-                        page.Button("GitHub", link="https://github.com/Xild076/LSD-AI", style_type=ButtonType.OUTLINE_PRIMARY)
+                        page.Button("GitHub", link="https://github.com/Xild076/LSDAI", style_type=ButtonType.OUTLINE_PRIMARY)
 
         # Objective News
         with page.Card(spacing_after=Spacing.LG, css_class="project-showcase"):
@@ -114,7 +126,7 @@ def build_projects_page(site: Site):
                     page.Write("Technologies: Python, BERT, Transformers, News APIs", text_color="var(--text-secondary)", text_size="14px", spacing_after=Spacing.MD)
                     with page.Container(css_class="d-flex gap-2"):
                         page.Button("View Project", link="projects/objectivenews.html", style_type=ButtonType.PRIMARY)
-                        page.Button("GitHub", link="https://github.com/Xild076/Objective-News", style_type=ButtonType.OUTLINE_PRIMARY)
+                        page.Button("GitHub", link="https://github.com/Xild076/ObjectiveNews", style_type=ButtonType.OUTLINE_PRIMARY)
 
         # Stock prediction
         with page.Card(spacing_after=Spacing.LG, css_class="project-showcase"):
@@ -259,6 +271,7 @@ def add_project_pages(site : Site):
         timeline_events=[
             {"time": "2025-03-17", "description": "Began project ETSA --- QC"},
             {"time": "2025-04-11", "description": "Joined the MAGICS Lab at USF"},
+            {"time": "2025-10-05", "description": "Finished the AeVAA paper"},
         ],
         technologies_used=[
             "Python 3.x for backend processing",

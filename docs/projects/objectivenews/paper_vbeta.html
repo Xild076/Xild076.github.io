@@ -96,8 +96,8 @@ harry.d.yin.gpc@gmail.com</p>
 <p>For grouping, the source I used was Korbinian Kosh's <em>A Friendly Introduction to Text Clustering</em><sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>. The key takeaways I recieved from this articles were to: 1. embed sentences, and 2. to use hierarchical clustering. Thus, I got to work with the basic implementation of textual clustering.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sentence_transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
 
 <span class="n">sentences</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="c1"># Put sentences here.</span>
 
@@ -123,9 +123,9 @@ harry.d.yin.gpc@gmail.com</p>
 <p>In the end, the basic framework was something like this:</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">silhouette_score</span>
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sentence_transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">silhouette_score</span>
 
 <span class="n">sentences_list</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">[</span><span class="o">...</span><span class="p">],</span>
@@ -135,11 +135,11 @@ harry.d.yin.gpc@gmail.com</p>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;all-MiniLM-L6-v2&#39;</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">find_representative_sentences</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_representative_sentences</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
     <span class="o">...</span>
     <span class="k">return</span> <span class="n">representative_sentences</span>
 
-<span class="k">def</span> <span class="nf">cluster</span><span class="p">(</span><span class="n">sentences</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cluster</span><span class="p">(</span><span class="n">sentences</span><span class="p">):</span>
     <span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span>
     <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span>
         <span class="n">distance_threshold</span><span class="o">=</span><span class="mf">12.5</span>
@@ -274,7 +274,7 @@ harry.d.yin.gpc@gmail.com</p>
 <p>For word objectivity, I was at first going to use Textblob's subjective score. The issue was that the subjective score didn't work for individual words. The ultimate implementation of word objectivity came with nltk's wordnet. It was relatively simple code to implement, although it is inconsistent and doesn't work for all words. However, it is good enough as of right now.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="k">def</span> <span class="nf">calc_objectivity_word</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calc_objectivity_word</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">obj_scores</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">synsets</span> <span class="o">=</span> <span class="n">wn</span><span class="o">.</span><span class="n">synsets</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">synsets</span><span class="p">:</span>
