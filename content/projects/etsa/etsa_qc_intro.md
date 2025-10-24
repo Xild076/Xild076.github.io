@@ -1,4 +1,8 @@
+<center>
+
 ### **AeVAA: An Explainable AI Framework for Aspect-Based Sentiment Analysis**
+
+</center>
 
 **Project Summary:** AeVAA is a modular, psychologically-grounded framework designed to provide an explainable and debuggable framework for Aspect-Based Sentiment Analysis (ABSA). It constructs a dynamic knowledge graph of entities and their interactions/relations, moving beyond "black-box" models to deliver nuanced, valence-aware sentiment scores with a clear, traceable reasoning process.
 
@@ -22,9 +26,15 @@ This modularity makes the system highly interpretable, debuggable, and changable
 
 ---
 
-### Technical Deep Dive: System Architecture & Skills
+### Technical Details: System Architecture & Skills
 
 The AeVAA pipeline is composed of five core modules, each demonstrating a distinct set of technical and analytical skills.
+
+<center>
+
+![Etsa Pipeline](/static/imgs/etsa_pipeline.png)
+
+</center>
 
 #### 1. Constituency Clause Extraction
 -   **Purpose:** The system first breaks down raw text into grammatically coherent constituency clauses. This mirrors the hierarchical way humans parse information and ensures that entity interactions are analyzed within their correct local context.
@@ -75,6 +85,16 @@ To move beyond simple heuristics, we needed to model how humans *actually* proce
 2.  **Survey-Based Data Collection:** We designed and implemented a survey using **Streamlit** to collect human sentiment judgments. The survey generated randomized, templated scenarios modeling different entity interactions (e.g., a positive entity performing a negative action on another positive entity) and aggregation effects (primacy vs. recency bias).
 3.  **Formula Derivation:** Using the collected pilot data (N=36), I fit parameters for a suite of candidate formulas using **SciPy's** optimization functions. These formulas, inspired by psychological concepts like negativity bias and the serial position effect, now power the AeVAA sentiment calculation module.
 
+#### Explainable Trace Example
+
+Below, I've included an example of the explanatory trace of the model.
+
+<center>
+
+![Etsa Pipeline](/static/imgs/pipeline_trace.png)
+
+</center>
+
 This data-driven approach allows the model's reasoning to be grounded in observable human behavior, making its outputs not only explainable but also more intuitively aligned with how people perceive sentiment.
 
 ---
@@ -88,6 +108,10 @@ We evaluated the end-to-end AeVAA framework on the SemEval 2014 ABSA benchmark. 
 -   **Quantified Contributions:** An ablation study confirmed that the modifier extraction module was the most critical component for accuracy, demonstrating the framework's utility for analytical research.
 
 AeVAA serves as a robust proof-of-concept, demonstrating that a modular, psychologically-grounded approach can create a powerful, trustworthy, and continuously improvable system for sentiment analysis.
+
+##### Publication
+
+We anticipate a submission to ARR in Jan 2026. This page may be taken down to abide with ARR double blind policy.
 
 ---
 
