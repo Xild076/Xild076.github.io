@@ -18,6 +18,7 @@ def create_site():
             {"text": "Projects", "url": "/projects.html"},
             {"text": "Blog", "url": "/blog.html"},
             {"text": "Cool Stuff", "url": "/cool_stuff.html"},
+            {"text": "CV/Resume", "url": "/cv.html"},
             {"text": "About", "url": "/about.html"},
         ]
     )
@@ -109,7 +110,7 @@ def build_projects_page(site: Site):
                     page.Image("/static/imgs/lsd_ai.png", alt="LSD AI", height="220px", object_fit=ObjectFit.CONTAIN, align=Alignment.CENTER)
                 with page.Container():
                     page.Write("LSD AI Framework", text_size="24px", text_color="var(--heading-color)", spacing_after=Spacing.SM)
-                    page.Write("Experimental machine learning framework exploring novel approaches to artificial intelligence research and development.", text_color="var(--text)", spacing_after=Spacing.MD)
+                    page.Write("Experimental ML system to analyze and give feedback to speeches.", text_color="var(--text)", spacing_after=Spacing.MD)
                     page.Write("Technologies: Python, TensorFlow, PyTorch, Research Methodologies", text_color="var(--text-secondary)", text_size="14px", spacing_after=Spacing.MD)
                     with page.Container(css_class="d-flex gap-2"):
                         page.Button("View Project", link="projects/lsdai.html", style_type=ButtonType.PRIMARY)
@@ -146,12 +147,12 @@ def build_blog_page(site: Site):
     
     with page.Background(color="var(--light)", padding=Spacing.XL, animation=AnimationType.FADE_IN, css_class="rounded-lg hero-section"):
         page.Write("Blog", align=Alignment.CENTER, spacing_after=Spacing.LG, text_size="50px", text_color="var(--heading-color)")
-        page.Write("Thoughts and insights on technology, AI, and life", align=Alignment.CENTER, spacing_after=Spacing.LG, text_color="var(--text-secondary)")
+        page.Write("Random thoughts and insights on technology, AI, and life", align=Alignment.CENTER, spacing_after=Spacing.LG, text_color="var(--text-secondary)")
     
     with page.Container(css_class="my_lg"):
         page.Divider(spacing_before=Spacing.XL, spacing_after=Spacing.XL, thickness=2.5)
         page.Write("Latest Posts", align=Alignment.CENTER, spacing_after=Spacing.LG, text_size='30px', text_color="var(--accent-primary)")
-        page.BlockQuote("Some random words by some random guy.", author="Harry Yin", align=Alignment.CENTER, spacing_after=Spacing.LG, animation=AnimationType.FADE_IN)
+        page.BlockQuote("Some random words by some random guy.", author="Some Random Guy (Harry Yin)", align=Alignment.CENTER, spacing_after=Spacing.LG, animation=AnimationType.FADE_IN)
         
         with page.Container(css_class="row"):
             all_blog_posts = [
@@ -214,6 +215,18 @@ def build_cool_stuff_page(site: Site):
             scroll_animation_delay=0.15
         )
 
+def build_cv_page(site: Site):
+    page = site.add_page("cv", "CV/Resume")
+    
+    with page.Background(color="var(--light)", padding=Spacing.XL, animation=AnimationType.FADE_IN, css_class="rounded-lg hero-section"):
+        page.Write("CV/Resume", align=Alignment.CENTER, spacing_after=Spacing.LG, text_size="50px", text_color="var(--heading-color)")
+        page.Write("My professional experience and skills", align=Alignment.CENTER, spacing_after=Spacing.LG, text_color="var(--text-secondary)")
+    
+    with page.Container(css_class="my_lg"):
+        page.Divider(spacing_before=Spacing.XL, spacing_after=Spacing.XL, thickness=2.5)
+        
+        page.Markdown("You can download my CV/Resume [here](static/docs/harry_yin_cv.pdf).", align=Alignment.CENTER, spacing_after=Spacing.LG)
+
 def add_html_pages(site: Site):
     import os
     static_dir = "static"
@@ -231,15 +244,6 @@ def add_html_pages(site: Site):
     graph_demo_rel = "projects/etsa/graph_sentiment_analysis.html"
     if os.path.exists(os.path.join(content_dir, graph_demo_rel)):
         site.add_html_file_page("graph_sentiment_analysis", "Graph Sentiment Analysis", graph_demo_rel)
-
-    """csp_rel = "cool_stuff/csp.html"
-    if os.path.exists(os.path.join(content_dir, csp_rel)):
-        site.add_html_file_page("csp", "CSP Project", csp_rel)
-    else:
-        csp_page = site.add_page("csp", "CSP Project")
-        csp_page.Write("CSP Project", align=Alignment.CENTER, text_size="40px", spacing_after=Spacing.LG)
-        csp_page.Write("Computer Science Principles project details coming soon!", align=Alignment.CENTER, spacing_after=Spacing.LG)"""
-
 
 def build_about_page(site:Site):
     page = site.add_page("about", "About Me")
@@ -437,6 +441,7 @@ def main():
     build_projects_page(site)
     build_blog_page(site)
     build_cool_stuff_page(site)
+    build_cv_page(site)
     build_about_page(site)
     
     add_project_pages(site)

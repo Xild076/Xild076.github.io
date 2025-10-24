@@ -38,7 +38,7 @@
         <header class="site-header">
   <div class="container d-flex justify-content-between align-items-center">
     <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
-    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/cv.html">CV/Resume</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
     <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
   </div>
 </header>
@@ -47,14 +47,14 @@
 <div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md); font-size: 3.5rem" data-scroll-animation="fade-in-down">Programming - Entity Sentiment Targeting</p><div class="align-items-start blog-post-meta d-flex flex-row flex-wrap justify-content-center mb-md text-muted"  style="margin-top: var(--spacing-sm); margin-bottom: 0"><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">By Harry Yin</p><p class="meta-separator mx-sm text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">•</p><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">Published on 2025-04-04</p><p class="meta-separator mx-sm text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">•</p><p class="meta-item text-left"  style="margin-top: 0; margin-bottom: 0; color: var(--bs-gray-600)">36 min read</p></div><hr class="divider" style="margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 0; border-top-width: 1px; border-top-style: solid; border-top-color: var(--bs-border-color); height: 0; opacity: 0.25"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p>This notebook aims to understand how sentiment is aimed at named entities</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">spacy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spacy</span><span class="w"> </span><span class="kn">import</span> <span class="n">displacy</span>
+<pre><span></span><code><span class="kn">import</span> <span class="nn">spacy</span>
+<span class="kn">from</span> <span class="nn">spacy</span> <span class="kn">import</span> <span class="n">displacy</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;en_core_web_sm&#39;</span><span class="p">)</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">analyze_text_structures</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">style</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;dep&quot;</span><span class="p">,</span> <span class="s2">&quot;ent&quot;</span><span class="p">]):</span>
+<span class="k">def</span> <span class="nf">analyze_text_structures</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">style</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;dep&quot;</span><span class="p">,</span> <span class="s2">&quot;ent&quot;</span><span class="p">]):</span>
     <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="n">displacy</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre>
@@ -96,7 +96,7 @@ Subj -> Negative Verb -> Obj (Positive Sentiment) = Negative Sentiment towards S
 <p>Given all this, let's check out how the numbers would play out. For this analysis, I will be using VADER sentiment analysis.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">vaderSentiment.vaderSentiment</span><span class="w"> </span><span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
+<pre><span></span><code><span class="kn">from</span> <span class="nn">vaderSentiment.vaderSentiment</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
 <span class="n">sia</span> <span class="o">=</span> <span class="n">SentimentIntensityAnalyzer</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">sia</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="s2">&quot;Adam criticized John&#39;s horrible decisions.&quot;</span><span class="p">))</span>
@@ -335,8 +335,8 @@ print(sia.polarity_scores("Adam did harmful things."))
 <p>Now, let's try to solve this! Solving this is pretty simple—let's just look at other tools instead and aggregate a solution together! Let's use the same three examples.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">textblob</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextBlob</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">afinn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Afinn</span>
+<pre><span></span><code><span class="kn">from</span> <span class="nn">textblob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
+<span class="kn">from</span> <span class="nn">afinn</span> <span class="kn">import</span> <span class="n">Afinn</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Textblob sentiment:&quot;</span><span class="p">,</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s2">&quot;Adam ordered.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sentiment</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Textblob sentiment:&quot;</span><span class="p">,</span> <span class="n">TextBlob</span><span class="p">(</span><span class="s2">&quot;Adam had a freak-out.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sentiment</span><span class="p">)</span>
@@ -366,11 +366,11 @@ AFINN sentiment: -2.0
 <p>So, how do we aggregate these results? Once again, while this may be crude, I decided to normalize AFINN with the total number of words tested, dividing them over 5, and average them with the Vader scores.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">nltk</span>
+<pre><span></span><code><span class="kn">import</span> <span class="nn">nltk</span>
 <span class="n">afn</span> <span class="o">=</span> <span class="n">Afinn</span><span class="p">()</span>
 <span class="n">sia</span> <span class="o">=</span> <span class="n">SentimentIntensityAnalyzer</span><span class="p">()</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">normalized_afinn_score</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">normalized_afinn_score</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">tokens</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">word_tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="n">word_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">afn</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
     <span class="n">relevant_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">word_scores</span> <span class="k">if</span> <span class="n">s</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
@@ -378,7 +378,7 @@ AFINN sentiment: -2.0
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">relevant_scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">relevant_scores</span><span class="p">)</span> <span class="o">/</span> <span class="mi">5</span>
     <span class="k">return</span> <span class="mi">0</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_sentiment</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_sentiment</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">afn_score</span> <span class="o">=</span> <span class="n">normalized_afinn_score</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="n">polarity_score</span> <span class="o">=</span> <span class="n">sia</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="n">text</span><span class="p">)[</span><span class="s1">&#39;compound&#39;</span><span class="p">]</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">afn_score</span> <span class="o">+</span> <span class="n">polarity_score</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
@@ -423,7 +423,7 @@ Compound A/VC Sentiment = ((V/AC - 1) * ASC+A + A/VC * 3) / 4, V/AC &lt; 0</p>
 <p>Now that is a bit better. Furthermore, this actually also solves the issue of sentiment mitigation as when before, the average would always decrease due to |V/AC| always being less than 1, now the average can increase as |V/AC| can be greater than 1. Let's put this into code.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_compound_sentiment</span><span class="p">(</span><span class="n">base_sentiment</span><span class="p">,</span> <span class="n">other_sentiment</span><span class="p">,</span> <span class="n">action_sentiment</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">calculate_compound_sentiment</span><span class="p">(</span><span class="n">base_sentiment</span><span class="p">,</span> <span class="n">other_sentiment</span><span class="p">,</span> <span class="n">action_sentiment</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">other_sentiment</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">compound_sentiment</span> <span class="o">=</span> <span class="p">((</span><span class="n">other_sentiment</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">action_sentiment</span> <span class="o">+</span> <span class="n">base_sentiment</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
     <span class="k">else</span><span class="p">:</span>
@@ -730,15 +730,15 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
 </ul>
 
 <div class="codehilite">
-<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_sentence_root</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">get_sentence_root</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">sent</span><span class="o">.</span><span class="n">root</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">sents</span><span class="p">]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_tokens_by_dependencies</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">target_deps</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_tokens_by_dependencies</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">target_deps</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">token</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">dep_</span> <span class="ow">in</span> <span class="n">target_deps</span><span class="p">]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_full_subtree</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">exclude_branch_types</span><span class="o">=</span><span class="p">[]):</span>
+<span class="k">def</span> <span class="nf">get_full_subtree</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">exclude_branch_types</span><span class="o">=</span><span class="p">[]):</span>
     <span class="n">subtree_tokens</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">traverse_subtree</span><span class="p">(</span><span class="n">token</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">traverse_subtree</span><span class="p">(</span><span class="n">token</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">dep_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_branch_types</span><span class="p">:</span>
             <span class="n">subtree_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">token</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
@@ -746,10 +746,10 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
     <span class="n">traverse_subtree</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subtree_tokens</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">has_dependency</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">target_dep</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">has_dependency</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">target_dep</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">dep_</span> <span class="o">==</span> <span class="n">target_dep</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">)</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">extract_named_entities_token</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">extract_named_entities_token</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">tokens</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[]</span>
     <span class="n">allowed_labels</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PERSON&quot;</span><span class="p">,</span> <span class="s2">&quot;ORG&quot;</span><span class="p">,</span> <span class="s2">&quot;GPE&quot;</span><span class="p">,</span> <span class="s2">&quot;NORP&quot;</span><span class="p">,</span> <span class="s2">&quot;FAC&quot;</span><span class="p">,</span> <span class="s2">&quot;PRODUCT&quot;</span><span class="p">,</span> <span class="s2">&quot;EVENT&quot;</span><span class="p">,</span> <span class="s2">&quot;LOC&quot;</span><span class="p">,</span> <span class="s2">&quot;WORK_OF_ART&quot;</span><span class="p">,</span> <span class="s2">&quot;LAW&quot;</span><span class="p">,</span> <span class="s2">&quot;LANGUAGE&quot;</span><span class="p">}</span>
@@ -757,11 +757,11 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
     <span class="n">doc</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">doc</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">ent</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span> <span class="k">if</span> <span class="n">ent</span><span class="o">.</span><span class="n">label_</span> <span class="ow">in</span> <span class="n">allowed_labels</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">i</span> <span class="ow">in</span> <span class="n">token_idxs</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ent</span><span class="p">)]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">extract_named_entities</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">extract_named_entities</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
     <span class="n">allowed_labels</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PERSON&quot;</span><span class="p">,</span> <span class="s2">&quot;ORG&quot;</span><span class="p">,</span> <span class="s2">&quot;GPE&quot;</span><span class="p">,</span> <span class="s2">&quot;NORP&quot;</span><span class="p">,</span> <span class="s2">&quot;FAC&quot;</span><span class="p">,</span> <span class="s2">&quot;PRODUCT&quot;</span><span class="p">,</span> <span class="s2">&quot;EVENT&quot;</span><span class="p">,</span> <span class="s2">&quot;LOC&quot;</span><span class="p">,</span> <span class="s2">&quot;WORK_OF_ART&quot;</span><span class="p">,</span> <span class="s2">&quot;LAW&quot;</span><span class="p">,</span> <span class="s2">&quot;LANGUAGE&quot;</span><span class="p">}</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">ent</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span> <span class="k">if</span> <span class="n">ent</span><span class="o">.</span><span class="n">label_</span> <span class="ow">in</span> <span class="n">allowed_labels</span><span class="p">]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">split_into_independent_clauses</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">split_into_independent_clauses</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="n">clauses</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">sents</span><span class="p">:</span>
@@ -790,7 +790,7 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
                 <span class="n">clauses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clause_text</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">clauses</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">extract_ac_asca_vc</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">extract_ac_asca_vc</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">has_dependency</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;nsubj&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">has_dependency</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;dobj&#39;</span><span class="p">):</span>
         <span class="n">ac_base</span> <span class="o">=</span> <span class="n">get_tokens_by_dependencies</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;nsubj&#39;</span><span class="p">])</span>
@@ -890,7 +890,7 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
 <p>Well, we have some successes and some failures, which is natural as the rule-based structure needs to be continuously updated, something of which I will continue to do later on. However, for now, it is generally satisfactory, though it fails real-world tests. That being said, let's get to the second issue: anything that doesn't fall under the category of transitive verbs constructions. The solution to this is very easy—as there aren't two different verbs, sentiment can only be aimed at a single thing! So let's update some things real quick.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">extract_ac_asca_vc</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">extract_ac_asca_vc</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">has_dependency</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;nsubj&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">has_dependency</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;dobj&#39;</span><span class="p">):</span>
         <span class="n">ac_base</span> <span class="o">=</span> <span class="n">get_tokens_by_dependencies</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;nsubj&#39;</span><span class="p">])</span>
@@ -1004,7 +1004,7 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
 <p>It seems, thus, the big issue within our code is that we don't go off of the root of the text. So let's try that out.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_conjuncts</span><span class="p">(</span><span class="n">token</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">get_conjuncts</span><span class="p">(</span><span class="n">token</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">token</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">dep_</span> <span class="o">==</span> <span class="s2">&quot;conj&quot;</span><span class="p">:</span>
@@ -1012,7 +1012,7 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
             <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">get_conjuncts</span><span class="p">(</span><span class="n">child</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">result</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_subtree_dependents_by_dep</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">allowed_deps</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_subtree_dependents_by_dep</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">allowed_deps</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">token</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">dep_</span> <span class="ow">in</span> <span class="n">allowed_deps</span><span class="p">:</span>
@@ -1021,9 +1021,9 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
             <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">get_subtree_dependents_by_dep</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">allowed_deps</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">result</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_full_subtree</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">exclude_branch_types</span><span class="o">=</span><span class="p">[],</span> <span class="n">excluded_tokens</span><span class="o">=</span><span class="p">[]):</span>
+<span class="k">def</span> <span class="nf">get_full_subtree</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">exclude_branch_types</span><span class="o">=</span><span class="p">[],</span> <span class="n">excluded_tokens</span><span class="o">=</span><span class="p">[]):</span>
     <span class="n">subtree_tokens</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">traverse_subtree</span><span class="p">(</span><span class="n">token</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">traverse_subtree</span><span class="p">(</span><span class="n">token</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">excluded_tokens</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">dep_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_branch_types</span><span class="p">:</span>
@@ -1033,12 +1033,12 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
     <span class="n">traverse_subtree</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subtree_tokens</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_tokens_by_dependencies</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">target_deps</span><span class="p">,</span> <span class="n">excluded_tokens</span><span class="o">=</span><span class="p">[]):</span> 
+<span class="k">def</span> <span class="nf">get_tokens_by_dependencies</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">target_deps</span><span class="p">,</span> <span class="n">excluded_tokens</span><span class="o">=</span><span class="p">[]):</span> 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_deps</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">target_deps</span> <span class="o">=</span> <span class="p">[</span><span class="n">target_deps</span><span class="p">]</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">token</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">dep_</span> <span class="ow">in</span> <span class="n">target_deps</span> <span class="ow">and</span> <span class="n">token</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excluded_tokens</span><span class="p">]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_tokens_dep_excluding_subtrees</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">dep_labels</span><span class="p">,</span> <span class="n">exclusion_list</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_tokens_dep_excluding_subtrees</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">dep_labels</span><span class="p">,</span> <span class="n">exclusion_list</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dep_labels</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">dep_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">dep_labels</span><span class="p">]</span>
     <span class="n">excluded_tokens</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -1046,7 +1046,7 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
         <span class="n">excluded_tokens</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">subtree</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">token</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">dep_</span> <span class="ow">in</span> <span class="n">dep_labels</span> <span class="ow">and</span> <span class="n">token</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excluded_tokens</span><span class="p">]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">extract_ac_asca_vc</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">extract_ac_asca_vc</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">has_dependency</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;nsubj&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">has_dependency</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;dobj&#39;</span><span class="p">):</span>
         <span class="n">root</span> <span class="o">=</span> <span class="n">get_sentence_root</span><span class="p">(</span><span class="n">doc</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -1148,7 +1148,7 @@ Vader score: {'neg': 0.0, 'neu': 0.0, 'pos': 1.0, 'compound': 0.5859}
 <p>Wow! The code actually works now! Good stuff. With that settled, let's put everything together into one, final, solid function to calculate sentiment.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_entity_directed_sentiment</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">calculate_entity_directed_sentiment</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">sentences</span> <span class="o">=</span> <span class="n">split_into_independent_clauses</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="n">entities</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">sentences</span><span class="p">:</span>
@@ -1306,7 +1306,7 @@ Cylix Entertainment delivered a visually stunning game plagued by technical flaw
 <p>Interesting. So it seems that right now, the rule-based analysis for prepositions doesn't consider the difference unique to the word "for" as "for" associates an issue with the victim instead of the actor, as is common for most other preps ("Critics slammed Darven Tech's flagship phone for its unreliable battery life." case). Also, for some reason, the entity "Velara" isn't extracted/considered an entity ("Velara’s book on dream logic captivated readers with its haunting prose." case). Let's try fix this.</p>
 
 <div class="codehilite">
-<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">extract_ac_asca_vc</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">extract_ac_asca_vc</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">has_dependency</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;nsubj&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">has_dependency</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;dobj&#39;</span><span class="p">):</span>
         <span class="n">root</span> <span class="o">=</span> <span class="n">get_sentence_root</span><span class="p">(</span><span class="n">doc</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>

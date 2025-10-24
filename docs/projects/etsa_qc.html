@@ -38,40 +38,169 @@
         <header class="site-header">
   <div class="container d-flex justify-content-between align-items-center">
     <div class="site-title"><a href="/index.html">Harry Yin&#x27;s Portfolio</a></div>
-    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
+    <nav class="justify-content-center nav-main"  style="margin-top: 0; margin-bottom: 0"><ul class="nav"><li class="nav-item"><a class="nav-link " href="/index.html">Home</a></li><li class="nav-item"><a class="nav-link " href="/projects.html">Projects</a></li><li class="nav-item"><a class="nav-link " href="/blog.html">Blog</a></li><li class="nav-item"><a class="nav-link " href="/cool_stuff.html">Cool Stuff</a></li><li class="nav-item"><a class="nav-link " href="/cv.html">CV/Resume</a></li><li class="nav-item"><a class="nav-link " href="/about.html">About</a></li></ul></nav>
     <button id="theme-toggle" title="Toggle theme" class="">🌓</button>
   </div>
 </header>
 
     <main id="main-content" role="main">
-<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-down">ETSA --- QC</p><div class="tabs-container"  style="margin-top: var(--spacing-lg)" data-scroll-animation="fade-in-up"><ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tabs-4353988016-tab-0" data-bs-toggle="tab" data-bs-target="#tabs-4353988016-pane-0" type="button" role="tab" aria-controls="tabs-4353988016-pane-0" aria-selected="true">Overview</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4353988016-tab-1" data-bs-toggle="tab" data-bs-target="#tabs-4353988016-pane-1" type="button" role="tab" aria-controls="tabs-4353988016-pane-1" aria-selected="false">Timeline</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4353988016-tab-2" data-bs-toggle="tab" data-bs-target="#tabs-4353988016-pane-2" type="button" role="tab" aria-controls="tabs-4353988016-pane-2" aria-selected="false">Tech &amp; Docs</button></li></ul><div class="tab-content"><div class="tab-pane fade show active" id="tabs-4353988016-pane-0" role="tabpanel" aria-labelledby="tabs-4353988016-tab-0"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><h1>Entity Targeted Sentiment Analysis (Quantum Criticism)</h1>
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-down">ETSA --- QC</p><div class="tabs-container"  style="margin-top: var(--spacing-lg)" data-scroll-animation="fade-in-up"><ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tabs-4385796272-tab-0" data-bs-toggle="tab" data-bs-target="#tabs-4385796272-pane-0" type="button" role="tab" aria-controls="tabs-4385796272-pane-0" aria-selected="true">Overview</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4385796272-tab-1" data-bs-toggle="tab" data-bs-target="#tabs-4385796272-pane-1" type="button" role="tab" aria-controls="tabs-4385796272-pane-1" aria-selected="false">Timeline</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4385796272-tab-2" data-bs-toggle="tab" data-bs-target="#tabs-4385796272-pane-2" type="button" role="tab" aria-controls="tabs-4385796272-pane-2" aria-selected="false">Tech &amp; Docs</button></li></ul><div class="tab-content"><div class="tab-pane fade show active" id="tabs-4385796272-pane-0" role="tabpanel" aria-labelledby="tabs-4385796272-tab-0"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><h3><strong>AeVAA: An Explainable AI Framework for Aspect-Based Sentiment Analysis</strong></h3>
 
-<p>Part of the Quantum Criticism Research Project with: Assistant Professor David Guy Brizan, Alex Pezcon, and Harry Yin (MAGICS Lab @ University of San Francisco)</p>
+<p><strong>Project Summary:</strong> AeVAA is a modular, psychologically-grounded framework designed to provide an explainable and debuggable framework for Aspect-Based Sentiment Analysis (ABSA). It constructs a dynamic knowledge graph of entities and their interactions/relations, moving beyond "black-box" models to deliver nuanced, valence-aware sentiment scores with a clear, traceable reasoning process.</p>
 
-<h2>Overview</h2>
+<p><strong>My Role:</strong> I performed as the first author on the paper, leading the conception and development of the project. My contributions included: 1. designing the system architecture, developing the LLM-powered relation and modifier extraction modules, implementing the survey-based data collection pipeline, and building the benchmarking and ablation study framework.</p>
 
-<p>A unified, graph-centric pipeline for tracking how sentiment attaches to and evolves around entities and their aspects within any text. ETSA processes raw sentences one by one, builds a dynamic property graph of entities, entity interactions, and descriptive phrases. The graph scores sentiment at multiple levels to generate a final, entity-centric sentiment.</p>
+<hr />
 
-<h2>Pipeline</h2>
+<h3>The Problem: The "Black Box" of Modern Sentiment Analysis</h3>
 
-<p><center></p>
+<p>Most sentiment analysis tools produce a single, document-wide score, which fails to capture the complex sentiments directed at different subjects within a text. While Aspect-Based Sentiment Analysis (ABSA) addresses this by targeting specific entities, state-of-the-art, or SOTA, models (typically based on transformers like BERT, RoBERTa, etc) have three limitations:</p>
 
-<p><img src="/static/imgs/etsa_pipeline.png" alt="ETSA Pipeline" width="600"></p>
+<ol>
+<li><strong>Lack of Explainability:</strong> These systems are "black boxes." It is almost impossible to understand why a model makes particular decision, making it difficult to debug.</li>
+<li><strong>Poor Long-Context Handling:</strong> Most ABSA datasets are sentence-level, meaning the models trained on these datasets struggle to track document-wide sentiment analysis.</li>
+<li><strong>Limited Granularity:</strong> Many models frame the task as a discrete classification problem (Positive, Negative, Neutral), losing the nuance of sentiment intensity, or valence (e.g., -0.2 for "problematic" vs. -0.7 "disastrous").</li>
+</ol>
 
-<p></center></p>
+<h3>The Solution: AeVAA's Modular, Graph-Centric Approach</h3>
 
-<h2>Explainable Trace Example</h2>
+<p>AeVAA aims to solve these challenges by deconstructing the ABSA task into a multi-stage pipeline that models human cognitive processes. Instead of a single opaque model, AeVAA uses a series of modules that build upon each other to achieve a final sentiment score with an explanatory trace.</p>
 
-<p><img src="/static/imgs/pipeline_trace.png" alt="ETSA Pipeline Explainable Trace" width="600"></p>
+<p>This modularity makes the system highly interpretable, debuggable, and changable, meaning any component to be swapped out for a more advanced or explainable alternative.</p>
 
-<h2>Data Collection</h2>
+<hr />
 
-<p>ETSA is currently collecting data to optimize its sentiment analysis formulas. We would greatly appreciate if you completed the survey here:</p>
+<h3>Technical Deep Dive: System Architecture &amp; Skills</h3>
+
+<p>The AeVAA pipeline is composed of five core modules, each demonstrating a distinct set of technical and analytical skills.</p>
+
+<h4>1. Constituency Clause Extraction</h4>
 
 <ul>
-<li><a rel="nofollow noopener" target="_blank" href="https://etsa-survey.streamlit.app/">ETSA Survey</a> </li>
+<li><strong>Purpose:</strong> The system first breaks down raw text into grammatically coherent constituency clauses. This mirrors the hierarchical way humans parse information and ensures that entity interactions are analyzed within their correct local context.</li>
+<li><strong>Technology:</strong> We leveraged the <strong>Berkeley Neural Parser (Benepar)</strong>, integrated with a <strong>spaCy</strong> NLP pipeline, for its state-of-the-art accuracy in dependency and constituency parsing.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>NLP Fundamentals:</strong> Deep understanding of syntax, dependency parsing, and constituency grammars.</li>
+<li><strong>Python &amp; Library Integration:</strong> Implementing and configuring advanced NLP libraries like <code>spaCy</code> and <code>Benepar</code>.</li>
+</ul></li>
 </ul>
-</div></div><div class="tab-pane fade" id="tabs-4353988016-pane-1" role="tabpanel" aria-labelledby="tabs-4353988016-tab-1"><div class="timeline"  style="margin-bottom: var(--spacing-md)"><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-03-17</div><p>Began project ETSA --- QC</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.15s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-04-11</div><p>Joined the MAGICS Lab at USF</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.3s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-10-05</div><p>Finished the AeVAA paper</p></div></div></div></div><div class="tab-pane fade" id="tabs-4353988016-pane-2" role="tabpanel" aria-labelledby="tabs-4353988016-tab-2"><p class='mb-sm'><strong>Technologies Used:</strong> <span class="badge bg-secondary me-xs mb-xs">Python 3.x for backend processing</span><span class="badge bg-secondary me-xs mb-xs">Streamlit for hosting</span><span class="badge bg-secondary me-xs mb-xs">SpaCy for NLP</span><span class="badge bg-secondary me-xs mb-xs">REBEL for entity resolution</span><span class="badge bg-secondary me-xs mb-xs">NetworkX for graph processing</span><span class="badge bg-secondary me-xs mb-xs">Hugging Face Transformers for state-of-the-art models</span><span class="badge bg-secondary me-xs mb-xs">Maverick for coreference resolution</span><span class="badge bg-secondary me-xs mb-xs">Github for development</span><span class="badge bg-secondary me-xs mb-xs">Pandas for data manipulation</span><span class="badge bg-secondary me-xs mb-xs">Numpy for numerical operations</span><span class="badge bg-secondary me-xs mb-xs">Matplotlib for plotting</span></p><h5 class='mt-md mb-sm'>Documents & Links:</h5><div class="gap-md grid grid-cols-1 project-document-widgets"  style="margin-bottom: var(--spacing-md)"><div class="animate-fade-in-up widget-horizontal-layout"  style="margin-bottom: var(--spacing-md)" object-fit="ObjectFit.CONTAIN"><div class="widget-image-container" style="flex-basis: 100px; width: 100px; height: 100px"><img src="/static/imgs/placeholder.png" alt="Summary of Novelty" style="object-fit: cover; display: block; width: 100%; height: 100%"></div>
+
+<h4>2. Entity and Coreference Resolution</h4>
+
+<ul>
+<li><strong>Purpose:</strong> This module identifies all unique entities (aspects) in the text and resolves coreferences (e.g., linking "the laptop," "my computer," and "it" to the same underlying entity).</li>
+<li><strong>Technology:</strong> I implemented a hybrid approach combining a custom rule-based aspect extractor (trained on SemEval data) with <strong>Maverick</strong>, a state-of-the-art coreference resolution model. The spaCy <code>en_core_web_trf</code> model provided the foundational token-level features (NER, POS tags).</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Machine Learning:</strong> Training and applying rule-based models for Information Extraction.</li>
+<li><strong>NLP Pipelines:</strong> Named Entity Recognition (NER), Noun Chunking, and Coreference Resolution.</li>
+<li><strong>System Design:</strong> Engineering a hybrid system that combines the strengths of multiple models.</li>
+</ul></li>
+</ul>
+
+<h4>3. Relation and Modifier Extraction</h4>
+
+<ul>
+<li><strong>Purpose:</strong> The module identifies three crucial types of relationships between entities (<strong>Action</strong>, <strong>Association</strong>, <strong>Ownership</strong>) and extracts descriptive modifiers that carry sentiment (e.g., "incredibly fast," "terrible battery life").</li>
+<li><strong>Technology:</strong> As no off-the-shelf tools existed for this nuanced task, I developed a solution using the <strong>Google Gemma 27B</strong> Large Language Model. This involved designing a sophisticated few-shot prompting strategy with a strict output schema to ensure consistent, machine-readable JSON. The module also includes robust error handling, JSON parsing, and an intelligent caching layer to manage API costs and latency.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>AI &amp; LLM Engineering:</strong> Advanced prompt engineering, few-shot learning, and output structuring for generative models.</li>
+<li><strong>API Integration &amp; Management:</strong> Building resilient modules with rate limiting, backoff-retries, and file-based caching.</li>
+<li><strong>Data Structuring:</strong> Designing and validating complex JSON schemas for reliable data exchange.</li>
+</ul></li>
+</ul>
+
+<h4>4. Graph Construction and Layering</h4>
+
+<ul>
+<li><strong>Purpose:</strong> The extracted entities, modifiers, and relations are synthesized into a layered, directed multi-graph. Each clause represents a 2D layer where nodes are entity mentions and edges are relations. These layers are stacked chronologically along a Z-axis, with temporal edges connecting mentions of the same entity across clauses.</li>
+<li><strong>Technology:</strong> The entire graph structure was implemented using the <strong>NetworkX</strong> library. I also developed a custom visualization module using <strong>Plotly</strong> to generate interactive 3D renderings of the graph for debugging and analysis.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Data Structures &amp; Algorithms:</strong> Applied graph theory concepts to model complex linguistic phenomena.</li>
+<li><strong>Software Engineering:</strong> Designing a robust and extensible <code>RelationGraph</code> class with a clear API.</li>
+<li><strong>Data Visualization:</strong> Creating informative and interactive visualizations with <code>Plotly</code> and <code>Matplotlib</code>.</li>
+</ul></li>
+</ul>
+
+<h4>5. Sentiment Calculation and Aggregation</h4>
+
+<ul>
+<li><strong>Purpose:</strong> This final module calculates the sentiment. An initial valence score is assigned to each entity mention (based on its modifiers) and relation. These scores are then propagated through the graph using a suite of psychologically-grounded formulas. Finally, the clause-level scores for each entity are aggregated into a single, final sentiment value.</li>
+<li><strong>Technology:</strong> Initial sentiment is derived from a weighted ensemble of models, including a valence-mapped <strong>DistilBERT</strong> and <strong>VADER</strong>. The propagation and aggregation steps use custom formulas derived from human survey data (see below), implemented with <strong>NumPy</strong> and <strong>SciPy</strong>.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Sentiment Analysis:</strong> Implementing and ensembling multiple sentiment analysis models.</li>
+<li><strong>Algorithm Design:</strong> Developing a novel graph-based algorithm for sentiment propagation and aggregation.</li>
+<li><strong>Scientific Computing:</strong> Using <code>NumPy</code> for efficient numerical operations on sentiment scores.</li>
+</ul></li>
+</ul>
+
+<hr />
+
+<h3>Innovation: Psychologically-Grounded Sentiment Models</h3>
+
+<p>To move beyond simple heuristics, we needed to model how humans <em>actually</em> process and update their impressions. Since no existing dataset captured these dynamics, we aimed to create one.</p>
+
+<ol>
+<li><strong>Lexicon Generation:</strong> We built a lexicon optimizer that scored candidate words and phrases using a 9-model ensemble, perplexity scores (from GPT-2), and semantic cohesion to generate a high-quality lexicon for the survey.</li>
+<li><strong>Survey-Based Data Collection:</strong> We designed and implemented a survey using <strong>Streamlit</strong> to collect human sentiment judgments. The survey generated randomized, templated scenarios modeling different entity interactions (e.g., a positive entity performing a negative action on another positive entity) and aggregation effects (primacy vs. recency bias).</li>
+<li><strong>Formula Derivation:</strong> Using the collected pilot data (N=36), I fit parameters for a suite of candidate formulas using <strong>SciPy's</strong> optimization functions. These formulas, inspired by psychological concepts like negativity bias and the serial position effect, now power the AeVAA sentiment calculation module.</li>
+</ol>
+
+<p>This data-driven approach allows the model's reasoning to be grounded in observable human behavior, making its outputs not only explainable but also more intuitively aligned with how people perceive sentiment.</p>
+
+<hr />
+
+<h3>Results &amp; Impact</h3>
+
+<p>We evaluated the end-to-end AeVAA framework on the SemEval 2014 ABSA benchmark. While it did not achieve state-of-the-art accuracy (achieving <strong>78.58% accuracy</strong> on the Restaurant dataset), this was not the primary goal. The true impact of AeVAA lies in its <strong>explainability and debuggability</strong>.</p>
+
+<ul>
+<li><strong>Transparent Reasoning:</strong> The modular architecture and graph output provide a complete trace, allowing us to see exactly how a final score was derived—from the initial modifiers to the effect of each relational interaction.</li>
+<li><strong>Rapid Debugging:</strong> During evaluation, we quickly identified performance bottlenecks. For example, the explanatory traces revealed that the modifier extraction module was a primary source of error. By refining the LLM prompt, we significantly improved performance, a task that would be impossible with a black-box model.</li>
+<li><strong>Quantified Contributions:</strong> An ablation study confirmed that the modifier extraction module was the most critical component for accuracy, demonstrating the framework's utility for analytical research.</li>
+</ul>
+
+<p>AeVAA serves as a robust proof-of-concept, demonstrating that a modular, psychologically-grounded approach can create a powerful, trustworthy, and continuously improvable system for sentiment analysis.</p>
+
+<hr />
+
+<h3>Skills Showcase</h3>
+
+<ul>
+<li><strong>Programming &amp; Core Tech:</strong>
+<ul>
+<li><strong>Python:</strong> Advanced python including object-oriented design and package development.</li>
+<li><strong>Git &amp; GitHub:</strong> Version control, branching, and collaborative development.</li>
+<li><strong>Virtual Environments:</strong> <code>venv</code> for dependency management.</li>
+</ul></li>
+<li><strong>NLP &amp; Machine Learning:</strong>
+<ul>
+<li><strong>Core NLP:</strong> Dependency/Constituency Parsing, NER, POS Tagging, Coreference Resolution.</li>
+<li><strong>Libraries:</strong> <code>spaCy</code>, <code>NLTK</code>, <code>Transformers</code>, <code>PyTorch</code>, <code>Maverick</code>.</li>
+<li><strong>Sentiment Analysis:</strong> VADER, TextBlob, Flair, and various transformer-based models.</li>
+</ul></li>
+<li><strong>AI &amp; Large Language Models (LLMs):</strong>
+<ul>
+<li><strong>Prompt Engineering:</strong> Designing complex few-shot prompts with structured JSON output for Google Gemma.</li>
+<li><strong>API Integration:</strong> Building resilient services with caching, rate limiting, and error handling.</li>
+</ul></li>
+<li><strong>Data Science &amp; Scientific Computing:</strong>
+<ul>
+<li><strong>Libraries:</strong> <code>NumPy</code>, <code>Pandas</code>, <code>SciPy</code> (for optimization), <code>scikit-learn</code>.</li>
+<li><strong>Experimental Design:</strong> Designing and implementing a human-in-the-loop data collection survey.</li>
+<li><strong>Statistics:</strong> Model evaluation (MSE, R²), cross-validation, and statistical analysis.</li>
+</ul></li>
+<li><strong>Web &amp; Visualization:</strong>
+<ul>
+<li><strong>Streamlit:</strong> Developed a full-stack web application for data collection.</li>
+<li><strong>Data Visualization:</strong> <code>Plotly</code> and <code>Matplotlib</code> for creating interactive 3D graphs and static report figures.</li>
+</ul></li>
+</ul>
+</div></div><div class="tab-pane fade" id="tabs-4385796272-pane-1" role="tabpanel" aria-labelledby="tabs-4385796272-tab-1"><div class="timeline"  style="margin-bottom: var(--spacing-md)"><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-03-17</div><p>Began project ETSA --- QC</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.15s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-04-11</div><p>Joined the MAGICS Lab at USF</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.3s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-10-05</div><p>Finished the AeVAA paper</p></div></div></div></div><div class="tab-pane fade" id="tabs-4385796272-pane-2" role="tabpanel" aria-labelledby="tabs-4385796272-tab-2"><p class='mb-sm'><strong>Technologies Used:</strong> <span class="badge bg-secondary me-xs mb-xs">Python 3.x for backend processing</span><span class="badge bg-secondary me-xs mb-xs">Streamlit for hosting</span><span class="badge bg-secondary me-xs mb-xs">SpaCy for NLP</span><span class="badge bg-secondary me-xs mb-xs">REBEL for entity resolution</span><span class="badge bg-secondary me-xs mb-xs">NetworkX for graph processing</span><span class="badge bg-secondary me-xs mb-xs">Hugging Face Transformers for state-of-the-art models</span><span class="badge bg-secondary me-xs mb-xs">Maverick for coreference resolution</span><span class="badge bg-secondary me-xs mb-xs">Github for development</span><span class="badge bg-secondary me-xs mb-xs">Pandas for data manipulation</span><span class="badge bg-secondary me-xs mb-xs">Numpy for numerical operations</span><span class="badge bg-secondary me-xs mb-xs">Matplotlib for plotting</span></p><h5 class='mt-md mb-sm'>Documents & Links:</h5><div class="gap-md grid grid-cols-1 project-document-widgets"  style="margin-bottom: var(--spacing-md)"><div class="animate-fade-in-up widget-horizontal-layout"  style="margin-bottom: var(--spacing-md)" object-fit="ObjectFit.CONTAIN"><div class="widget-image-container" style="flex-basis: 100px; width: 100px; height: 100px"><img src="/static/imgs/placeholder.png" alt="Summary of Novelty" style="object-fit: cover; display: block; width: 100%; height: 100%"></div>
             <div class="widget-content-container d-flex flex-column">
                 <h5 class="widget-title">Summary of Novelty</h5>
                 <p class="widget-description flex-grow-1">View Summary of Novelty.</p>
