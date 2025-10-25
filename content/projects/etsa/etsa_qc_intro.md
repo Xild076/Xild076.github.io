@@ -8,6 +8,11 @@
 
 **My Role:** I performed as the first author on the paper, leading the conception and development of the project. My contributions included: 1. designing the system architecture, developing the LLM-powered relation and modifier extraction modules, implementing the survey-based data collection pipeline, and building the benchmarking and ablation study framework.
 
+**Co-authors:** 
+- Associate Professor David-Guy Brizan (Associate professor of CS at USFCA, project supervisor)
+- Alex Peczon (Undergraduate student in CS at USFCA, co-author)
+- Assistant Professor Sarah Hillenbrand (Assistant professor of neuroscience at USFCA, co-author and advisor)
+
 ---
 
 ### The Problem: The "Black Box" of Modern Sentiment Analysis
