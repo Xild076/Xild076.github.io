@@ -10,7 +10,7 @@
 
 ---
 
-### The Problem: Navigating the Maze of Misinformation
+### The Problem: Navigating Misinformation
 
 Misinformation isn't new, but the scale and speed at which it spreads today is. With endless news sources, echo chambers, and emotionally charged language, it's incredibly difficult to get a clear, unbiased picture of any given topic. A single event can be framed in dozens of different ways, leaving you to wonder what the core facts really are.
 
