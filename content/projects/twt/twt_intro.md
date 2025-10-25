@@ -16,7 +16,9 @@ While modern LLMs are powerful, they are extremely massive and costly. I decided
 
 ### The Solution: Multistage prompting
 
+
 Instead of one big "thinking" step, this project breaks down reasoning into a predictable, four-phase process inspired by how a person might tackle a problem: plan, gather information, synthesize, and refine. Each phase is handled by specialized prompts, creating an pseudo "chain of reasoning" that is both easy to follow and robust. 
+
 ---
 
 ### Technical Details: System Architecture & Skills
