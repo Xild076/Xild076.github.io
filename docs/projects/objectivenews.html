@@ -44,29 +44,27 @@
 </header>
 
     <main id="main-content" role="main">
-<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-down">Alitheia AI (Objective News)</p><div class="tabs-container"  style="margin-top: var(--spacing-lg)" data-scroll-animation="fade-in-up"><ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tabs-4342590272-tab-0" data-bs-toggle="tab" data-bs-target="#tabs-4342590272-pane-0" type="button" role="tab" aria-controls="tabs-4342590272-pane-0" aria-selected="true">Overview</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4342590272-tab-1" data-bs-toggle="tab" data-bs-target="#tabs-4342590272-pane-1" type="button" role="tab" aria-controls="tabs-4342590272-pane-1" aria-selected="false">Timeline</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4342590272-tab-2" data-bs-toggle="tab" data-bs-target="#tabs-4342590272-pane-2" type="button" role="tab" aria-controls="tabs-4342590272-pane-2" aria-selected="false">Tech &amp; Docs</button></li></ul><div class="tab-content"><div class="tab-pane fade show active" id="tabs-4342590272-pane-0" role="tabpanel" aria-labelledby="tabs-4342590272-tab-0"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p><center></p>
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-down">Alitheia AI (Objective News)</p><div class="tabs-container"  style="margin-top: var(--spacing-lg)" data-scroll-animation="fade-in-up"><ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tabs-4350978784-tab-0" data-bs-toggle="tab" data-bs-target="#tabs-4350978784-pane-0" type="button" role="tab" aria-controls="tabs-4350978784-pane-0" aria-selected="true">Overview</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4350978784-tab-1" data-bs-toggle="tab" data-bs-target="#tabs-4350978784-pane-1" type="button" role="tab" aria-controls="tabs-4350978784-pane-1" aria-selected="false">Timeline</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4350978784-tab-2" data-bs-toggle="tab" data-bs-target="#tabs-4350978784-pane-2" type="button" role="tab" aria-controls="tabs-4350978784-pane-2" aria-selected="false">Tech &amp; Docs</button></li></ul><div class="tab-content"><div class="tab-pane fade show active" id="tabs-4350978784-pane-0" role="tabpanel" aria-labelledby="tabs-4350978784-tab-0"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p><center></p>
 
-<h2>Alitheia AI - Objectifying News</h2>
-
-<p></center></p>
-
-<h3>The status quo of misinformation</h3>
-
-<p>Misinformation has always been a historical issue, whether it be in the era of the Greeks or the Dark ages. However, with growing access to technology and information, access to misinformation has also been amplified. This issue is worsened by the fact technology has made it much harder to distinguish between fact and fiction, resulting in even more confusion.</p>
-
-<p><center></p>
-
-<p><img src="/static/imgs/misinformation.png" alt="41% of Americans state that they see misinformation at least once a week." width="600"></p>
+<h3>Alitheia AI - An Engine for Objectifying News</h3>
 
 <p></center></p>
 
-<p>According to a survey done by Citizen Data in 2024, at least 83% of individuals have reported seeing some form of misinformation, with another 10% being unsure whether they've seen misinformation.</p>
+<p><strong>Project Summary:</strong> Alitheia AI was my attempt to build a tool to help navigate the complex and often biased world of online news. It's a multi-stage pipeline that automatically gathers news articles on a given topic, identifies the core underlying narratives, rewrites them to be more objective, and assigns a transparent reliability score. The goal is to move beyond simple "fact-checking" and instead provide users with a clear, neutralized view of what different sources are actually saying.</p>
 
-<p>Furthermore, misinformation can have devastating consequences, both on a societal and individual level. It can fuel distrust in institutions, manipulate public opinion, and lead to harmful decision-making. On a societal scale, it can undermine democracy, incite violence, and exacerbate divisions by spreading false narratives that polarize communities.</p>
+<p><strong>My Role:</strong> As the sole developer, I designed and built this project from the ground up. My work involved everything from architecting the data pipeline and implementing the web scraping tools to designing the clustering algorithms, building the language objectification engine, and creating the final interactive Streamlit application.</p>
 
-<h3>Alitheia AI and its solution</h3>
+<hr />
 
-<p>Alitheia AI presents a novel solution to providing unbiased and reliable news by implementing a full pipeline with AI elements to find, categorize, and objectify news.</p>
+<h3>The Problem: Navigating the Maze of Misinformation</h3>
+
+<p>Misinformation isn't new, but the scale and speed at which it spreads today is. With endless news sources, echo chambers, and emotionally charged language, it's incredibly difficult to get a clear, unbiased picture of any given topic. A single event can be framed in dozens of different ways, leaving you to wonder what the core facts really are.</p>
+
+<p>This project was born out of that frustration. I wanted to create a system that could automatically cut through the noise, strip away the spin, and present the fundamental narratives in a way that was easy to understand and trust.</p>
+
+<h3>The Solution: A Pipeline for Clarity</h3>
+
+<p>Alitheia AI tackles this problem with a structured, multi-stage pipeline. Instead of relying on a single, opaque model to declare what's "true," it deconstructs the problem into a series of transparent, logical steps: gather, group, objectify, score, and present.</p>
 
 <p><center></p>
 
@@ -74,39 +72,118 @@
 
 <p></center></p>
 
-<p>The process begins by collecting news articles and opinion pieces from various sources using information retrieval techniques. The system employs a combination of web scraping and API-based retrieval (e.g., Google News API, Bing News API, and NewsAPI) to ensure a diverse range of perspectives. Additionally, sources are filtered and ranked based on reliability metrics, ensuring that high-quality sources are prioritized.</p>
+<p>This modular approach makes the entire process explainable. You can see which sources were used, how narratives were grouped, and what language was changed, giving you full transparency into the final output.</p>
 
-<p>Once the articles are collected, textual clustering is applied. This step groups articles based on their core arguments rather than just keywords. Using sentence embeddings and unsupervised clustering methods like HDBSCAN, the system ensures that similar articles are categorized together, allowing for an organized and comparative analysis of different perspectives on the same topic.</p>
+<hr />
 
-<p>Next, the fake news detection module is applied. This is powered by a CNN-LSTM model trained on datasets such as LIAR, ISOT, and other benchmarked fake news datasets. By leveraging deep learning architectures, the system assigns a confidence score to each article, indicating the probability of misinformation.</p>
+<h3>Technical Deep Dive: System Architecture &amp; Skills</h3>
 
-<p>To further enhance objectivity, the system incorporates an objectification and bias removal step. This involves rule-based NLP processing to eliminate highly emotive language and biased phrasing without altering the core meaning of the text. Additionally, a fine-tuned BART-based summarization model is tested to further refine objectivity by rephrasing articles in a neutral tone.</p>
+<p>The Alitheia AI pipeline is composed of several core modules, each designed to handle a specific part of the analysis process.</p>
 
-<p>Once bias is mitigated, the reliability calculation module assesses the trustworthiness of each article based on source credibility, objectivity scores, and historical accuracy of the outlet. A weighted scoring system ensures that highly reliable articles receive higher prominence.</p>
+<h4>1. Intelligence Gathering &amp; Web Scraping</h4>
 
-<p>Simultaneously, the opinion extraction step identifies editorialized content and logical fallacies in opinion articles. A zero-shot classification model (BART-based) is used to distinguish news, opinions, and facts, while a fallacy detection model flags arguments containing logical inconsistencies.</p>
+<ul>
+<li><strong>Purpose:</strong> To start, the I needed to gather a wide and diverse range of articles on a topic.</li>
+<li><strong>Technology:</strong> I built a resilient web scraper using <code>requests</code> and <code>BeautifulSoup</code>. It employs a dual-strategy approach: it first tries the more structured <strong>Google News RSS feed</strong> and falls back to <strong>HTML scraping</strong> if that fails. To extract clean article text from messy web pages, I integrated <code>trafilatura</code> and <code>newspaper3k</code>.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Web Scraping &amp; Data Extraction:</strong> Building a robust tool that can handle different web formats and gracefully manage failures.</li>
+<li><strong>System Design:</strong> Implementing a multi-strategy, fault-tolerant data retrieval system.</li>
+</ul></li>
+</ul>
 
-<p>Finally, all processed information is presented through an interactive user interface. Users can explore articles categorized by topic clusters, compare different perspectives, and examine reliability breakdowns for each piece of news. Transparency features, such as an explanation panel for AI-generated scores, enhance trust in the system.</p>
+<h4>2. Narrative Clustering with Unsupervised Learning</h4>
 
-<p>Through this multi-stage pipeline, Alitheia AI aims to empower users with factual, unbiased, and objective news, ensuring that misinformation and bias no longer distort the truth.</p>
+<ul>
+<li><strong>Purpose:</strong> I grouped sentences and articles by their core argument, to locate key narratives.</li>
+<li><strong>Technology:</strong> I used a sentence-embedding approach with <code>Sentence-Transformers</code> (<code>all-MiniLM-L6-v2</code>) to convert text into numerical vectors. To handle the unknown number of narratives, I used <code>HDBSCAN</code>, a density-based clustering algorithm. For performance, I used <code>UMAP</code> for dimensionality reduction before clustering. A significant part of this work involved hyperparameter tuning with <strong>Optuna</strong> to find the optimal settings for the clustering pipeline, which I logged and tracked.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Unsupervised Machine Learning:</strong> Applying density-based clustering (HDBSCAN) to a real-world NLP task.</li>
+<li><strong>NLP &amp; Embeddings:</strong> Using sentence embeddings to capture semantic meaning for clustering.</li>
+<li><strong>Hyperparameter Optimization:</strong> Using <code>Optuna</code> to systematically find the best parameters for the clustering algorithm.</li>
+</ul></li>
+</ul>
 
-<p>You can try this program out here: <a rel="nofollow noopener" target="_blank" href="https://objectivenews.streamlit.app/">https://objectivenews.streamlit.app/</a></p>
+<h4>3. Language Objectification &amp; Bias Removal</h4>
 
-<h3>Innovations</h3>
+<ul>
+<li><strong>Purpose:</strong> To get to the factual heart of a narrative, I create a system to identify and neutralize subjective, emotionally charged language.</li>
+<li><strong>Technology:</strong> I built a custom, rule-based objectification engine. It uses an ensemble of lexicon-based tools (<code>TextBlob</code>, <code>VaderSentiment</code>, <code>NLTK SentiWordNet</code>, and the MPQA subjectivity lexicon) to calculate an "objectivity score" for each word. For subjective words, it uses <code>WordNet</code> and other APIs to find more neutral synonyms and intelligently replaces them while trying to preserve grammatical correctness.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Computational Linguistics:</strong> Designing and implementing a rule-based system for language transformation.</li>
+<li><strong>Algorithm Design:</strong> Creating a novel algorithm for scoring word objectivity and finding neutral alternatives.</li>
+</ul></li>
+</ul>
 
-<p>Alitheia AI includes some novel key improvements when compared to previous methods of objectifying news:</p>
+<h4>4. Dynamic Reliability Scoring</h4>
 
+<ul>
+<li><strong>Purpose:</strong> I create a system to provide a transparent score for how trustworthy each narrative is.</li>
+<li><strong>Technology:</strong> I developed a multi-factor reliability score calculated from:
 <ol>
-<li>It collects news from diverse sources to ensure a comprehensive perspective  </li>
-<li>It groups similar points of information within articles together for easy reading using innovative techniques like context and untrained self-attention  </li>
-<li>It uses a novel rule-based method to objectify text with NLP  </li>
-<li>It creates a dynamic reliability score to avoid the binary choice of "fact" and "fiction"  </li>
-</ol>
+<li><strong>Source Reputation:</strong> Pulled from a pre-compiled dataset of source bias ratings.</li>
+<li><strong>Source Diversity:</strong> Narratives supported by more sources are scored higher.</li>
+<li><strong>Objectivity:</strong> The calculated objectivity score from the previous module.</li>
+<li><strong>Recency &amp; Temporal Cohesion:</strong> How recent and chronologically consistent the reporting is.</li>
+</ol></li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Data Analysis:</strong> Combining multiple features into a single, meaningful score.</li>
+<li><strong>Feature Engineering:</strong> Designing and implementing metrics for source diversity and temporal consistency.</li>
+</ul></li>
+</ul>
+
+<h4>5. Summarization &amp; User Interface</h4>
+
+<ul>
+<li><strong>Purpose:</strong> The final step was to present all this complex information in a simple, intuitive way.</li>
+<li><strong>Technology:</strong> I built a multi-page web application using <strong>Streamlit</strong>. The app provides different views for analyzing articles, exploring the objectification engine, and more. For summaries, the pipeline can use fast extractive methods or a more powerful abstractive model (<strong>Gemma</strong>) for higher quality.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Web Development:</strong> Building a full-stack, interactive web application with <code>Streamlit</code>.</li>
+<li><strong>UI/UX Design:</strong> Designing a user-friendly interface to present complex analytical results.</li>
+</ul></li>
+</ul>
+
+<hr />
 
 <h3>Conclusion</h3>
 
-<p>Alitheia AI is dedicated to improving the way we consume information. By leveraging AI to remove bias, detect misinformation, and provide transparency, my final goal is to give users the tools needed to navigate today's world of misinformation with a little more trust. Cheers!</p>
-</div></div><div class="tab-pane fade" id="tabs-4342590272-pane-1" role="tabpanel" aria-labelledby="tabs-4342590272-tab-1"><div class="timeline"  style="margin-bottom: var(--spacing-md)"><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-10-01</div><p>Began project Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.15s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-12-15</div><p>Completed the first beta version of Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.3s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-01-02</div><p>Completed the second beta version of Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.44999999999999996s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-02-09</div><p>Completed official proposal paper for full version of Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.6s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-03-06</div><p>Renamed project to Alitheia AI (Greek for &#x27;truth&#x27;)</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.75s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-07-25</div><p>Massive rework including but not limited to: improved clustering algorithms, hyperparameter tuning, self-attention model trained with meta-learning, etc... (see project page for more details)</p></div></div></div></div><div class="tab-pane fade" id="tabs-4342590272-pane-2" role="tabpanel" aria-labelledby="tabs-4342590272-tab-2"><p class='mb-sm'><strong>Technologies Used:</strong> <span class="badge bg-secondary me-xs mb-xs">Python 3.x for backend processing</span><span class="badge bg-secondary me-xs mb-xs">Streamlit for hosting</span><span class="badge bg-secondary me-xs mb-xs">Stanza for NLP</span><span class="badge bg-secondary me-xs mb-xs">Hugging Face Transformers for state-of-the-art models</span><span class="badge bg-secondary me-xs mb-xs">Scikit-learn for clustering</span><span class="badge bg-secondary me-xs mb-xs">BeautifulSoup for web scraping</span><span class="badge bg-secondary me-xs mb-xs">Requests for HTTP requests</span><span class="badge bg-secondary me-xs mb-xs">Github for development</span></p><h5 class='mt-md mb-sm'>Documents & Links:</h5><div class="gap-md grid grid-cols-1 project-document-widgets"  style="margin-bottom: var(--spacing-md)"><div class="animate-fade-in-up widget-horizontal-layout"  style="margin-bottom: var(--spacing-md)" object-fit="ObjectFit.CONTAIN"><div class="widget-image-container" style="flex-basis: 100px; width: 100px; height: 100px"><img src="/static/imgs/placeholder.png" alt="Beta Paper" style="object-fit: cover; display: block; width: 100%; height: 100%"></div>
+<p>Alitheia AI was a challenging but incredibly rewarding project. It was a deep dive into the practical application of NLP and ML to a real-world problem that I'm passionate about. By building this tool, I not only honed my technical skills but also developed a deeper appreciation for the complexities of language and information. My hope is that this project demonstrates a viable path toward creating AI tools that don't just give answers, but promote clarity and critical thinking. Cheers!</p>
+
+<p>You can try out the live application here: <strong><a rel="nofollow noopener" target="_blank" href="https://objectivenews.streamlit.app/">https://objectivenews.streamlit.app/</a></strong></p>
+
+<hr />
+
+<h3>Skills Showcase</h3>
+
+<ul>
+<li><strong>Programming &amp; Core Tech:</strong>
+<ul>
+<li><strong>Python:</strong> Advanced proficiency in building multi-module applications, including OOP and data processing.</li>
+<li><strong>Git &amp; GitHub:</strong> Version control for project management.</li>
+</ul></li>
+<li><strong>NLP &amp; Machine Learning:</strong>
+<ul>
+<li><strong>Core NLP:</strong> Text preprocessing, sentence splitting, POS tagging, lemmatization.</li>
+<li><strong>Libraries:</strong> <code>spaCy</code>, <code>NLTK</code>, <code>Sentence-Transformers</code>, <code>scikit-learn</code>, <code>PyTorch</code>.</li>
+<li><strong>Unsupervised Learning:</strong> HDBSCAN, UMAP, KMeans for narrative clustering.</li>
+<li><strong>Hyperparameter Tuning:</strong> <code>Optuna</code> for optimizing the clustering pipeline.</li>
+</ul></li>
+<li><strong>Data Science &amp; Scientific Computing:</strong>
+<ul>
+<li><strong>Libraries:</strong> <code>NumPy</code>, <code>Pandas</code>, <code>SciPy</code>.</li>
+<li><strong>Algorithm Design:</strong> Developed custom algorithms for objectivity and reliability scoring.</li>
+</ul></li>
+<li><strong>Web Scraping &amp; Development:</strong>
+<ul>
+<li><strong>Scraping:</strong> <code>requests</code>, <code>BeautifulSoup</code>, <code>trafilatura</code>, <code>newspaper3k</code>.</li>
+<li><strong>Web App:</strong> <code>Streamlit</code> for building and deploying the interactive UI.</li>
+</ul></li>
+</ul>
+</div></div><div class="tab-pane fade" id="tabs-4350978784-pane-1" role="tabpanel" aria-labelledby="tabs-4350978784-tab-1"><div class="timeline"  style="margin-bottom: var(--spacing-md)"><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-10-01</div><p>Began project Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.15s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-12-15</div><p>Completed the first beta version of Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.3s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-01-02</div><p>Completed the second beta version of Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.44999999999999996s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-02-09</div><p>Completed official proposal paper for full version of Objective News</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.6s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-03-06</div><p>Renamed project to Alitheia AI (Greek for &#x27;truth&#x27;)</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.75s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2025-07-25</div><p>Massive rework including but not limited to: improved clustering algorithms, hyperparameter tuning, self-attention model trained with meta-learning, etc... (see project page for more details)</p></div></div></div></div><div class="tab-pane fade" id="tabs-4350978784-pane-2" role="tabpanel" aria-labelledby="tabs-4350978784-tab-2"><p class='mb-sm'><strong>Technologies Used:</strong> <span class="badge bg-secondary me-xs mb-xs">Python 3.x for backend processing</span><span class="badge bg-secondary me-xs mb-xs">Streamlit for hosting</span><span class="badge bg-secondary me-xs mb-xs">Stanza for NLP</span><span class="badge bg-secondary me-xs mb-xs">Hugging Face Transformers for state-of-the-art models</span><span class="badge bg-secondary me-xs mb-xs">Scikit-learn for clustering</span><span class="badge bg-secondary me-xs mb-xs">BeautifulSoup for web scraping</span><span class="badge bg-secondary me-xs mb-xs">Requests for HTTP requests</span><span class="badge bg-secondary me-xs mb-xs">Github for development</span></p><h5 class='mt-md mb-sm'>Documents & Links:</h5><div class="gap-md grid grid-cols-1 project-document-widgets"  style="margin-bottom: var(--spacing-md)"><div class="animate-fade-in-up widget-horizontal-layout"  style="margin-bottom: var(--spacing-md)" object-fit="ObjectFit.CONTAIN"><div class="widget-image-container" style="flex-basis: 100px; width: 100px; height: 100px"><img src="/static/imgs/placeholder.png" alt="Beta Paper" style="object-fit: cover; display: block; width: 100%; height: 100%"></div>
             <div class="widget-content-container d-flex flex-column">
                 <h5 class="widget-title">Beta Paper</h5>
                 <p class="widget-description flex-grow-1">View Beta Paper.</p>

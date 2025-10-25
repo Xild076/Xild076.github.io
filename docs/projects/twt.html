@@ -44,12 +44,129 @@
 </header>
 
     <main id="main-content" role="main">
-<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-down">Thinking without Thinking</p><div class="tabs-container"  style="margin-top: var(--spacing-lg)" data-scroll-animation="fade-in-up"><ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tabs-4369018384-tab-0" data-bs-toggle="tab" data-bs-target="#tabs-4369018384-pane-0" type="button" role="tab" aria-controls="tabs-4369018384-pane-0" aria-selected="true">Overview</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4369018384-tab-1" data-bs-toggle="tab" data-bs-target="#tabs-4369018384-pane-1" type="button" role="tab" aria-controls="tabs-4369018384-pane-1" aria-selected="false">Timeline</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4369018384-tab-2" data-bs-toggle="tab" data-bs-target="#tabs-4369018384-pane-2" type="button" role="tab" aria-controls="tabs-4369018384-pane-2" aria-selected="false">Tech &amp; Docs</button></li></ul><div class="tab-content"><div class="tab-pane fade show active" id="tabs-4369018384-pane-0" role="tabpanel" aria-labelledby="tabs-4369018384-tab-0"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p><center></p>
+<div class="container py-lg"  style="margin-bottom: var(--spacing-md)"><p class="h1 mb-lg text-center text-left"  style="margin-bottom: var(--spacing-md)" data-scroll-animation="fade-in-down">Thinking without Thinking</p><div class="tabs-container"  style="margin-top: var(--spacing-lg)" data-scroll-animation="fade-in-up"><ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tabs-4350978832-tab-0" data-bs-toggle="tab" data-bs-target="#tabs-4350978832-pane-0" type="button" role="tab" aria-controls="tabs-4350978832-pane-0" aria-selected="true">Overview</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4350978832-tab-1" data-bs-toggle="tab" data-bs-target="#tabs-4350978832-pane-1" type="button" role="tab" aria-controls="tabs-4350978832-pane-1" aria-selected="false">Timeline</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tabs-4350978832-tab-2" data-bs-toggle="tab" data-bs-target="#tabs-4350978832-pane-2" type="button" role="tab" aria-controls="tabs-4350978832-pane-2" aria-selected="false">Tech &amp; Docs</button></li></ul><div class="tab-content"><div class="tab-pane fade show active" id="tabs-4350978832-pane-0" role="tabpanel" aria-labelledby="tabs-4350978832-tab-0"><div class="markdown-content"  style="margin-bottom: var(--spacing-md)"><p><center></p>
 
-<h2>Thinking Without Thinking - A free, open source thinking</h2>
+<h3><strong>Thinking Without Thinking: An Explainable Agentic AI Pipeline</strong></h3>
 
 <p></center></p>
-</div></div><div class="tab-pane fade" id="tabs-4369018384-pane-1" role="tabpanel" aria-labelledby="tabs-4369018384-tab-1"><div class="timeline"  style="margin-bottom: var(--spacing-md)"><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-08-29</div><p>Begin development of Thinking Without Thinking</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.15s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-08-30</div><p>Implemented the first system of self-criticism began hosting on Streamlit</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.3s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-10-15</div><p>Began reworking TWT to include pipeline blocks system</p></div></div></div></div><div class="tab-pane fade" id="tabs-4369018384-pane-2" role="tabpanel" aria-labelledby="tabs-4369018384-tab-2"><p class='mb-sm'><strong>Technologies Used:</strong> <span class="badge bg-secondary me-xs mb-xs">Python 3.x for backend processing</span><span class="badge bg-secondary me-xs mb-xs">Streamlit for hosting</span><span class="badge bg-secondary me-xs mb-xs">Google API keys for content generation</span><span class="badge bg-secondary me-xs mb-xs">Github for development</span></p></div></div></div></div>    </main>
+
+<p><strong>Project Summary:</strong> "Thinking Without Thinking" started as a fun personal project to see if I could create a more structured and transparent "thought process" for an AI using just prompt engineering. It's an agentic reasoning pipeline that deconstructs user query into steps that integrate custom tools to generate the best possible answer.</p>
+
+<p><strong>My Role:</strong> I was the sole developer and designed and built the entire system.</p>
+
+<hr />
+
+<h3>The Problem: Costly LLMs</h3>
+
+<p>While modern LLMs are powerful, they are extremely massive and costly. I decided to take a shot to see if I could use a cheap and free model (Gemma 27B) to match the quality of a model 25x its size (something like Deepseek v3.1, the high quality model of which I knew the parameter size).</p>
+
+<h3>The Solution: Multistage prompting</h3>
+
+<h2>Instead of one big "thinking" step, this project breaks down reasoning into a predictable, four-phase process inspired by how a person might tackle a problem: plan, gather information, synthesize, and refine. Each phase is handled by specialized prompts, creating an pseudo "chain of reasoning" that is both easy to follow and robust. </h2>
+
+<h3>Technical Details: System Architecture &amp; Skills</h3>
+
+<p>The pipeline is orchestrated by a central <code>ThinkingPipeline</code> class that dynamically routes a user's query through a sequence of "blocks."</p>
+
+<h4>1. Phase 1: Meta-Reasoning (Planning &amp; Routing)</h4>
+
+<ul>
+<li><strong>Purpose:</strong> Before doing any work, the system first creates a strategy to answer the prompt. Then, another prompt has the model create a machine-readable tool usage plan to integrate the necessary context into the system.</li>
+<li><strong>Technology:</strong> This is powered entirely by a series of chained prompts sent to the <strong>Google Gemma 27B</strong> model.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>AI &amp; LLM Engineering:</strong> Advanced prompt engineering, designing self-correction loops, and structured data extraction from model outputs.</li>
+<li><strong>System Design:</strong> Architecting a meta-reasoning layer that improves the reliability of downstream tasks.</li>
+</ul></li>
+</ul>
+
+<h4>2. Phase 2: Tool Execution</h4>
+
+<ul>
+<li><strong>Purpose:</strong> The pipeline executes the planned blocks in sequence, using the output of one block as potential input for the next. This allows the system to gather and process information from multiple sources.</li>
+<li><strong>Technology:</strong>
+<ul>
+<li><strong>Code Tool:</strong> Executes Python code in a sandboxed environment using the <code>subprocess</code> module. It automatically captures stdout, handles errors, and uses a custom <code>matplotlib</code> hook to save any generated plots to temporary files.</li>
+<li><strong>Internet Tool:</strong> Performs live web searches through HTML scraping with <code>requests</code> and <code>BeautifulSoup</code> if the feed fails. Article content is then extracted using <code>trafilatura</code> and <code>newspaper3k</code>.</li>
+<li><strong>Creative Tool:</strong> Uses a high-temperature LLM call to brainstorm a diverse set of ideas and then uses a separate, low-temperature evaluation prompt to select the most promising one.</li>
+</ul></li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Software Engineering:</strong> Building sandboxed execution environments and creating robust, fault-tolerant tool integrations.</li>
+<li><strong>Web Scraping &amp; Data Extraction:</strong> Combining multiple libraries to build a resilient web scraping tool that handles failures gracefully.</li>
+<li><strong>API Integration:</strong> Interfacing with external services and handling their outputs within a unified pipeline.</li>
+</ul></li>
+</ul>
+
+<h4>3. Phase 3: Synthesis &amp; Self-Correction</h4>
+
+<ul>
+<li><strong>Purpose:</strong> This module gathers all the collected information (code outputs, web summaries, brainstormed ideas) and synthesizes a comprehensive, human-readable answer. This initial draft is then "scored" by another LLM call, which provides feedback, and a final "improver" prompt refines the answer based on this feedback.</li>
+<li><strong>Technology:</strong> This phase relies on prompt engineering that instruct the LLM to consolidate context, generate a draft, critique it based on a rubric (clarity, logic, actionability), and then produce a final, polished version.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Prompt Engineering:</strong> Designing a multi-step editorial review process using LLMs.</li>
+<li><strong>Content Synthesis:</strong> Building prompts that can effectively synthesize information from disparate sources into a coherent narrative.</li>
+</ul></li>
+</ul>
+
+<h4>4. Phase 4: Transparent User Interface</h4>
+
+<ul>
+<li><strong>Purpose:</strong> The entire process is demonstrated through an interactive web application, allowing a user to see the final answer and inspect every step the agent took to get there.</li>
+<li><strong>Technology:</strong> I built the UI using Streamlit.</li>
+<li><strong>Skills Demonstrated:</strong>
+<ul>
+<li><strong>Web Development:</strong> Creating a full-stack, interactive web application with <code>Streamlit</code>.</li>
+<li><strong>UI/UX Design:</strong> Designing an intuitive interface for visualizing complex, multi-step processes.</li>
+<li><strong>Data Visualization:</strong> Presenting logs, code, and structured JSON in an easily digestible format.</li>
+</ul></li>
+</ul>
+
+<hr />
+
+<h3>Results &amp; Impact</h3>
+
+<p>The result is an AI that does what every math teacher wants you to do: show its work. </p>
+
+<ul>
+<li><strong>Reliable Tool Use:</strong> The system can successfully perform complex tasks like searching for recent news, writing Python code to analyze it, generating a plot, and embedding that plot into a final summary, all within a single query.</li>
+<li><strong>Full Transparency:</strong> The Streamlit UI provides complete insight into the agent's reasoning, making it a powerful tool for understanding how these models "think."</li>
+</ul>
+
+<hr />
+
+<h3>Skills Showcase</h3>
+
+<ul>
+<li><strong>Programming &amp; Core Tech:</strong>
+<ul>
+<li><strong>Python:</strong> Advanced proficiency, including object-oriented design, <code>subprocess</code> management, and package development.</li>
+<li><strong>Git &amp; GitHub:</strong> Version control and project management.</li>
+</ul></li>
+<li><strong>AI &amp; Large Language Models (LLMs):</strong>
+<ul>
+<li><strong>Prompt Engineering:</strong> Designing complex, chained prompts for planning, execution, self-critique, and synthesis with Google Gemma.</li>
+<li><strong>Agentic AI Design:</strong> Architecting a multi-step reasoning pipeline with tool-use and self-correction loops.</li>
+</ul></li>
+<li><strong>Web Scraping &amp; Data Extraction:</strong>
+<ul>
+<li><strong>Libraries:</strong> <code>requests</code>, <code>BeautifulSoup</code>, <code>trafilatura</code>, <code>newspaper3k</code>.</li>
+<li><strong>Strategy:</strong> Implemented a robust dual-strategy (RSS + HTML) approach for data retrieval.</li>
+</ul></li>
+<li><strong>Web &amp; Visualization:</strong>
+<ul>
+<li><strong>Streamlit:</strong> Developed a full-stack, interactive web application for demonstrating the pipeline.</li>
+<li><strong>PDF Generation:</strong> <code>ReportLab</code> and <code>PyPDF2</code> for creating and reading PDF documents.</li>
+<li><strong>Data Visualization:</strong> <code>Matplotlib</code> for generating plots within the sandboxed code environment.</li>
+</ul></li>
+<li><strong>Software Engineering:</strong>
+<ul>
+<li><strong>System Design:</strong> Architecting a modular, block-based system for easy extension.</li>
+<li><strong>API Integration:</strong> Building resilient modules with caching, error handling, and rate limiting.</li>
+</ul></li>
+</ul>
+</div></div><div class="tab-pane fade" id="tabs-4350978832-pane-1" role="tabpanel" aria-labelledby="tabs-4350978832-tab-1"><div class="timeline"  style="margin-bottom: var(--spacing-md)"><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-08-29</div><p>Begin development of Thinking Without Thinking</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.15s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-08-30</div><p>Implemented the first system of self-criticism began hosting on Streamlit</p></div></div><div class="timeline-item"  style="margin-top: 0; margin-bottom: var(--spacing-lg)" data-scroll-animation="fade-in-left" data-scroll-animation-delay="0.3s"><div class="timeline-marker"></div><div class="timeline-content"><div class="timeline-time">2024-10-15</div><p>Began reworking TWT to include pipeline blocks system</p></div></div></div></div><div class="tab-pane fade" id="tabs-4350978832-pane-2" role="tabpanel" aria-labelledby="tabs-4350978832-tab-2"><p class='mb-sm'><strong>Technologies Used:</strong> <span class="badge bg-secondary me-xs mb-xs">Python 3.x for backend processing</span><span class="badge bg-secondary me-xs mb-xs">Streamlit for hosting</span><span class="badge bg-secondary me-xs mb-xs">Google API keys for content generation</span><span class="badge bg-secondary me-xs mb-xs">Github for development</span></p></div></div></div></div>    </main>
 
     <footer class="site-footer">
         <div class="container">
