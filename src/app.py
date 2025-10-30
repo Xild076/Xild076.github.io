@@ -255,7 +255,7 @@ def build_about_page(site:Site):
     with page.Container(css_class="my_lg"):
         with page.Columns(n=2, gap=Spacing.XL, spacing_before=Spacing.LG):
             with page.Container(css_class="d-flex justify-content-center align-items-center"):
-                page.Image("/static/imgs/profileimage.png", alt="Harry Yin", 
+                page.Image("/static/imgs/profileimage.jpg", alt="Harry Yin", 
                          caption="Harry Yin - Developer & Researcher", 
                          width="350px", height="350px", object_fit=ObjectFit.COVER, 
                          align=Alignment.CENTER)
@@ -276,7 +276,7 @@ Feel free to explore my projects and blog, and I'm always open to collaboration 
                 with page.Container(css_class="d-flex gap-2 mt-3"):
                     page.Button("EXEC PROJECTS", link="/projects.html", style_type=ButtonType.PRIMARY)
                     page.Button("READ BLOG", link="/blog.html", style_type=ButtonType.OUTLINE_PRIMARY)
-            page.Image("/static/imgs/pengu.png", alt="Penguin", caption="penguine!!!", align=Alignment.CENTER)
+        page.Image("/static/imgs/pengu.png", alt="Penguin", caption="penguine!!!", align=Alignment.CENTER)
 
 def add_project_pages(site : Site):
     site.add_project_page(
