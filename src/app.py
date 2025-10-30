@@ -250,7 +250,7 @@ def build_about_page(site:Site):
     
     with page.Background(color="var(--light)", padding=Spacing.XL, animation=AnimationType.FADE_IN, css_class="rounded-lg hero-section"):
         page.Write("About Me", align=Alignment.CENTER, spacing_after=Spacing.MD, text_size="42px", text_color="var(--heading-color)")
-        page.Write("Getting to know the person behind the code", align=Alignment.CENTER, spacing_after=Spacing.LG, text_color="var(--text-secondary)")
+        page.Write("(About me!!!)", align=Alignment.CENTER, spacing_after=Spacing.LG, text_color="var(--text-secondary)")
     
     with page.Container(css_class="my_lg"):
         with page.Columns(n=2, gap=Spacing.XL, spacing_before=Spacing.LG):
