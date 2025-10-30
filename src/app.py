@@ -255,7 +255,7 @@ def build_about_page(site:Site):
     with page.Container(css_class="my_lg"):
         with page.Columns(n=2, gap=Spacing.XL, spacing_before=Spacing.LG):
             with page.Container(css_class="d-flex justify-content-center align-items-center"):
-                page.Image("/static/imgs/placeholder.png", alt="Harry Yin", 
+                page.Image("/static/imgs/profileimage.png", alt="Harry Yin", 
                          caption="Harry Yin - Developer & Researcher", 
                          width="350px", height="350px", object_fit=ObjectFit.COVER, 
                          align=Alignment.CENTER)
