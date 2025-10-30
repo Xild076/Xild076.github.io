@@ -276,7 +276,7 @@ Feel free to explore my projects and blog, and I'm always open to collaboration 
                 with page.Container(css_class="d-flex gap-2 mt-3"):
                     page.Button("EXEC PROJECTS", link="/projects.html", style_type=ButtonType.PRIMARY)
                     page.Button("READ BLOG", link="/blog.html", style_type=ButtonType.OUTLINE_PRIMARY)
-            page.Image("/static/imgs/pengu.png", alt="Penguin", caption="penguine!!!")
+            page.Image("/static/imgs/pengu.png", alt="Penguin", caption="penguine!!!", align=Alignment.CENTER)
 
 def add_project_pages(site : Site):
     site.add_project_page(
