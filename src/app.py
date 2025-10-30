@@ -261,11 +261,22 @@ def build_about_page(site:Site):
                          align=Alignment.CENTER)
             
             with page.Container(css_class="d-flex flex-column justify-content-center"):
-                page.Markdown("""Hello, I'm Harry, I'm gonna finish this bit soon!""", align=Alignment.LEFT)
+                page.Markdown("""Hi, I'm Harry!
+
+I'm an aspiring data scientist and researcher! I love working on projects that involve the analysis of complex data like text and human emotions, using tools to analyze and model such processes. 
+
+My main interests lie in natural language processing, machine learning, and AI ethics. I've worked extensively with Python, scikit learn, spacy, and various other machine learning libraries to build projects. Currently, I'm exploring symbolic systems and their application to creating interpretable models.
+
+In my free time, I enjoy reading a lot of novels, writing my own short stories, and sleeping. I also like swimming and playing some video games when I have the time.
+
+Feel free to explore my projects and blog, and I'm always open to collaboration or discussion on interesting topics!
+
+                              """, align=Alignment.LEFT)
                 
                 with page.Container(css_class="d-flex gap-2 mt-3"):
                     page.Button("EXEC PROJECTS", link="/projects.html", style_type=ButtonType.PRIMARY)
                     page.Button("READ BLOG", link="/blog.html", style_type=ButtonType.OUTLINE_PRIMARY)
+            page.Image("/static/imgs/pengu.png", alt="Penguin", caption="penguine!!!")
 
 def add_project_pages(site : Site):
     site.add_project_page(
