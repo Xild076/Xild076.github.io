@@ -44,8 +44,8 @@ def build_index_page(site: Site):
                     page.Image("/static/imgs/etsa_pipeline.png", alt="ETSA Pipeline", caption="ETSA Pipeline", width=None, height="240px", object_fit=ObjectFit.CONTAIN, align=Alignment.CENTER)
 
                 with page.Container(css_class="d-flex flex-column justify-content-center"):
-                    page.Markdown("### ETSA --- QC", align=Alignment.CENTER, spacing_after=Spacing.LG)
-                    page.Markdown("Recently, I have been working on ETSA with Assistant Professor David Guy Brizan and Alex Pezcon (MAGICS Lab @ University of San Francisco). It is a unified, graph-centric pipeline for tracking how sentiment attaches to—and evolves around—entities and their aspects within any text. ETSA processes raw sentences one by one, builds a dynamic property graph of entities and descriptive phrases, scores sentiment at multiple levels, and propagates those scores through tunable, explainable message-passing. We are currently collecting data for the project: [You can participate in the survey here.](https://etsa---qc---survey.streamlit.app/) We would greatly appreciate your help in collecting data for this project. The survey is quick and easy, and it will help us a lot in our research. Thank you for your time and support!", align=Alignment.LEFT, spacing_after=Spacing.LG)
+                    page.Markdown("### ETSA --- QC (AeVAA)", align=Alignment.CENTER, spacing_after=Spacing.LG)
+                    page.Markdown("I've been working on AeVAA with Professor David-Guy Brizan and Alex Peczon from USFCA. It is a project to create an explainable ABSA system, and we are anticipating a paper submission at the start of next year.", align=Alignment.LEFT, spacing_after=Spacing.LG)
                     page.Button("View the project", link="projects/etsa_qc.html", style_type=ButtonType.PRIMARY)
         
         page.Divider(spacing_before=Spacing.XL, spacing_after=Spacing.LG, thickness=2)
