@@ -1,0 +1,15 @@
+It has been somewhat of a while, and I blame that on the fact that I've been up to quite a lot! Between the last few dregs of the school year, a few of my personal projects that I got engrossed in, and other various issues, I've neglected to write a blog for a while. 
+
+I've learned a lot in the past few months, most of all about writing. Writing short stories and/or flash fiction has become somewhat of a hobby of mine, and I wanted to share my experience with it and what I find to be the most important aspects of writing such stories.
+
+While this may sound like generic advice, my first piece is to write from the heart. I don't mean to write an autobiography dressed in the clothes of fiction, however, I do think that channeling emotions one may be feeling at a given time into writing is what gives writing heart. I find that the stories I am most satisfied with are those that came from emotions I was feeling strongly at the time, whether it be anxiety, melancholy, or whimsical.
+
+The most difficult part about this process is being able to represent emotions in a palatable way, as emotions, being emotions, often resist proper definition. To cope with this, I find that ambiguity is a powerful tool. In the end, words, and language in general, is used to express the reality we experience, however, this reality is not meant to map onto everyone else's experience. People are, in my opinion, meant to find their own meaning and connection from a text instead of embodying the text in full "empathy", and ambiguity helps with this.
+
+An odd metaphor I would use to describe this would be the induced fit model I learned about a few months ago in AP Biology; a substrate only needs to be generally similar to the intended substrate of an enzyme to bind to it, and I find my writing following a similar principle. My writing, or at least I hope it does so, is meant to explain how I feel at the moment, and hopefully, someone with a similar experience can connect to such writings.
+
+In addition to ambiguity, I also like to add the surreal. With emotions being so hard to describe, I try to map the feeling into something visual or tactile. However, since emotions are often otherworldly, these visual bits also become so. For instance, in a story about dissociation I wrote that I'm decently satisfied with, the image I conjoured up was that of fish swimming down the streets, of which I can credit a random YouTube video I saw for inspiration. It is very satisfying when the images, no matter how otherwordly, mean something, and they allow me to describe things in ways not possible with just the real world.
+
+That being said, I am neither formally trained in writing nor have I been writing for too long. These are just a few of my personal thoughts on what I think makes my writing matter to me. Writing is a way for me to express myself and process some oddly complex emotions I feel in a safe way, and if it helps others along the way, that would be amazing. My style or thought process may not fit everyone's, but I hope it does give some inspiration.
+
+Cheers!
