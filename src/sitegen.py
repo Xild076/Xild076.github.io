@@ -526,6 +526,157 @@ class BaseComponent:
             options_html += f'<option value="{html.escape(str(opt_value))}"{is_selected}{opt_disabled}>{opt_text}</option>'
         self._append_html(f'<select {attrs}>{options_html}</select>')
 
+    # ===================== NEW WIDGETS =====================
+
+    def Heading(self, text, level=2, align=Alignment.LEFT, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
+        """Semantic heading element (h1-h6)."""
+        tag = f"h{min(max(level, 1), 6)}"
+        alignment_class = self._get_alignment_class(align)
+        combined_css = f"{alignment_class} {css_class}".strip()
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, combined_css, None, kwargs)
+        self._append_html(f'<{tag} {attrs}>{html.escape(text)}</{tag}>')
+
+    def Section(self, title=None, subtitle=None, align=Alignment.CENTER, spacing_before=Spacing.XL, spacing_after=Spacing.LG, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
+        """Section wrapper with optional title and subtitle. Use as a context manager."""
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"section-block {css_class}".strip(), None, kwargs)
+        section_html = f'<div {attrs}>'
+        if title:
+            alignment_class = self._get_alignment_class(align)
+            section_html += f'<h2 class="section-title {alignment_class}" style="font-size:1.8rem; margin-bottom:0.5rem; font-weight:700">{html.escape(title)}</h2>'
+        if subtitle:
+            alignment_class = self._get_alignment_class(align)
+            section_html += f'<p class="section-subtitle {alignment_class}" style="color:var(--text-secondary); margin-bottom:var(--spacing-lg)">{html.escape(subtitle)}</p>'
+        self._append_html(section_html)
+        return ContextWrapper(self, "Container")
+
+    def Spacer(self, size=Spacing.LG):
+        """Empty spacer element."""
+        self._append_html(f'<div class="spacer" style="height:{self._format_size(size)}"></div>')
+
+    def Callout(self, text, callout_type="info", title=None, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.NONE, scroll_animation=False, scroll_animation_delay=0.0, css_class="", **kwargs):
+        """Callout/admonition box (info, warning, danger, success, tip)."""
+        icons = {"info": "ℹ️", "warning": "⚠️", "tip": "💡", "danger": "🚨", "success": "✅"}
+        icon = icons.get(callout_type, "ℹ️")
+        display_title = title or callout_type.capitalize()
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"callout callout-{callout_type} {css_class}".strip(), None, kwargs)
+        self._append_html(
+            f'<div {attrs}>'
+            f'<div class="callout-title">{icon} {html.escape(display_title)}</div>'
+            f'<div class="callout-body"><p>{html.escape(text)}</p></div>'
+            f'</div>'
+        )
+
+    def StatCard(self, value, label, description=None, icon_text=None, animate_count=False, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.FADE_IN_UP, scroll_animation=True, scroll_animation_delay=0.0, css_class="", **kwargs):
+        """Stat card showing a value with a label."""
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"stat-card {css_class}".strip(), None, kwargs)
+        icon_html = f'<div class="stat-icon">{icon_text}</div>' if icon_text else ''
+        count_attr = f' data-count-to="{value}"' if animate_count and str(value).isdigit() else ''
+        display_value = "0" if animate_count and str(value).isdigit() else html.escape(str(value))
+        desc_html = f'<div class="stat-description">{html.escape(description)}</div>' if description else ''
+        self._append_html(
+            f'<div {attrs}>'
+            f'{icon_html}'
+            f'<div class="stat-value"{count_attr}>{display_value}</div>'
+            f'<div class="stat-label">{html.escape(label)}</div>'
+            f'{desc_html}'
+            f'</div>'
+        )
+
+    def SkillBar(self, label, percent, color=None, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, css_class="", **kwargs):
+        """Animated skill/progress bar with label and percentage."""
+        percent = max(0, min(100, percent))
+        fill_style = f'background:{color};' if color else ''
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, f"skill-bar {css_class}".strip(), None, kwargs)
+        self._append_html(
+            f'<div {attrs}>'
+            f'<div class="skill-bar-header"><span>{html.escape(label)}</span><span class="skill-bar-percent">{percent}%</span></div>'
+            f'<div class="skill-bar-track"><div class="skill-bar-fill" data-width="{percent}%" style="width:0;{fill_style}"></div></div>'
+            f'</div>'
+        )
+
+    def TagList(self, tags, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, css_class="", **kwargs):
+        """List of tag badges. Tags can be strings or dicts with 'text' and optional 'link'."""
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, f"tag-list {css_class}".strip(), None, kwargs)
+        tags_html = ""
+        for tag in tags:
+            if isinstance(tag, str):
+                tags_html += f'<span class="tag">{html.escape(tag)}</span>'
+            elif isinstance(tag, dict):
+                text = html.escape(tag.get('text', ''))
+                link = tag.get('link')
+                if link:
+                    tags_html += f'<a href="{link}" class="tag">{text}</a>'
+                else:
+                    tags_html += f'<span class="tag">{text}</span>'
+        self._append_html(f'<div {attrs}>{tags_html}</div>')
+
+    def ProjectCard(self, title, description, image=None, techs=None, buttons=None, image_height="200px", spacing_before=Spacing.DEFAULT, spacing_after=Spacing.LG, animation=AnimationType.FADE_IN_UP, scroll_animation=True, scroll_animation_delay=0.0, css_class="", **kwargs):
+        """Complete project showcase card with image, text, tech tags, and action buttons."""
+        if techs is None: techs = []
+        if buttons is None: buttons = []
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"project-card {css_class}".strip(), None, kwargs)
+
+        img_html = ""
+        if image:
+            img_html = f'<div class="project-card-image"><img src="{image}" alt="{html.escape(title)}" style="max-height:{image_height}"></div>'
+
+        techs_html = ""
+        if techs:
+            techs_html = f'<div class="project-card-techs">Technologies: {html.escape(", ".join(techs))}</div>'
+
+        buttons_html = ""
+        if buttons:
+            buttons_html = '<div class="project-card-actions">'
+            for i, btn in enumerate(buttons):
+                btn_text = html.escape(btn.get('text', 'View'))
+                btn_link = btn.get('link', '#')
+                btn_style = btn.get('style', 'primary' if i == 0 else 'outline-primary')
+                buttons_html += f'<a href="{btn_link}" class="btn btn-{btn_style}" role="button">{btn_text}</a>'
+            buttons_html += '</div>'
+
+        self._append_html(
+            f'<div {attrs}>'
+            f'{img_html}'
+            f'<div class="project-card-body">'
+            f'<div class="project-card-title">{html.escape(title)}</div>'
+            f'<div class="project-card-description">{html.escape(description)}</div>'
+            f'{techs_html}'
+            f'{buttons_html}'
+            f'</div>'
+            f'</div>'
+        )
+
+    def BlogCard(self, title, author=None, date=None, slug=None, excerpt=None, spacing_before=Spacing.DEFAULT, spacing_after=Spacing.DEFAULT, animation=AnimationType.FADE_IN_UP, scroll_animation=True, scroll_animation_delay=0.0, css_class="", **kwargs):
+        """Blog post card with title, meta info, excerpt, and link."""
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, animation, scroll_animation, scroll_animation_delay, f"blog-card {css_class}".strip(), None, kwargs)
+
+        meta_parts = []
+        if author: meta_parts.append(html.escape(author))
+        if date: meta_parts.append(html.escape(date))
+        meta_html = f'<div class="blog-card-meta">{" · ".join(meta_parts)}</div>' if meta_parts else ''
+
+        excerpt_html = f'<div class="blog-card-excerpt">{html.escape(excerpt)}</div>' if excerpt else ''
+
+        link_html = ""
+        if slug:
+            link_html = f'<a href="blog/{slug}.html" class="btn btn-primary btn-sm" role="button">Read More</a>'
+
+        self._append_html(
+            f'<div {attrs}>'
+            f'{meta_html}'
+            f'<div class="blog-card-title">{html.escape(title)}</div>'
+            f'{excerpt_html}'
+            f'{link_html}'
+            f'</div>'
+        )
+
+    def IconText(self, icon_text, text, spacing_before=Spacing.NONE, spacing_after=Spacing.SM, css_class="", **kwargs):
+        """Icon + text inline combo."""
+        attrs = self._get_combined_attributes(spacing_before, spacing_after, AnimationType.NONE, False, 0.0, f"d-flex align-items-center gap-2 {css_class}".strip(), None, kwargs)
+        self._append_html(f'<div {attrs}><span style="font-size:1.3em">{icon_text}</span><span>{html.escape(text)}</span></div>')
+
+    # ===================== END NEW WIDGETS =====================
+
 class Page(BaseComponent):
     def __init__(self, site, slug, title=""):
         super().__init__()
@@ -626,10 +777,13 @@ class Page(BaseComponent):
 
             header_tag_main_css = self.site.meta.get('site_header_css_class', 'site-header')
 
+            hamburger_html = '<button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>'
+
             self.site_header_content = (
                 f'<header class="{header_tag_main_css.strip()}">\n'
                 f'  <div class="{layout_container_css}">\n'
                 f'    {site_title_html}\n'
+                f'    {hamburger_html}\n'
                 f'    {navigation_html_content}\n'
                 f'    {theme_toggle_button_html}\n'
                 f'  </div>\n'
