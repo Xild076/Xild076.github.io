@@ -95,22 +95,20 @@ harry.d.yin.gpc@gmail.com</p>
 
 <p>For grouping, the source I used was Korbinian Kosh's <em>A Friendly Introduction to Text Clustering</em><sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>. The key takeaways I recieved from this articles were to: 1. embed sentences, and 2. to use hierarchical clustering. Thus, I got to work with the basic implementation of textual clustering.</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
+<pre><code>from sentence_transformers import SentenceTransformer
+from sklearn.cluster import AgglomerativeClustering
 
-<span class="n">sentences</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="c1"># Put sentences here.</span>
+sentences = [...] # Put sentences here.
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;all-MiniLM-L6-v2&#39;</span><span class="p">)</span>
-<span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span>
+model = SentenceTransformer('all-MiniLM-L6-v2')
+embeddings = model.encode(sentences)
 
-<span class="n">clustering_model</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span>
-    <span class="n">distance_threshold</span><span class="o">=</span><span class="mf">12.5</span>
-<span class="p">)</span>
+clustering_model = AgglomerativeClustering(
+    distance_threshold=12.5
+)
 
-<span class="n">clusters</span> <span class="o">=</span> <span class="n">clustering_model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+clusters = clustering_model.fit_predict(embeddings)
 </code></pre>
-</div>
 
 <p>For my first attempt, I used <code>distance_threshold</code> because I didn't want to input the number of topics or clusters; I wanted the code to determine what the clusters were. For the inputs, I scraped the web for all the text I needed, put them all into one big list, and then clustered to get the main ideas.</p>
 
@@ -122,41 +120,39 @@ harry.d.yin.gpc@gmail.com</p>
 
 <p>In the end, the basic framework was something like this:</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">silhouette_score</span>
+<pre><code>from sentence_transformers import SentenceTransformer
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics import silhouette_score
 
-<span class="n">sentences_list</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">[</span><span class="o">...</span><span class="p">],</span>
-    <span class="p">[</span><span class="o">...</span><span class="p">],</span>
-    <span class="o">...</span>
-<span class="p">]</span> <span class="c1"># Put sentences here.</span>
+sentences_list = [
+    [...],
+    [...],
+    ...
+] # Put sentences here.
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;all-MiniLM-L6-v2&#39;</span><span class="p">)</span>
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
-<span class="k">def</span> <span class="nf">find_representative_sentences</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
-    <span class="o">...</span>
-    <span class="k">return</span> <span class="n">representative_sentences</span>
+def find_representative_sentences(...):
+    ...
+    return representative_sentences
 
-<span class="k">def</span> <span class="nf">cluster</span><span class="p">(</span><span class="n">sentences</span><span class="p">):</span>
-    <span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span>
-    <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span>
-        <span class="n">distance_threshold</span><span class="o">=</span><span class="mf">12.5</span>
-    <span class="p">)</span>
-    <span class="n">clusters</span> <span class="o">=</span> <span class="n">clustering_model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">clusters</span>
+def cluster(sentences):
+    embeddings = model.encode(sentences)
+    clustering_model = AgglomerativeClustering(
+        distance_threshold=12.5
+    )
+    clusters = clustering_model.fit_predict(embeddings)
+    return clusters
 
-<span class="n">representative_sentences</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">sentences</span> <span class="ow">in</span> <span class="n">sentences_list</span><span class="p">:</span>
-    <span class="n">clusters</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span>
-    <span class="n">representative_sentences</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-        <span class="n">find_representative_sentences</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-    <span class="p">)</span>
+representative_sentences = []
+for sentences in sentences_list:
+    clusters = cluster(sentences)
+    representative_sentences.extend(
+        find_representative_sentences(...)
+    )
 
-<span class="n">rep_cluster</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">(</span><span class="n">representative_sentences</span><span class="p">)</span>
+rep_cluster = cluster(representative_sentences)
 </code></pre>
-</div>
 
 <p>Thus, I have the basic methodology for grouping done. <em>(Improvements are currently being made. Please reference <a href="#6-future-plans">Future Plans</a> to see.)</em></p>
 
@@ -172,14 +168,12 @@ harry.d.yin.gpc@gmail.com</p>
 
 <p>For the Google search url, I used a method I found on DEV<sup class="footnote-ref" id="fnref-5"><a href="#fn-5">5</a></sup>:</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="n">base_url</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="sa">f</span><span class="s2">&quot;https://www.google.com/search?q=</span><span class="si">{</span><span class="n">search_query</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="sa">f</span><span class="s2">&quot;&amp;gl=us&amp;tbm=nws&amp;num=</span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="sa">f</span><span class="s2">&quot;&amp;tbs=cdr:1,cd_min:</span><span class="si">{</span><span class="n">formatted_start</span><span class="si">}</span><span class="s2">,cd_max:</span><span class="si">{</span><span class="n">formatted_end</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="p">)</span>
+<pre><code>base_url = (
+    f"https://www.google.com/search?q={search_query}"
+    f"&amp;gl=us&amp;tbm=nws&amp;num={amount}"
+    f"&amp;tbs=cdr:1,cd_min:{formatted_start},cd_max:{formatted_end}"
+)
 </code></pre>
-</div>
 
 <p>This method allowed me to find links from a certain topic in a certain range <em>(supposedly, the date range currently isn't working, see <a href="#6-future-plans">Future Plans</a>)</em>. The <code>seach_query</code> is derived from gathering the keywords of the title of the inputted article or keywords of the text. Thus, I have a list of links.</p>
 
@@ -209,63 +203,61 @@ harry.d.yin.gpc@gmail.com</p>
 
 <p>The issue came after the adjectives were removed. After the words were removed, there would be hanging punctuation, determiners, and conjunctions. These needed to be removed, which resulted in a long and arduous journey figuring out the grammatical rules that would necessitate the removal of any of the hanging texts. Ultimately, the code came together with this:</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="n">add</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># add is 0, remove is 1, synonym is 2</span>
-<span class="n">word_text</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">text</span>
-<span class="n">word_pos</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">upos</span>
-<span class="n">word_objectivity</span> <span class="o">=</span> <span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">word_text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">word_pos</span><span class="p">))</span>
-<span class="k">if</span> <span class="n">word_pos</span> <span class="o">==</span> <span class="s2">&quot;ADJ&quot;</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">word_objectivity</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">:</span> <span class="c1"># If it is above the threshold, add normally, no need to change</span>
-        <span class="k">if</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span> <span class="o">==</span> <span class="s2">&quot;AUX&quot;</span><span class="p">:</span> <span class="c1"># If preceding is AUX (is, was, etc. -&gt; They were ____), add synonym</span>
-            <span class="n">add</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="k">while</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;NOUN&quot;</span><span class="p">,</span> <span class="s2">&quot;PROPN&quot;</span><span class="p">}:</span> <span class="c1"># If subsequent word is Noun/Proper Noun, remove it</span>
-                    <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
-                    <span class="k">break</span>
-                <span class="k">if</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;CCONJ&quot;</span><span class="p">,</span> <span class="s2">&quot;CONJ&quot;</span><span class="p">,</span> <span class="s2">&quot;PUNCT&quot;</span><span class="p">,</span> <span class="s2">&quot;ADJ&quot;</span><span class="p">}:</span> <span class="c1"># If subsequent word is not connecting (conj, punct) or adjective, remove it</span>
-                    <span class="k">break</span>
-                <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="k">elif</span> <span class="n">word_pos</span> <span class="o">==</span> <span class="s2">&quot;VERB&quot;</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">word_objectivity</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">:</span><span class="c1"># If it is above the threshold, add normally, no need to change</span>
-        <span class="n">add</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="k">elif</span> <span class="n">word_pos</span> <span class="o">==</span> <span class="s2">&quot;ADV&quot;</span><span class="p">:</span>
-    <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">prev_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
-        <span class="n">next_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
-        <span class="k">if</span> <span class="n">prev_token</span> <span class="o">!=</span> <span class="s2">&quot;AUX&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">next_token</span> <span class="o">==</span> <span class="s2">&quot;ADJ&quot;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">next_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">:</span>
-                    <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="k">elif</span> <span class="n">word_objectivity</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">:</span>
-                <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="k">elif</span> <span class="n">word_pos</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;CONJ&quot;</span><span class="p">,</span> <span class="s2">&quot;CCONJ&quot;</span><span class="p">}:</span>
-    <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">prev_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
-        <span class="n">next_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
-        <span class="k">if</span> <span class="n">prev_token</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ADJ&quot;</span><span class="p">,</span> <span class="s2">&quot;PUNCT&quot;</span><span class="p">}</span> <span class="ow">and</span> <span class="n">next_token</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ADJ&quot;</span><span class="p">}:</span> <span class="c1"># If it is surrounded by lists of adjectives</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">prev_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span> <span class="ow">or</span> 
-                <span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">prev_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">):</span> <span class="c1"># Either or: Conj is less important in grammatical fluency</span>
-                <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="k">elif</span> <span class="n">word_pos</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;PUNCT&quot;</span><span class="p">}:</span>
-    <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">prev_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
-        <span class="n">next_token</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upos</span>
-        <span class="k">if</span> <span class="n">prev_token</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ADJ&quot;</span><span class="p">,</span> <span class="s2">&quot;PUNCT&quot;</span><span class="p">}</span> <span class="ow">and</span> <span class="n">next_token</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ADJ&quot;</span><span class="p">}:</span> <span class="c1"># If it is surrounded by lists of adjectives</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">prev_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span> <span class="ow">and</span> 
-                <span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">prev_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">):</span> <span class="c1"># And: Conj is less important in grammatical fluency</span>
-                <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">prev_token</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ADV&quot;</span><span class="p">}:</span> <span class="c1"># If an adverb is before it</span>
-            <span class="k">if</span> <span class="n">calc_objectivity_word</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">get_pos_wn</span><span class="p">(</span><span class="n">prev_token</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">objectivity_threshold</span><span class="p">:</span>
-                <span class="n">add</span> <span class="o">=</span> <span class="mi">1</span>
+<pre><code>add = 0 # add is 0, remove is 1, synonym is 2
+word_text = word.text
+word_pos = word.upos
+word_objectivity = calc_objectivity_word(word_text, get_pos_wn(word_pos))
+if word_pos == "ADJ":
+    if word_objectivity &lt; objectivity_threshold: # If it is above the threshold, add normally, no need to change
+        if sentence.words[i-1].upos == "AUX": # If preceding is AUX (is, was, etc. -&gt; They were ____), add synonym
+            add = 2
+        else:
+            n = i + 1
+            while n &lt; len(sentence.words):
+                if sentence.words[n].upos in {"NOUN", "PROPN"}: # If subsequent word is Noun/Proper Noun, remove it
+                    add = 1
+                    break
+                if sentence.words[n].upos not in {"CCONJ", "CONJ", "PUNCT", "ADJ"}: # If subsequent word is not connecting (conj, punct) or adjective, remove it
+                    break
+                n += 1
+elif word_pos == "VERB":
+    if word_objectivity &lt; objectivity_threshold:# If it is above the threshold, add normally, no need to change
+        add = 2
+elif word_pos == "ADV":
+    if 1 &lt;= i &lt;= len(sentence.words) - 2:
+        prev_token = sentence.words[i-1].upos
+        next_token = sentence.words[i+1].upos
+        if prev_token != "AUX":
+            if next_token == "ADJ":
+                if calc_objectivity_word(sentence.words[i+1].text, get_pos_wn(next_token)) &lt; objectivity_threshold:
+                    add = 1
+            elif word_objectivity &lt; objectivity_threshold:
+                add = 1
+elif word_pos in {"CONJ", "CCONJ"}:
+    if 1 &lt;= i &lt;= len(sentence.words) - 2:
+        prev_token = sentence.words[i-1].upos
+        next_token = sentence.words[i+1].upos
+        if prev_token in {"ADJ", "PUNCT"} and next_token in {"ADJ"}: # If it is surrounded by lists of adjectives
+            if (calc_objectivity_word(sentence.words[i-1].text, get_pos_wn(prev_token)) &lt; objectivity_threshold or 
+                calc_objectivity_word(sentence.words[i+1].text, get_pos_wn(prev_token)) &lt; objectivity_threshold): # Either or: Conj is less important in grammatical fluency
+                add = 1
+elif word_pos in {"PUNCT"}:
+    if 1 &lt;= i &lt;= len(sentence.words) - 2:
+        prev_token = sentence.words[i-1].upos
+        next_token = sentence.words[i+1].upos
+        if prev_token in {"ADJ", "PUNCT"} and next_token in {"ADJ"}: # If it is surrounded by lists of adjectives
+            if (calc_objectivity_word(sentence.words[i-1].text, get_pos_wn(prev_token)) &lt; objectivity_threshold and 
+                calc_objectivity_word(sentence.words[i+1].text, get_pos_wn(prev_token)) &lt; objectivity_threshold): # And: Conj is less important in grammatical fluency
+                add = 1
+        if prev_token in {"ADV"}: # If an adverb is before it
+            if calc_objectivity_word(sentence.words[i-1].text, get_pos_wn(prev_token)) &lt; objectivity_threshold:
+                add = 1
 
-<span class="k">if</span> <span class="n">add</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="n">processed_sentence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word_text</span><span class="p">)</span>
-<span class="k">elif</span> <span class="n">add</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-    <span class="n">processed_sentence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_objective_synonym</span><span class="p">(</span><span class="n">word_text</span><span class="p">,</span> <span class="n">sentence</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+if add == 0:
+    processed_sentence.append(word_text)
+elif add == 2:
+    processed_sentence.append(get_objective_synonym(word_text, sentence.text))
 </code></pre>
-</div>
 
 <p>The issue is, it is still incomplete. Despite running many test cases, I still continously find new errors. Furthermore, the text post-processing of combining the text back into a legible sentence still needs improvements. There are often random spaces or not enough spaces due to the weird format of characters. I plan to rework this in the future too <em>(See <a href="#6-future-plans">Future Plans</a>)</em>.</p>
 
@@ -273,23 +265,21 @@ harry.d.yin.gpc@gmail.com</p>
 
 <p>For word objectivity, I was at first going to use Textblob's subjective score. The issue was that the subjective score didn't work for individual words. The ultimate implementation of word objectivity came with nltk's wordnet. It was relatively simple code to implement, although it is inconsistent and doesn't work for all words. However, it is good enough as of right now.</p>
 
-<div class="codehilite">
-<pre><span></span><code><span class="k">def</span> <span class="nf">calc_objectivity_word</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="n">obj_scores</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">synsets</span> <span class="o">=</span> <span class="n">wn</span><span class="o">.</span><span class="n">synsets</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">synsets</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">swn_syn</span> <span class="o">=</span> <span class="n">swn</span><span class="o">.</span><span class="n">senti_synset</span><span class="p">(</span><span class="n">syn</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
-            <span class="n">obj_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">swn_syn</span><span class="o">.</span><span class="n">obj_score</span><span class="p">())</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">pass</span>
-    <span class="k">if</span> <span class="n">obj_scores</span><span class="p">:</span>
-        <span class="n">obj_swn</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">obj_scores</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">obj_scores</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">obj_swn</span> <span class="o">=</span> <span class="mf">0.5</span>
-    <span class="k">return</span> <span class="n">obj_swn</span>
+<pre><code>def calc_objectivity_word(word, pos=None):
+    obj_scores = []
+    synsets = wn.synsets(word, pos=pos)
+    for syn in synsets:
+        try:
+            swn_syn = swn.senti_synset(syn.name())
+            obj_scores.append(swn_syn.obj_score())
+        except Exception as e:
+            pass
+    if obj_scores:
+        obj_swn = sum(obj_scores)/len(obj_scores)
+    else:
+        obj_swn = 0.5
+    return obj_swn
 </code></pre>
-</div>
 
 <h4>4.2.2 Synonyms</h4>
 

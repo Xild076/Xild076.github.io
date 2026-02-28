@@ -3,13 +3,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggleButton = document.getElementById('theme-toggle');
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
     const currentTheme = localStorage.getItem('theme') || (prefersDarkScheme.matches ? 'dark' : 'light');
+    const setToggleState = (theme) => {
+      if (!themeToggleButton) return;
+      const isDark = theme === 'dark';
+      themeToggleButton.textContent = isDark ? '☀️' : '🌙';
+      themeToggleButton.setAttribute('title', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+      themeToggleButton.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+    };
+
     document.documentElement.setAttribute('data-theme', currentTheme);
+    setToggleState(currentTheme);
   
     if (themeToggleButton) {
       themeToggleButton.addEventListener('click', () => {
         let newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
+        setToggleState(newTheme);
       });
     }
   

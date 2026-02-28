@@ -156,6 +156,7 @@ def build_blog_page(site: Site):
         
         with page.Container(css_class="row"):
             all_blog_posts = [
+                {"slug": "food", "title": "Misc - Short Story: Food", "file": "blogs/food.md", "author": "Harry Yin", "date": "2026-02-28"},
                 {"slug": "writing_lessons", "title": "Misc - What I learned about writing", "file": "blogs/writing_lessons.md", "author": "Harry Yin", "date": "2026-02-05"},
                 {"slug": "research_reflection", "title": "Programming - Research Reflection on ETSA (AeVAA)", "file": "blogs/researching.md", "author": "Harry Yin", "date": "2025-11-04"},
                 {"slug": "writing_fun", "title": "Misc - Short Story: The Frog Who Cried Rain", "file": "blogs/writing_fun.md", "author": "Harry Yin", "date": "2025-09-30"},
@@ -416,6 +417,7 @@ def add_project_pages(site : Site):
     )
 def add_blog_posts(site):
     blog_posts = [
+        {"slug": "food", "title": "Misc - Short Story: Food", "file": "blogs/food.md", "author": "Harry Yin", "date": "2026-02-28"},
         {"slug": "writing_lessons", "title": "Misc - What I learned about writing", "file": "blogs/writing_lessons.md", "author": "Harry Yin", "date": "2026-02-05"},
         {"slug": "research_reflection", "title": "Programming - Research Reflection on ETSA (AeVAA)", "file": "blogs/researching.md", "author": "Harry Yin", "date": "2025-11-04"},
         {"slug": "writing_fun", "title": "Misc - Short Story: The Frog Who Cried Rain", "file": "blogs/writing_fun.md", "author": "Harry Yin", "date": "2025-09-30"},
