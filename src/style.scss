@@ -761,7 +761,7 @@ pre {
 .markdown-content {
   line-height: 1.75;
   h1, h2, h3, h4, h5, h6 { margin-top: var(--spacing-lg); margin-bottom: var(--spacing-sm); }
-  p { margin-bottom: var(--spacing-sm); max-width: 72ch; }
+  p { margin-bottom: var(--spacing-sm); }
   ul, ol { margin-bottom: var(--spacing-sm); padding-left: 1.5rem; }
   li { margin-bottom: var(--spacing-xs); }
   img { margin: var(--spacing-sm) auto; display: block; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); max-width: 90%; }
